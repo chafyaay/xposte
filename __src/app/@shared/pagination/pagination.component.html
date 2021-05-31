@@ -1,0 +1,30 @@
+<div class="flex">
+  <div class="totalInbox">
+    <span class="val">{{ totalResult }}</span>
+    {{ titlePagination }}
+  </div>
+  <div class="wrapperPagination">
+    <span class="icone file">
+      <ng-select
+        [items]="PageNumbers"
+        bindLabel="name"
+        bindValue="name"
+        [(ngModel)]="pagination.pageNumber"
+        (change)="changePageNumber()"
+      >
+      </ng-select>
+    </span>
+  </div>
+  <div class="wrapperPagination">
+    <span class="icone eye">
+      <ng-select
+        [items]="pageSize"
+        bindLabel="name"
+        bindValue="id"
+        [(ngModel)]="pagination.pageSize"
+        (change)="changePageSize()"
+      >
+      </ng-select>
+    </span>
+  </div>
+</div>

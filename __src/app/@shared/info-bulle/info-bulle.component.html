@@ -1,0 +1,15 @@
+<div class="ifo-bulle">
+  <div class="tooltip">
+    <div
+      class="icone help"
+      (mouseenter)="showInfoBulle = true"
+      (mouseout)="showInfoBulle = false"
+    ></div>
+
+    <ul class="tooltip-text" [ngClass]="{ active: showInfoBulle }">
+      <li *ngFor="let adress of balSelected">
+        {{ adress }}
+      </li>
+    </ul>
+  </div>
+</div>

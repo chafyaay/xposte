@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr" xml:lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Home</title>
+    <meta name="description" content="" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="assets/img/favicon.ico"
+    />
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
+  </head>
+
+  <body>
+    <div class="global">
+      <!-- ======= START .Bloc HEADER ======= -->
+      <header class="header">
+        <div class="header_content">
+          <div class="header__logo">
+            <a href="#"><img src="assets/img/logo.jpg" alt="Sesam vitale" /></a>
+          </div>
+          <div class="header__right">
+            <nav class="header__right-nav">
+              <ul>
+                <li>
+                  <a href="#" class="current" title="Boîtes aux lettres">
+                    Boîtes aux lettres
+                  </a>
+                </li>
+                <li>
+                  <a href="#" title="Boîtes aux lettres de rejeu">
+                    Boîtes aux lettres de rejeu
+                  </a>
+                </li>
+                <li><a href="#" title="Utilisateurs"> Utilisateurs </a></li>
+                <li class="subMenu">
+                  <a href="#" title="Configuration"> Configuration </a>
+                  <ul>
+                    <li><a href="#">Frontal</a></li>
+                    <li><a href="#" class="current">WhiteList Anti-Spam</a></li>
+                    <li><a href="#">Rôles</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+            <div class="header__right-profile">
+              <h3 class="user">Dominique Sanchez</h3>
+              <h4 class="profession">Administrateur GIE</h4>
+              <i class="zmdi zmdi-chevron-up arrow-profile"></i>
+              <div class="logout">
+                <a href="#" class="sign-out">Déconnexion</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- ======= END .Bloc HEADER ======= -->
+      <div class="container pd20">
+        <!-- ======= START .Bloc TILTE & BUTTON ======= -->
+        <div class="wrapper-title flex">
+          <h1 class="main-title">WhiteList Anti-Spam</h1>
+          <button class="main-btn icon">Ajouter un domaine, IP</button>
+        </div>
+        <!-- ======= END .Bloc TILTE & BUTTON ======= -->
+        <!-- ======= START .Bloc FILTRES ======= -->
+        <div id="filter">
+          <div class="flex align-items">
+            <h2 class="title mgr30">Filtres</h2>
+            <div class="inputField frontal mgr30">
+              <input type="text" id="frontal" name="frontal" placeholder=" " />
+              <label for="frontal"> Frontal </label>
+            </div>
+            <div class="inputField frontal">
+              <input type="text" id="frontal" name="frontal" placeholder=" " />
+              <label for="frontal"> Frontal </label>
+            </div>
+          </div>
+          <div class="flex align-items">
+            <button class="reset mgr20">Réinitialiser les filtres</button>
+            <button class="main-btn">Filtrer</button>
+          </div>
+        </div>
+        <!-- ======= END .Bloc FILTRES ======= -->
+        <div class="flex space-between mgb40">
+          <div class="flex">
+            <div class="totalInbox">
+              <span class="val">12</span>
+              Frontaux
+            </div>
+            <div class="wrapperPagination">
+              <span class="icone file">1/4</span>
+            </div>
+            <div class="wrapperPagination">
+              <span class="icone eye">10 par page</span>
+            </div>
+          </div>
+          <div>
+            <button class="main-btn btn-second mgr30">
+              Exporter toute la liste
+            </button>
+            <button class="main-btn btn-second">
+              Supprimer les 2 domaines, IPs
+            </button>
+          </div>
+        </div>
+        <!-- ======= START .Bloc MAIN TABLE ======= -->
+        <table class="main-table table-frontal">
+          <thead>
+            <tr>
+              <th>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check" id="check" />
+                  <label for="check"></label>
+                </div>
+              </th>
+              <th>Nom<i class="zmdi zmdi-caret-down"></i></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- ======= END .Bloc MAIN TABLE ======= -->
+      </div>
+      <!-- ======= START .Bloc NEWBOX ======= -->
+      <div class="wrapperNewBox">
+        <h3 class="wrapperNewBox_title">Ajouter un domaine ou un IP</h3>
+        <i class="zmdi zmdi-close"></i>
+        <form action="#">
+          <h4 class="title_modal mgb20">Liste</h4>
+          <div class="flex mgb30">
+            <div class="inputRadio mgr40">
+              <input type="radio" name="radio" id="avant" />
+              <label for="avant">Liste avant</label>
+            </div>
+            <div class="inputRadio">
+              <input type="radio" name="radio" id="apres" />
+              <label for="apres">Liste après</label>
+            </div>
+          </div>
+          <div class="inputField">
+            <input type="text" id="domaine" name="domaine" placeholder=" " />
+            <label for="domaine"> Nom du domaine, IP </label>
+          </div>
+        </form>
+        <div class="wrapper-btn">
+          <button class="main-btn btn-reset">Annuler</button>
+          <button class="main-btn btn-second">Valider</button>
+        </div>
+      </div>
+      <div class="overley"></div>
+      <div id="cover-spin"></div>
+      <!-- ======= END .Bloc NEWBOX ======= -->
+    </div>
+    <script
+      type="text/javascript"
+      src="assets/js/lib/jquery-1.12.4.min.js"
+    ></script>
+    <script type="text/javascript" src="assets/js/scripts.min.js"></script>
+  </body>
+</html>

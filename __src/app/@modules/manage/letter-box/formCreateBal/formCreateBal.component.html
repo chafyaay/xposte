@@ -1,0 +1,219 @@
+<form action="#" [formGroup]="createBALForm">
+  <div class="inputField" [ngClass]="checkBALUnicityState">
+    <input
+      formControlName="adresseBal"
+      class="form-control"
+      type="text"
+      maxlength="320"
+      id="address-bal-cration"
+      name="address"
+      placeholder=" "
+      (blur)="checkBALUnicity()"
+    />
+    <label for="address-bal-cration"> {{ 'ADRESS' | translate }} </label>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        createBALForm.get('adresseBal').value &&
+        !this.createBALForm.get('adresseBal').valid
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField frontal">
+    <ng-select
+      [items]="selectListDataNew.frontal"
+      bindLabel="nom"
+      bindValue="identifiant"
+      placeholder="Frontal"
+      class="form-control ngselectCustom"
+      id="frontal-bal-cration"
+      formControlName="frontal"
+      (keyup)="getFrontalData($event)"
+      (blur)="checkFontralIsSet()"
+      (focus)="isFrontalFielled = true"
+      (change)="selectFrontal()"
+    >
+    </ng-select>
+    <label
+      for="frontal-bal-cration"
+      [ngClass]="isFrontalFielled ? 'ng-select-label' : ''"
+    >
+      {{ 'FRONTAL' | translate }}
+    </label>
+  </div>
+
+  <div class="inputField">
+    <ng-select
+      [items]="typeBALList"
+      bindLabel="value"
+      bindValue="id"
+      placeholder="Frontal"
+      class="form-control ngselectCustom"
+      id="type-bal-cration"
+      formControlName="typeBal"
+      (blur)="checkEtatBALIsSet()"
+      (focus)="isEtatBALFielled = true"
+    >
+    </ng-select>
+    <label
+      for="type-bal-cration"
+      [ngClass]="isEtatBALFielled ? 'ng-select-label' : ''"
+    >
+      {{ 'BAL_TYPE_CREATION_LABEL' | translate }}
+    </label>
+  </div>
+
+  <div class="inputField">
+    <input
+      type="number"
+      onkeypress="return event.charCode >= 48"
+      min="0"
+      id="seuil"
+      name="seuil"
+      formControlName="seuil"
+      placeholder=" "
+    />
+    <label for="seuil"> {{ 'SEUIL' | translate }} </label>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        createBALForm.get('seuil').value &&
+        !this.createBALForm.get('seuil').valid
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField">
+    <input
+      type="text"
+      id="ips"
+      name="listeAdressesIPAutorises"
+      formControlName="listeAdressesIPAutorises"
+      placeholder=" "
+    />
+    <label for="ips"> {{ 'IPS' | translate }} </label>
+    <span class="helptext">{{ 'IP_TOOLTIP_MSG' | translate }}</span>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        createBALForm.get('listeAdressesIPAutorises').value &&
+        !this.createBALForm.get('listeAdressesIPAutorises').valid
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField">
+    <input
+      type="text"
+      id="email-alert"
+      name="email"
+      formControlName="adresseMailAlerte"
+      placeholder=" "
+    />
+    <label for="email-alert"> {{ 'MAIL_ALERTE' | translate }} </label>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        createBALForm.get('adresseMailAlerte').value &&
+        !this.createBALForm.get('adresseMailAlerte').valid
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField">
+    <input
+      type="{{ showMdpProd ? 'text' : 'password' }}"
+      id="password-prod"
+      name="password-prod"
+      placeholder=" "
+      formControlName="mdpProd"
+    />
+    <label for="password-prod"> {{ 'MOT_PASS_PRODUCTION' | translate }}</label>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        createBALForm.get('mdpProd').value &&
+        !this.createBALForm.get('mdpProd').valid
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+
+    <i
+      class="zmdi"
+      [ngClass]="showMdpProd ? 'zmdi-eye' : 'zmdi-eye-off'"
+      (click)="showMdpProd = !showMdpProd"
+    ></i>
+  </div>
+
+  <div class="inputCheck mgb40">
+    <input
+      type="checkbox"
+      name="boxRejeu"
+      id="bal-rejeu"
+      formControlName="balRejeu"
+      (change)="checkBALRejeu()"
+    />
+    <label for="bal-rejeu">{{ 'BOITE_DE_REJEU' | translate }}</label>
+  </div>
+
+  <div class="inputField">
+    <input
+      type="{{ showMdpRejeu ? 'text' : 'password' }}"
+      id="password"
+      name="password"
+      formControlName="mdpRejeu"
+      placeholder=" "
+      (change)="updateMdpRejeu()"
+    />
+    <label for="password"> {{ 'MOT_DE_PASS' | translate }} </label>
+
+    <i
+      class="zmdi"
+      [ngClass]="showMdpRejeu ? 'zmdi-eye' : 'zmdi-eye-off'"
+      (click)="showMdpRejeu = !showMdpRejeu"
+    ></i>
+    <span
+      class="helptext text-red"
+      *ngIf="!this.createBALForm.get('mdpRejeu').valid"
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField">
+    <input
+      type="text"
+      maxlength="320"
+      formControlName="balRelais"
+      id="relais-messagerie"
+      placeholder=" "
+    />
+    <label for="relais-messagerie"> {{ 'RELAI_MESSAGERIE' | translate }}</label>
+    <span class="helptext">{{ 'OPTIONAL' | translate }}</span>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        createBALForm.get('balRelais').value &&
+        !this.createBALForm.get('balRelais').valid
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+</form>
+
+<div class="wrapper-btn">
+  <button class="main-btn btn-reset" (click)="closeFormulaire()">
+    {{ 'CANCEL' | translate }}
+  </button>
+  <button
+    class="main-btn btn-second"
+    [disabled]="!createBALForm.valid"
+    (click)="CreateBal()"
+  >
+    {{ 'VALID' | translate }}
+  </button>
+</div>

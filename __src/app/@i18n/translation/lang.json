@@ -1,0 +1,42 @@
+[
+  {
+    "label": "Francais",
+    "langId": "fr",
+    "flag": "flag-fr"
+  },
+  {
+    "label": "English(UK)",
+    "langId": "en",
+    "flag": "flag-uk"
+  },
+  {
+    "label": "English(US)",
+    "langId": "en-US",
+    "flag": "flag-us"
+  },
+  {
+    "label": "Español",
+    "langId": "es",
+    "flag": "flag-es"
+  },
+  {
+    "label": "Deutsch",
+    "langId": "de",
+    "flag": "flag-de"
+  },
+  {
+    "label": "Nederlands",
+    "langId": "nl",
+    "flag": "flag-nl"
+  },
+  {
+    "label": "Italiano",
+    "langId": "it",
+    "flag": "flag-it"
+  },
+  {
+    "label": "Português",
+    "langId": "pt",
+    "flag": "flag-pt"
+  }
+]

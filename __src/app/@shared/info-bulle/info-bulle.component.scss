@@ -1,0 +1,43 @@
+.icone {
+  width: 20px;
+  height: 20px;
+}
+.tooltip-text {
+  width: 200px;
+  background-color: #979797;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  left: -20px;
+  top: 30px;
+  transition: all 0.31s;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 9;
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  &::before {
+    content: " ";
+    position: absolute;
+    width: 0px;
+    height: 20px;
+    top: -38px;
+    left: 20px;
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #979797;
+  }
+  li{
+    color: black;
+    font-size: 0.999rem;
+    margin: .5rem 1rem;
+    text-align: left;
+    list-style: disc;
+    margin-left: 2rem;
+  }
+}

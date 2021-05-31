@@ -1,0 +1,93 @@
+<header class="header" [ngClass]="getPathMenu() === 'step 4' ? 'pdb60' : ''">
+  <div class="header_content">
+    <div class="header__logo">
+      <a><img src="assets/img/logo.jpg" alt="Sesam vitale" /></a>
+    </div>
+    <div class="header__right">
+      <nav class="header__right-nav">
+        <ul>
+          <li>
+            <a
+              routerLink="/manage/mailBox/main"
+              class=""
+              [ngClass]="getPathMenu() === 'step 1' ? 'current' : ''"
+              title="Boîtes aux lettres"
+            >
+              {{ 'BOITES_AUX_LETTRES' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/manage/mailBox-reply"
+              title="Boîtes aux lettres de rejeu"
+              class=""
+              [ngClass]="getPathMenu() === 'step 2' ? 'current' : ''"
+            >
+              {{ 'BOITES_AUX_LETTRES_REJEU' | translate }}
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/manage/users"
+              title="Utilisateurs"
+              [ngClass]="getPathMenu() === 'step 3' ? 'current' : ''"
+            >
+              {{ 'UTILISATEURS' | translate }}
+            </a>
+          </li>
+          <li
+            class="subMenu"
+            [ngClass]="getPathMenu() === 'step 4' ? 'openMenu' : ''"
+          >
+            <a
+              *ngIf="isRoleAdmin"
+              routerLink="/manage/config"
+              title="Configuration"
+              [ngClass]="getPathMenu() === 'step 4' ? 'current' : ''"
+            >
+              {{ 'CONFIGURATION' | translate }}
+            </a>
+            <ul>
+              <li>
+                <a
+                  [ngClass]="getSubMenuItem() === 'step 1' ? 'current' : ''"
+                  routerLink="/manage/config/domaine"
+                  >{{ 'DOMAINE' | translate }}</a
+                >
+              </li>
+              <li>
+                <a
+                  [ngClass]="getSubMenuItem() === 'step 2' ? 'current' : ''"
+                  routerLink="/manage/config/Frontal"
+                  >{{ 'FRONTAL' | translate }}</a
+                >
+              </li>
+              <li>
+                <a
+                  [ngClass]="getSubMenuItem() === 'step 3' ? 'current' : ''"
+                  routerLink="/manage/config/WhiteList"
+                  >{{ 'WHITE_LIST' | translate }}</a
+                >
+              </li>
+              <li>
+                <a
+                  [ngClass]="getSubMenuItem() === 'step 4' ? 'current' : ''"
+                  routerLink="/manage/config/roles"
+                  >{{ 'ROLES' | translate }}</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="header__right-profile">
+        <h3 class="user">{{ 'DOMINIQUE_SANCHEZ' | translate }}</h3>
+        <h4 class="profession">{{ 'ADMINISTRATEUR_GIE' | translate }}</h4>
+        <i class="zmdi zmdi-chevron-up arrow-profile"></i>
+        <div class="logout">
+          <a href="#" class="sign-out">{{ 'DECONNEXION' | translate }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

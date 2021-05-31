@@ -1,0 +1,85 @@
+<div id="filter">
+  <h2 class="title">{{ 'FILTERS_LABEL' | translate }}</h2>
+
+  <div class="inputField state" *ngIf="filtreType == FiltreType.BAL">
+    <ng-select
+      [items]="inputFilterData.etat"
+      bindLabel="name"
+      bindValue="id"
+      placeholder="Etat"
+      id="state"
+      name="state"
+      class="ngselectCustom"
+      [(ngModel)]="selectedEtat"
+      (change)="changeSelectedEtat()"
+    >
+    </ng-select>
+    <label
+      for="state"
+      [ngClass]="selectedEtat || isEtatSelected ? 'ng-select-label' : ''"
+    >
+      {{ 'STATE' | translate }}
+    </label>
+  </div>
+  <div class="inputField address" *ngIf="filtreType == FiltreType.BAL">
+    <input
+      #inputAddress
+      type="text"
+      [(ngModel)]="filter.filterData.adresse"
+      id="address"
+      [maxLength]="320"
+      name="address"
+      placeholder=" "
+      autofocus
+    />
+    <label
+      for="address"
+      [ngClass]="filter.filterData.adresse ? 'ng-select-label' : ''"
+    >
+      {{ 'ADDRESS' | translate }}
+    </label>
+  </div>
+  <div class="inputCheck" *ngIf="filtreType == FiltreType.BAL">
+    <input
+      type="checkbox"
+      [(ngModel)]="filter.highlight"
+      name="check1"
+      id="check1"
+      [disabled]="canDisableHighlight()"
+    />
+    <label for="check1">{{ 'ADDRESS_HIGHLIGHT' | translate }}</label>
+  </div>
+
+  <!--Using items input-->
+  <div class="inputField frontal" *ngIf="filtreType == FiltreType.BAL">
+    <ng-select
+      [items]="inputFilterData.frontal"
+      bindLabel="name"
+      bindValue="id"
+      placeholder=" "
+      class="ngselectCustom"
+      id="frontal"
+      [(ngModel)]="filter.filterData.frontal"
+      (keyup)="getFrontal($event)"
+      (change)="changeSelectedFrontal()"
+      (focus)="animateFrontalLabel()"
+      (blur)="animateFrontalLabel()"
+    >
+    </ng-select>
+    <label
+      for="Frontal"
+      [ngClass]="
+        filter.filterData.frontal || isFielled ? 'ng-select-label' : ''
+      "
+    >
+      {{ 'FRONTAL' | translate }}
+    </label>
+  </div>
+
+  <button class="reset" (click)="resetData()">
+    {{ 'RESET_FILTER' | translate }}
+  </button>
+  <button class="main-btn" (click)="clickFilter()" [disabled]="canFilter()">
+    {{ 'FILTER_BUTTON' | translate }}
+  </button>
+</div>

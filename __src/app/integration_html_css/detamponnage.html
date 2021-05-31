@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr" xml:lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Home</title>
+    <meta name="description" content="" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="assets/img/favicon.ico"
+    />
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
+  </head>
+
+  <body>
+    <div class="global">
+      <header class="header">
+        <div class="header_content">
+          <div class="header__logo">
+            <a href="#"><img src="assets/img/logo.jpg" alt="Sesam vitale" /></a>
+          </div>
+          <div class="header__right">
+            <nav class="header__right-nav">
+              <ul>
+                <li>
+                  <a href="#" class="current" title="Boîtes aux lettres">
+                    Boîtes aux lettres
+                  </a>
+                </li>
+                <li>
+                  <a href="#" title="Boîtes aux lettres de rejeu">
+                    Boîtes aux lettres de rejeu
+                  </a>
+                </li>
+                <li><a href="#" title="Utilisateurs"> Utilisateurs </a></li>
+                <li class="subMenu">
+                  <a href="#" title="Configuration"> Configuration </a>
+                  <ul>
+                    <li><a href="#">Frontal</a></li>
+                    <li><a href="#">WhiteList Anti-Spam</a></li>
+                    <li><a href="#">Rôles</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+            <div class="header__right-profile">
+              <h3 class="user">Dominique Sanchez</h3>
+              <h4 class="profession">Administrateur GIE</h4>
+              <i class="zmdi zmdi-chevron-up arrow-profile"></i>
+              <div class="logout">
+                <a href="#" class="sign-out">Déconnexion</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="container pd20">
+        <div class="wrapper-title flex">
+          <h1 class="main-title">Boîtes aux lettres</h1>
+          <button class="main-btn icon">Créer une Boîte aux lettres</button>
+        </div>
+        <div id="filter">
+          <h2 class="title">Filtres</h2>
+          <div class="inputField state">
+            <input type="text" id="state" name="state" placeholder=" " />
+            <label for="state"> Etat </label>
+          </div>
+          <div class="inputField address">
+            <input type="text" id="address" name="address" placeholder=" " />
+            <label for="address"> Adresse </label>
+          </div>
+          <div class="inputCheck">
+            <input type="checkbox" name="check1" id="check1" />
+            <label for="check1">Adresse en surbrillance</label>
+          </div>
+          <div class="inputField frontal">
+            <input type="text" id="frontal" name="frontal" placeholder=" " />
+            <label for="frontal"> Frontal </label>
+          </div>
+          <button class="reset">Réinitialiser les filtres</button>
+          <button class="main-btn" disabled>Filtrer</button>
+        </div>
+        <div class="flex space-between mgb40">
+          <div class="flex">
+            <div class="totalInbox">
+              <span class="val">40</span>
+              Domaines
+            </div>
+            <div class="wrapperPagination">
+              <span class="icone file">1/4</span>
+            </div>
+            <div class="wrapperPagination">
+              <span class="icone eye">10 par page</span>
+            </div>
+          </div>
+          <div>
+            <button class="main-btn btn-second mgr40">
+              Remettre à disposition les messages lus
+            </button>
+            <button class="main-btn btn-second">Tamponner 560 BALs</button>
+          </div>
+        </div>
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check" id="check" />
+                  <label for="check"></label>
+                </div>
+              </th>
+              <th>Etat<i class="zmdi zmdi-caret-down"></i></th>
+              <th>
+                Rejouable
+                <i class="zmdi zmdi-caret-down"></i>
+              </th>
+              <th>
+                Type
+                <i class="zmdi zmdi-caret-down"></i>
+              </th>
+              <th>
+                Adresse
+                <i class="zmdi zmdi-caret-down"></i>
+              </th>
+              <th>Relai de messagerie<i class="zmdi zmdi-caret-down"></i></th>
+              <th>Frontal<i class="zmdi zmdi-caret-down"></i></th>
+              <th>Seuil (Ko) <i class="zmdi zmdi-caret-down"></i></th>
+              <th>Email d’alerte<i class="zmdi zmdi-caret-down"></i></th>
+              <th>IPs<i class="zmdi zmdi-caret-down"></i></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td class="icone state-pause"></td>
+              <td class="icone check"></td>
+              <td class="icone production">Production</td>
+              <td>assurance@01.571.rss.fr</td>
+              <td></td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>si@ram.fr</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr class="subLine">
+              <td>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td><strong>Dossier Tampon</strong></td>
+                      <td>Message : 1</td>
+                      <td>Volume du dossier (Ko) : 14.7</td>
+                      <td><span>Date : </span> 12/02/2021 à 14:34:45</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Dossier Tampon</strong></td>
+                      <td>Message : 1</td>
+                      <td>Volume du dossier (Ko) : 14.7</td>
+                      <td><span>Date : </span> 12/02/2021 à 14:34:45</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check3" id="check3" />
+                  <label for="check3"></label>
+                </div>
+              </td>
+              <td class="icone state-close"></td>
+              <td class="icone"></td>
+              <td class="icone test">Test</td>
+              <td>assurance@01.571.rss.fr</td>
+              <td></td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>si@ram.fr</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check4" id="check4" />
+                  <label for="check4"></label>
+                </div>
+              </td>
+              <td class="icone state-ok"></td>
+              <td class="icone"></td>
+              <td class="icone service">Service</td>
+              <td>assurance@01.571.rss.fr</td>
+              <td></td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>si@ram.fr</td>
+              <td class="ips">
+                <span>10 254.19.65</span>
+                <span class="icone help">10 254.19.65</span>
+                <span>10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check5" id="check5" />
+                  <label for="check5"></label>
+                </div>
+              </td>
+              <td class="icone state-ok"></td>
+              <td class="icone"></td>
+              <td class="icone production">Production</td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>mail@mail.com</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>si@ram.fr</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check6" id="check6" />
+                  <label for="check6"></label>
+                </div>
+              </td>
+              <td class="icone state-pause-blue"></td>
+              <td class="icone check"></td>
+              <td class="icone test">Test</td>
+              <td>assurance@01.571.rss.fr</td>
+              <td class="icone relai">mail@mail.com</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>si@ram.fr</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- ======= START .Bloc NEWBOX ======= -->
+      <div class="wrapperNewBox detamponnage open">
+        <h3 class="wrapperNewBox_title">Détamponnage des BALs</h3>
+        <i class="zmdi zmdi-close"></i>
+        <form action="#">
+          <h4 class="title_modal mgb20">Critères de tamponnage</h4>
+          <div class="flex">
+            <div class="totalInbox left mgb30">
+              BALs
+              <span class="val">40</span>
+            </div>
+          </div>
+          <div class="inputField">
+            <input type="text" id="taille" name="taille" placeholder=" " />
+            <label for="taille"> Taille des lots </label>
+          </div>
+          <div class="inputField">
+            <input
+              type="text"
+              id="ordonnancement"
+              name="ordonnancement"
+              placeholder=" "
+            />
+            <label for="ordonnancement"> Ordonnancement du traitement </label>
+          </div>
+          <div class="flex relative">
+            <div class="inputField">
+              <input type="text" id="critere" name="critere" placeholder=" " />
+              <label for="critere"> Critère supplémentaire de priorité </label>
+            </div>
+            <button class="main-btn icon" disabled>Ajouter un critère</button>
+          </div>
+          <ul class="listAdd">
+            <li class="flex relative">
+              <h3 class="title_modal">Expéditeur</h3>
+              <div class="inputField">
+                <input
+                  type="text"
+                  id="expediteur"
+                  name="expediteur"
+                  placeholder=" "
+                />
+                <label for="expediteur"> Nom de l’expéditeur </label>
+                <i class="zmdi zmdi-delete"></i>
+              </div>
+            </li>
+            <li class="flex relative">
+              <h3 class="title_modal">Période</h3>
+              <div class="inputField icon-field date">
+                <input
+                  type="text"
+                  id="date_start"
+                  name="date_start"
+                  placeholder=" "
+                />
+                <label for="date_start"> Date de début </label>
+              </div>
+              <div class="inputField icon-field date">
+                <input
+                  type="text"
+                  id="date_end"
+                  name="date_end"
+                  placeholder=" "
+                />
+                <label for="date_end"> Date de fin </label>
+                <i class="zmdi zmdi-delete"></i>
+              </div>
+            </li>
+            <li class="flex relative">
+              <h3 class="title_modal">Expéditeur</h3>
+              <div class="inputField">
+                <input
+                  type="text"
+                  id="expediteur"
+                  name="expediteur"
+                  placeholder=" "
+                />
+                <label for="expediteur"> Nom de l’expéditeur </label>
+                <i class="zmdi zmdi-delete"></i>
+              </div>
+            </li>
+          </ul>
+        </form>
+      </div>
+      <div class="overley"></div>
+      <!-- ======= END .Bloc NEWBOX ======= -->
+    </div>
+    <script
+      type="text/javascript"
+      src="assets/js/lib/jquery-1.12.4.min.js"
+    ></script>
+    <script type="text/javascript" src="assets/js/scripts.min.js"></script>
+  </body>
+</html>

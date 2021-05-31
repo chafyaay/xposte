@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr" xml:lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Home</title>
+    <meta name="description" content="" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="assets/img/favicon.ico"
+    />
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
+  </head>
+
+  <body>
+    <div class="global">
+      <!-- ======= START .Bloc HEADER ======= -->
+      <header class="header">
+        <div class="header_content">
+          <div class="header__logo">
+            <a href="#"><img src="assets/img/logo.jpg" alt="Sesam vitale" /></a>
+          </div>
+          <div class="header__right">
+            <nav class="header__right-nav">
+              <ul>
+                <li>
+                  <a href="#" class="current" title="Boîtes aux lettres">
+                    Boîtes aux lettres
+                  </a>
+                </li>
+                <li>
+                  <a href="#" title="Boîtes aux lettres de rejeu">
+                    Boîtes aux lettres de rejeu
+                  </a>
+                </li>
+                <li><a href="#" title="Utilisateurs"> Utilisateurs </a></li>
+                <li class="subMenu">
+                  <a href="#" title="Configuration"> Configuration </a>
+                  <ul>
+                    <li><a href="#" class="current">Frontal</a></li>
+                    <li><a href="#">WhiteList Anti-Spam</a></li>
+                    <li><a href="#">Rôles</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+            <div class="header__right-profile">
+              <h3 class="user">Dominique Sanchez</h3>
+              <h4 class="profession">Administrateur GIE</h4>
+              <i class="zmdi zmdi-chevron-up arrow-profile"></i>
+              <div class="logout">
+                <a href="#" class="sign-out">Déconnexion</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- ======= END .Bloc HEADER ======= -->
+      <div class="container pd20">
+        <!-- ======= START .Bloc TILTE & BUTTON ======= -->
+        <div class="wrapper-title flex">
+          <h1 class="main-title">Configuration de frontal</h1>
+          <button class="main-btn icon">Créer un frontal</button>
+        </div>
+        <!-- ======= END .Bloc TILTE & BUTTON ======= -->
+        <!-- ======= START .Bloc FILTRES ======= -->
+        <div id="filter">
+          <div class="flex align-items">
+            <h2 class="title mgr30">Filtres</h2>
+            <div class="inputField frontal">
+              <input type="text" id="frontal" name="frontal" placeholder=" " />
+              <label for="frontal"> Frontal </label>
+            </div>
+          </div>
+          <div class="flex align-items">
+            <button class="reset mgr20">Réinitialiser les filtres</button>
+            <button class="main-btn">Filtrer</button>
+          </div>
+        </div>
+        <!-- ======= END .Bloc FILTRES ======= -->
+        <div class="flex space-between mgb40">
+          <div class="flex">
+            <div class="totalInbox">
+              <span class="val">12</span>
+              Frontaux
+            </div>
+            <div class="wrapperPagination">
+              <span class="icone file">1/4</span>
+            </div>
+            <div class="wrapperPagination">
+              <span class="icone eye">10 par page</span>
+            </div>
+          </div>
+          <div>
+            <button class="main-btn btn-second">Exporter toute la liste</button>
+          </div>
+        </div>
+        <!-- ======= START .Bloc MAIN TABLE ======= -->
+        <table class="main-table table-frontal">
+          <thead>
+            <tr>
+              <th>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check" id="check" />
+                  <label for="check"></label>
+                </div>
+              </th>
+              <th>Frontal<i class="zmdi zmdi-caret-down"></i></th>
+              <th>Seuil (Ko) <i class="zmdi zmdi-caret-down"></i></th>
+              <th>Email d’alerte<i class="zmdi zmdi-caret-down"></i></th>
+              <th>IPs<i class="zmdi zmdi-caret-down"></i></th>
+              <th>Utilisateur<i class="zmdi zmdi-caret-down"></i></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inputCheck checkTable">
+                  <input type="checkbox" name="check2" id="check2" />
+                  <label for="check2"></label>
+                </div>
+              </td>
+              <td>assurance@01.571.rss.fr</td>
+              <td>Acceuil CESI</td>
+              <td>500 000</td>
+              <td>147.85.789</td>
+              <td class="ips">
+                <span class="icone help">10 254.19.65</span>
+              </td>
+              <td class="event">
+                <i class="zmdi zmdi-eye"></i>
+                <i class="zmdi zmdi-edit"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- ======= END .Bloc MAIN TABLE ======= -->
+      </div>
+      <!-- ======= START .Bloc NEWBOX ======= -->
+      <div class="wrapperNewBox">
+        <h3 class="wrapperNewBox_title">Configurer le frontal</h3>
+        <i class="zmdi zmdi-close"></i>
+        <form action="#">
+          <div class="inputField">
+            <input type="text" id="frontal" name="frontal" placeholder=" " />
+            <label for="frontal"> Frontal </label>
+          </div>
+          <div class="inputField error">
+            <input type="text" id="seuil" name="seuil" placeholder=" " />
+            <label for="seuil"> Seuil (Ko) </label>
+          </div>
+          <div class="inputField">
+            <input type="text" id="email" name="email" placeholder=" " />
+            <label for="email"> Mail d’alerte </label>
+          </div>
+          <div class="inputField">
+            <input type="text" id="ips" name="ips" placeholder=" " />
+            <label for="ips"> IPs </label>
+            <span class="helptext">Séparer les IPs par des virgules</span>
+          </div>
+          <div class="inputCheck mgb40">
+            <input type="checkbox" name="users" id="users" />
+            <label for="users"> Utilisateurs</label>
+          </div>
+        </form>
+        <div class="wrapper-btn">
+          <button class="main-btn btn-reset">Annuler</button>
+          <button class="main-btn btn-second">Valider</button>
+        </div>
+      </div>
+      <div class="overley"></div>
+      <div id="cover-spin"></div>
+      <!-- ======= END .Bloc NEWBOX ======= -->
+    </div>
+    <script
+      type="text/javascript"
+      src="assets/js/lib/jquery-1.12.4.min.js"
+    ></script>
+    <script type="text/javascript" src="assets/js/scripts.min.js"></script>
+  </body>
+</html>

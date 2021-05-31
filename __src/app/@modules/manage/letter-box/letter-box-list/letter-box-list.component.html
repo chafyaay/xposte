@@ -1,0 +1,212 @@
+<table class="main-table">
+  <thead>
+    <tr>
+      <th>
+        <div class="inputCheck checkTable">
+          <input
+            #input
+            type="checkbox"
+            name="check"
+            id="check"
+            (click)="selectAllBal($event)"
+            [(ngModel)]="selectAll"
+            [checked]="selectAll"
+          />
+
+          <label for="check"></label>
+        </div>
+      </th>
+      <th>
+        {{ 'ETAT' | translate }}
+
+        <i
+          class="zmdi"
+          (click)="toggleTrie('etatBal')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'etatBal',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'etatBal' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'etatBal' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+        <!--une fois rachid me donne l'icon bleu je vais les changés ici ,ce n'est pas zmdi zmdi-caret-down-->
+      </th>
+      <th>
+        {{ 'REJOUABLE' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('rejouable')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'rejouable',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'rejouable' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'rejouable' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+        <!--une fois rachid me donne l'icon bleu je vais les changés ici ,ce n'est pas zmdi zmdi-caret-down-->
+      </th>
+      <th>
+        {{ 'TYPE' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('typeBal')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'typeBal',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'typeBal' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'typeBal' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>
+        {{ 'ADRESS' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('adresseBal')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'adresseBal',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'adresseBal' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'adresseBal' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>
+        {{ 'RELAI_MESSAGERIE' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('relaisMessagerie')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy ||
+              (sortBy && sortBy === '') ||
+              sortBy !== 'relaisMessagerie',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'relaisMessagerie' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'relaisMessagerie' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>
+        {{ 'FRONTAL' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('frontal')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'frontal',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'frontal' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'frontal' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>
+        {{ 'SEUIL' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('seuil')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'seuil',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'seuil' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'seuil' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>
+        {{ 'MAIL_ALERTE' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('adresseMailAlerte')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy ||
+              (sortBy && sortBy === '') ||
+              sortBy !== 'adresseMailAlerte',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'adresseMailAlerte' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'adresseMailAlerte' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>IPs</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <app-letter-box-item
+      *ngFor="let bal of listBAL; let index = index"
+      [frontalRefs]="frontalRefs"
+      [balData]="bal"
+      [RowNumber]="index"
+      [selectedBAList]="selectedBALList"
+      [Highlight]="highlight"
+      [adresseHighlight]="adresseHighlight"
+      [highlighRowEnable]="highlighRowEnable"
+      (selectedBALEvent)="emitToParent($event)"
+      (updateBALEvent)="updateBal($event)"
+    ></app-letter-box-item>
+  </tbody>
+</table>

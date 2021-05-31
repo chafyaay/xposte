@@ -1,0 +1,46 @@
+image: docker-proxy.docapost.tech/node:10.15.1
+
+stages:
+  - build
+  - test
+  - deploy
+
+cache:
+  key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DI
+  paths:
+    - ./node_modules
+
+build msgsv-sal-webapp:
+  stage: build
+  before_script:
+    - rm package-lock.json
+    - npm config set registry https://outils.docapost.tech/nexus/repository/npm-central/
+    - npm install -g @angular/cli@8.3.19
+    - npm install
+  script:
+    - ng build --prod --output-hashing all --base-href / --deploy-url /
+    - echo "<!-- $CI_JOB_ID -->" >> ./dist/sesam/index.html
+    - echo "artifactId=$CI_JOB_ID" > build.env
+  artifacts:
+    reports:
+      dotenv: build.env
+    paths:
+      - ./dist
+
+
+
+deploy:
+  stage: deploy
+  tags:
+    - msgsv
+    - front
+    - deploy
+  script:
+    - ansible-playbook /home/centos/playbooks/sesam-playbook.yaml -l VM-dev-sesam -f 5 -e artifact_id=$artifactId -e project_id=$CI_PROJECT_ID -e path=sesam
+  variables:
+    GIT_STRATEGY: none
+    ANSIBLE_HOST_KEY_CHECKING: 'False'
+  needs:
+    - job: build msgsv-sal-webapp
+      artifacts: true
+  when: manual

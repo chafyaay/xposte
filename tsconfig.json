@@ -1,0 +1,35 @@
+/* to learn more about this file see: https://angular.io/config/tsconfig. */
+
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@core": ["__src/app/@corere"],
+      "@core/*": ["__src/app/@core/*/*"],
+      "@modules": ["__src/app/@moduleses"],
+      "@modules/*": ["__src/app/@modules/*/*"],
+      "@shared": ["__src/app/@shareded"],
+      "@shared/*": ["__src/app/@shared/*/*"],
+      "@env/*": ["__src/environments/*/*"],
+      "@app/*": ["__src/app/*/*"]
+    }
+  },
+
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "preserveWhitespaces": true
+  }
+}

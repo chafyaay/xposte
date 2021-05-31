@@ -1,0 +1,103 @@
+<tr
+  [ngClass]="
+    balData.isChecked ? 'selectedRow ' + highlighBalClass : highlighBalClass
+  "
+>
+  <td>
+    <div class="inputCheck checkTable">
+      <input
+        type="checkbox"
+        id="RowNumber-{{ RowNumber }}"
+        (click)="selectRow(balData.adresseBal, $event)"
+        [(ngModel)]="balData.isChecked"
+      />
+
+      <label for="RowNumber-{{ RowNumber }}"></label>
+    </div>
+  </td>
+  <td
+    class="icone"
+    [ngClass]="balData.etatBal == 'inactive' ? 'state-pause' : 'state-ok'"
+  ></td>
+  <td class="icone" [ngClass]="balData.balRejeu ? 'check' : ''"></td>
+  <td class="icone" [ngClass]="balData.typeBal | lowercase">
+    {{ balData.typeBal }}
+  </td>
+  <td
+    [innerHTML]="
+      balData.adresseBal | highlightSearch: (Highlight ? adresseHighlight : '')
+    "
+  >
+    {{ balData.adresseBal }}
+  </td>
+  <td>{{ balData.adresseMailAlerte }}</td>
+  <td>{{ balData.frontal.nom }}</td>
+  <td>{{ balData.seuil }}</td>
+  <td>{{ balData.adresseMailAlerte }}</td>
+  <td class="ips">
+    <span *ngFor="let ip of balData.listeAdressesIPAutorises" class="icone">
+      {{ ip }}
+    </span>
+  </td>
+  <td class="event">
+    <i
+      class="zmdi"
+      [ngClass]="showSubRows ? 'zmdi-eye-off displayBlock ' : 'zmdi-eye '"
+      (click)="showSubRows = !showSubRows"
+    ></i>
+    <i
+      class="zmdi zmdi-edit"
+      [ngClass]="showSubRows ? 'displayBlock ' : ''"
+      (click)="updateBal()"
+    ></i>
+  </td>
+</tr>
+
+<tr class="subLine" *ngIf="showSubRows">
+  <td>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <strong>{{ 'INBOX_FOLDER' | translate }}</strong>
+          </td>
+          <td>
+            {{ 'MESSAGE_UNREAD' | translate }} :
+            {{ balData.dossierInbox?.nbMessagesNonLus }}
+          </td>
+          <td>
+            {{ 'FOLDER_VOLUME' | translate }} :
+            {{ balData.dossierInbox?.volumeDossier }}
+          </td>
+          <td>
+            <span>{{ 'DATE_LAST_SUMMARY' | translate }}&nbsp; : &nbsp;</span>
+            {{
+              balData.dossierInbox?.dateDernierReleve
+                | date: 'dd/MM/yyyy à HH:mm'
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>{{ 'TAMPON_FOLDER' | translate }}</strong>
+          </td>
+          <td>
+            {{ 'MESSAGE_TAMPON' | translate }} :
+            {{ balData.dossierTampon?.nbMessagesTamponnes }}
+          </td>
+          <td>
+            {{ 'FOLDER_VOLUME' | translate }} :
+            {{ balData.dossierTampon?.volumeDossier }}
+          </td>
+          <td>
+            <span>{{ 'DATE_TAMPON' | translate }}&nbsp; : &nbsp; </span>
+            {{
+              balData.dossierTampon?.dateMiseEnTampon
+                | date: 'dd/MM/yyyy à HH:mm'
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </td>
+</tr>

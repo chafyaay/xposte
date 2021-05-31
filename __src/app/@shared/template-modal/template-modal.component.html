@@ -1,0 +1,15 @@
+<div class="poppin" [ngClass]="isModalOpen ? 'show ' : ''">
+  <h3 class="wrapperNewBox_title">{{ TitleModal }}</h3>
+  <span>
+    <i (click)="annuler()" class="zmdi zmdi-close"></i>
+  </span>
+  <ng-content></ng-content>
+  <div class="wrapper-btn">
+    <button class="main-btn btn-reset" (click)="annuler()">
+      {{ 'CANCEL' | translate }}
+    </button>
+    <button class="main-btn btn-second" [disabled]="!isValid" (click)="valider()">
+      {{ 'VALID' | translate }}
+    </button>
+  </div>
+</div>
