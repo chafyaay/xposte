@@ -2,8 +2,8 @@
   <div class="m-a-s-k" (mouseenter)="showInfoBulle = true"
   (mouseout)="showInfoBulle = false"></div>
   <span class="icone help"></span>
-    <ul *ngIf="balSelected.length>0" class="tooltip-text" [ngClass]="{ active: showInfoBulle }">
-      <li *ngFor="let adress of balSelected;let i=index">
+    <ul *ngIf="selectedBal && (selectedBal.length>0)" class="tooltip-text" [ngClass]="{ active: showInfoBulle }">
+      <li *ngFor="let adress of selectedBal;let i=index">
         <div *ngIf="i<10">{{ adress }}</div>
 
       </li>

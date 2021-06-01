@@ -8,10 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 export class InfoBulleComponent implements OnInit {
   showInfoBulle: boolean;
   @Input()
-  balSelected: any[];
+  selectedBal: any[]=[];
   constructor() {
     this.showInfoBulle = false;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

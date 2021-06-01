@@ -129,7 +129,6 @@ private remise_dispo_service:RemiseDispoService,
 
   REMISE_DISPO_EVENT_HANDLER(event: any) {
     this.isFormValid=event.isFormValid;
-
     this.REMISE_DISPO_OBJ={
       etatBal:this.balFilter.etatBal,
       adresseBal:this.balFilter.adresseBal,
@@ -154,6 +153,7 @@ this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
 },
 err=>{
   this.openNotifRemiseDispoSuccess=false;
+  this.openNotifBalCreationSucces=false;
   this.openNotifRemiseDispoError=true;
   this.showRemiseDispositionModal=false;
   this.notificationErrorMessage="Erreur lors de remise à disposition"

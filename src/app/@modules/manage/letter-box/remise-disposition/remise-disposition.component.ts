@@ -30,6 +30,8 @@ export class RemiseDispositionComponent implements OnInit {
 
   @Input()
   balNumber :number;
+  @Input()
+  selectedBal :any[]=[];
 
   @Input()
   balSelected :number;
@@ -53,6 +55,8 @@ export class RemiseDispositionComponent implements OnInit {
   list2Empty = true;
   REMISE_DISPO_OBJ:remiseDispoI={};
   @Output() REMISE_DISPO_EVENT:EventEmitter<any>=new EventEmitter();
+  LIST_A=[];
+  LIST_B=[];
 
   public  FIELD_LISTS= {list1:[],list2:[] }
 
@@ -62,6 +66,8 @@ export class RemiseDispositionComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.createRemiseDispoForm();
+    console.log(this.f.get('dateHeureDebut').value)
 
     const FIELD:SUBFIELDSI=this.translate.translations[this.translate.currentLang].criters
     this.FIELD_LISTS={
@@ -97,15 +103,15 @@ export class RemiseDispositionComponent implements OnInit {
    this.LIST_B=[...this.FIELD_LISTS.list2];
 
     //this.FIELD_LISTS.list1.map(item=>item.label=this.FIELDS.REMETTRE_DISPO_EMMETTEUR)
-    this.createRemiseDispoForm();
+    
 
   }
 
   createRemiseDispoForm() {
     this.miseDispoForm = new FormGroup({
       periode:new FormControl('',{validators:[PeriodValidator]}),
-      dateHeureDebut: new FormControl('', { validators: [Validators.required, DateTimeValidator] }),
-      dateHeureFin: new FormControl('', { validators: [Validators.required, DateTimeValidator] }),
+      dateHeureDebut: new FormControl(null, { validators: [Validators.required, DateTimeValidator] }),
+      dateHeureFin: new FormControl(null, { validators: [Validators.required, DateTimeValidator] }),
       emetteur: new FormControl(null),
       destinataire: new FormControl(null),
       contentDescription: new FormControl(null),
@@ -132,10 +138,12 @@ export class RemiseDispositionComponent implements OnInit {
     let py = now.setFullYear(now.getFullYear() - 1);
     let dd = new Date(this.f.get('dateHeureDebut').value).getTime();
     let df = new Date(this.f.get('dateHeureFin').value).getTime();
-    const isValid= (dd < df && dd < n && df <= n && dd >= py && df > py);   
+     this.isPeriodValid= (dd < df && dd < n && df <= n && dd >= py && df > py);   
   
-   this.f.get('periode').patchValue(isValid);
-   if(isValid)
+     console.log(this.f.get('dateHeureDebut').value,'-- DF: ',df, "dif=", dd-df)
+   
+   this.f.get('periode').patchValue(this.isPeriodValid);
+   if(this.isPeriodValid)
    {
      this.fillObj('dateHeureDebut');
      this.fillObj('dateHeureFin');
@@ -234,8 +242,7 @@ export class RemiseDispositionComponent implements OnInit {
   }
   
  // insert filter field 
- LIST_A=[];
- LIST_B=[];
+
   insertField(listType: string) {
     if(this.selectedFieldId==='emetteur'){
       this.miseDispoForm.get('emetteur').setValidators([customEmailValidator()])

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,8 +32,16 @@ export function apiUrl(windowRef: WindowRefService) {
   );
 }
 
+import { registerLocaleData } from '@angular/common';
+
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
+
+
 export const Providers = [
   { provide: 'api_url', useFactory: apiUrl, deps: [WindowRefService] },
+   {provide: LOCALE_ID, useValue: "fr-FR" } 
 ];
 
 @NgModule({

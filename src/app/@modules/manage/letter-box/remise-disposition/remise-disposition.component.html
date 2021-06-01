@@ -5,7 +5,7 @@
       {{ 'BOITES_AUX_LETTRES' | translate }}
     </div>
     <div class="info-bulle">
-      <app-info-bulle [balSelected]="balSelected"></app-info-bulle>
+      <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
     </div>
   </div>
 <h3 >
@@ -20,8 +20,7 @@
     <app-date-time-picker class="mgl20" label="{{'REMETTRE_DISPO_DATE_FIN' | translate}}"  (datetimevalueEvent)="onPeriodeSelect($event,'df')"
       formControlName="dateHeureFin" name="activeEndDate"></app-date-time-picker>
   </div>
-  <span *ngIf="!this.isPeriodValid" class="helptext text-red">{{errMsg}}</span>
-
+  <span *ngIf="f.get('dateHeureDebut').touched && (!this.isPeriodValid)" class="helptext text-red">{{'INVALID_INPUT' | translate}}</span>
   <!-- list des messages  lus  -->
   <div class="select-field field-lists flex mgt40">
     <div class="inputField" style="flex-grow: 1">
