@@ -1,0 +1,70 @@
+<div class="inputField icon-field">
+  <input
+    class="icon-field date"
+    (blur)="inputBlur($event)"
+    [ngModel]="dateString | date: inputDatetimeFormat"
+    (change)="onInputChange($event)"
+    [disabled]="disabled"
+    [ngbPopover]="calendarContent"
+    placeholder=" "
+  />
+  <span class="calendar-icone" [ngbPopover]="calendarContent"></span>
+  <label for="{{label}}"> {{ label }} </label>
+</div>
+
+<ng-template #calendarContent>
+  <div>
+    <div *ngIf="!showTimePickerToggle">
+      <ngb-datepicker
+        id="dp"
+        #dp
+        name="datepicker"
+        [ngModel]="datetime"
+        (ngModelChange)="onDateChange($event, dp)"
+      ></ngb-datepicker>
+    </div>
+    <div *ngIf="!showTimePickerToggle">
+      <div class="mt-auto">
+        <ngb-timepicker
+          #tp
+          name="timepicker"
+          [ngModel]="datetime"
+          (ngModelChange)="onTimeChange($event)"
+          [seconds]="seconds"
+          [hourStep]="hourStep"
+          [minuteStep]="minuteStep"
+        >
+        </ngb-timepicker>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #calendarContent2>
+  <div>
+    <div *ngIf="!showTimePickerToggle">
+      <ngb-datepicker
+        id="dp"
+        #dp
+        name="datepicker"
+        [ngModel]="datetime"
+        (ngModelChange)="onDateChange($event, dp)"
+      ></ngb-datepicker>
+    </div>
+    <div *ngIf="!showTimePickerToggle">
+      <div class="mt-auto">
+        <ngb-timepicker
+          #tp
+          name="timepicker"
+          [ngModel]="datetime"
+          (ngModelChange)="onTimeChange($event)"
+          [seconds]="seconds"
+          [hourStep]="hourStep"
+          [minuteStep]="minuteStep"
+        >
+        </ngb-timepicker>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
