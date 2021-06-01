@@ -30,6 +30,8 @@ export class RemiseDispositionComponent implements OnInit {
 
   @Input()
   balNumber :number;
+  @Input()
+  selectedBal :any[]=[];
 
   @Input()
   balSelected :number;
@@ -64,6 +66,8 @@ export class RemiseDispositionComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.createRemiseDispoForm();
+    console.log(this.f.get('dateHeureDebut').value)
 
     const FIELD:SUBFIELDSI=this.translate.translations[this.translate.currentLang].criters
     this.FIELD_LISTS={
@@ -99,15 +103,15 @@ export class RemiseDispositionComponent implements OnInit {
    this.LIST_B=[...this.FIELD_LISTS.list2];
 
     //this.FIELD_LISTS.list1.map(item=>item.label=this.FIELDS.REMETTRE_DISPO_EMMETTEUR)
-    this.createRemiseDispoForm();
+    
 
   }
 
   createRemiseDispoForm() {
     this.miseDispoForm = new FormGroup({
       periode:new FormControl('',{validators:[PeriodValidator]}),
-      dateHeureDebut: new FormControl('', { validators: [Validators.required, DateTimeValidator] }),
-      dateHeureFin: new FormControl('', { validators: [Validators.required, DateTimeValidator] }),
+      dateHeureDebut: new FormControl(null, { validators: [Validators.required, DateTimeValidator] }),
+      dateHeureFin: new FormControl(null, { validators: [Validators.required, DateTimeValidator] }),
       emetteur: new FormControl(null),
       destinataire: new FormControl(null),
       contentDescription: new FormControl(null),
@@ -136,6 +140,7 @@ export class RemiseDispositionComponent implements OnInit {
     let df = new Date(this.f.get('dateHeureFin').value).getTime();
      this.isPeriodValid= (dd < df && dd < n && df <= n && dd >= py && df > py);   
   
+     console.log(this.f.get('dateHeureDebut').value,'-- DF: ',df, "dif=", dd-df)
    
    this.f.get('periode').patchValue(this.isPeriodValid);
    if(this.isPeriodValid)

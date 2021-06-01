@@ -30,7 +30,7 @@
       openNotifRemiseDispoSuccess ||
       openNotifRemiseDispoError ||
       openNotifTemponnageError
-    "
+    "    
     [notificationColor]="
       openNotifTemponnageError || openNotifRemiseDispoError
         ? 'alerteMessage'
@@ -123,41 +123,26 @@
             : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
         }}
       </h3>
-      <ul>
-        <li>{{ 'REMISE-DISPO_BAL' | translate }} : {{ this.balTamponNbr }}</li>
+<ul class="flex">
+<li class="notif-items">{{ 'REMISE-DISPO_BAL' | translate }} : {{ this.balTamponNbr }}</li>
+<li class="notif-items">{{ 'ETAT' | translate }} : {{ REMISE_DISPO_OBJ.etatBal }}</li>
+<li *ngIf="REMISE_DISPO_OBJ.adresseBal" class="notif-items">{{ 'ADRESS' | translate }} : {{ REMISE_DISPO_OBJ.adresseBal }}</li>
+<li *ngIf="REMISE_DISPO_OBJ.identifiantFrontal" class="notif-items">{{ 'FRONTAL' | translate }} : {{ REMISE_DISPO_OBJ.identifiantFrontal }}</li>
+<li *ngIf="REMISE_DISPO_OBJ.dateHeureDebut &&  REMISE_DISPO_OBJ.dateHeureFin" class="notif-items">
+  <span class="mbl20">{{'REMETTRE_DISPO_DATE_DEBUT' | translate}} : {{ REMISE_DISPO_OBJ.dateHeureDebut  | date : 'EEEE, MMMM d, h:mm'  }}</span>
+  <span class="mbl20">{{'REMETTRE_DISPO_DATE_FIN' | translate}} : {{ REMISE_DISPO_OBJ.dateHeureFin | date : 'EEEE, MMMM d, h:mm'}}</span>
+</li>
+</ul>
 
-        <li>
-          {{ 'CRITERE_MISE_DISPO_LABEL' | translate }} :
-          <ng-container *ngIf="REMISE_DISPO_OBJ.etatBal">
-            &nbsp; {{ 'ETAT' | translate }}:
-            <div>
-              {{ REMISE_DISPO_OBJ.etatBal }}
-            </div> </ng-container
-          >&nbsp;&nbsp;&nbsp;&nbsp;
-          <ng-container *ngIf="REMISE_DISPO_OBJ.adresseBal">
-            &nbsp;{{ 'ADRESS' | translate }}&nbsp;&nbsp;
-            <div>
-              <span class="">{{ REMISE_DISPO_OBJ.adresseBal }}</span>
-            </div>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-          </ng-container>
-          <ng-container *ngIf="REMISE_DISPO_OBJ.identifiantFrontal">
-            &nbsp;{{ 'FRONTAL' | translate }}&nbsp;&nbsp;&nbsp;&nbsp;
-            <div>
-              <span class="">{{ REMISE_DISPO_OBJ.identifiantFrontal }}</span>
-            </div>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-          </ng-container>
-        </li>
-      </ul>
     </ng-container>
+
     <ng-container *ngIf="openNotifRemiseDispoError">
       {{ notificationErrorMessage }}
     </ng-container>
   </app-notification>
   <!--notification de Creation de BAL -->
   <app-notification
-    
+    *ngIf="openNotifBalCreationSucces || openNotifBalCreationFail"
     [notificationColor]="openNotifBalCreationFail ? 'alerteMessage' : 'message'"
     (closeNotfification)="resetNotificationDataAndClose()"
   >
@@ -168,15 +153,11 @@
           : ('BAL_CREATION_NOTIFICATION_FAIL' | translate)
       }}
     </h3>
-    <ng-container *ngIf="openNotifBalCreationSucces">
+    <ng-container *ngIf="openNotifBalCreationSucces || openNotifRemiseDispoSuccess">
       <ul>
         <li>
           {{ 'ADDRESS' | translate }} :
           {{ newBal?.adresseBal }}
-        </li>
-        <li *ngIf="REMISE_DISPO_OBJ.dateHeureDebut && REMISE_DISPO_OBJ.dateHeureFin">
-          {{ 'REMETTRE_DISPO_PERIODE' | translate }} :
-          {{ REMISE_DISPO_OBJ.dateHeureDebut }} : {{ REMISE_DISPO_OBJ.dateHeureFin }} 
         </li>
         <li>
           &nbsp; {{ 'FRONTAL' | translate }} :

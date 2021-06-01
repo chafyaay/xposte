@@ -129,7 +129,6 @@ private remise_dispo_service:RemiseDispoService,
 
   REMISE_DISPO_EVENT_HANDLER(event: any) {
     this.isFormValid=event.isFormValid;
-
     this.REMISE_DISPO_OBJ={
       etatBal:this.balFilter.etatBal,
       adresseBal:this.balFilter.adresseBal,
@@ -150,7 +149,6 @@ private remise_dispo_service:RemiseDispoService,
 this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
   res=>{
     this.openNotifRemiseDispoSuccess=true;
-    this.openNotifBalCreationSucces=true;
     this.showRemiseDispositionModal=false;
 },
 err=>{

@@ -204,16 +204,26 @@ export class DateTimePickerComponent extends NgbDatepickerI18n
     }
 
     this.setDateStringModel();
-    this.datetimevalueEvent.emit(this.datetime);
+    console.log(this.datetime)
+    this.datetimevalueEvent.emit(this.setDateStringModel());
   }
 
   onTimeChange(event: NgbTimeStruct) {
-    this.datetime.hour = event.hour;
-    this.datetime.minute = event.minute;
-    this.datetime.second = event.second;
-
-    this.setDateStringModel();
-    this.datetimevalueEvent.emit(this.datetime);
+    if(!event) event={
+      hour:new Date().getHours(),
+      minute:new Date().getMinutes(),
+      second:new Date().getSeconds()
+    }
+    console.log(event)
+    if(this.datetime){
+      this.datetime.hour = event.hour;
+      this.datetime.minute = event.minute;
+      this.datetime.second = event.second;
+  
+      this.setDateStringModel();
+      this.datetimevalueEvent.emit(this.setDateStringModel());
+  
+    }
   }
 
   setDateStringModel() {
