@@ -150,10 +150,12 @@ private remise_dispo_service:RemiseDispoService,
 this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
   res=>{
     this.openNotifRemiseDispoSuccess=true;
+    this.openNotifBalCreationSucces=true;
     this.showRemiseDispositionModal=false;
 },
 err=>{
   this.openNotifRemiseDispoSuccess=false;
+  this.openNotifBalCreationSucces=false;
   this.openNotifRemiseDispoError=true;
   this.showRemiseDispositionModal=false;
   this.notificationErrorMessage="Erreur lors de remise à disposition"

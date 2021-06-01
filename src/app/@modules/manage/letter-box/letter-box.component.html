@@ -155,7 +155,7 @@
   </app-notification>
   <!--notification de Creation de BAL -->
   <app-notification
-    *ngIf="openNotifBalCreationSucces || openNotifBalCreationFail"
+    
     [notificationColor]="openNotifBalCreationFail ? 'alerteMessage' : 'message'"
     (closeNotfification)="resetNotificationDataAndClose()"
   >
@@ -171,6 +171,10 @@
         <li>
           {{ 'ADDRESS' | translate }} :
           {{ newBal?.adresseBal }}
+        </li>
+        <li *ngIf="REMISE_DISPO_OBJ.dateHeureDebut && REMISE_DISPO_OBJ.dateHeureFin">
+          {{ 'REMETTRE_DISPO_PERIODE' | translate }} :
+          {{ REMISE_DISPO_OBJ.dateHeureDebut }} : {{ REMISE_DISPO_OBJ.dateHeureFin }} 
         </li>
         <li>
           &nbsp; {{ 'FRONTAL' | translate }} :
