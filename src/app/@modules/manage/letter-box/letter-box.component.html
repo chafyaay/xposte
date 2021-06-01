@@ -27,12 +27,14 @@
     *ngIf="
       openNotifDetemponnageSucces ||
       openNotifTemponnage ||
-      openNotifRemiseDispoSuccess||
-      openNotifRemiseDispoError||
+      openNotifRemiseDispoSuccess ||
+      openNotifRemiseDispoError ||
       openNotifTemponnageError
     "
     [notificationColor]="
-      (openNotifTemponnageError || openNotifRemiseDispoError) ? 'alerteMessage' : notificationColor
+      openNotifTemponnageError || openNotifRemiseDispoError
+        ? 'alerteMessage'
+        : notificationColor
     "
     (closeNotfification)="resetNotificationDataAndClose()"
   >
@@ -112,20 +114,20 @@
     <ng-container *ngIf="openNotifDetemponnageFail">
       {{ notificationErrorMessage }}
     </ng-container>
-<!-- show remise disposition notification  -->
+    <!-- show remise disposition notification  -->
     <ng-container *ngIf="openNotifRemiseDispoSuccess">
       <h3 class="message_title">
         {{
           openNotifRemiseDispoSuccess
-            ? ('DETAMPON_NOTIFICATION_SUCCES' | translate)
-            : ('DETAMPON_NOTIFICATION_FAIL' | translate)
+            ? ('REMISE_DISPO_NOTIFICATION_SUCCES' | translate)
+            : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
         }}
       </h3>
       <ul>
-        <li>{{ 'DETAMPO_BAL' | translate }} : {{ this.balTamponNbr }}</li>
+        <li>{{ 'REMISE-DISPO_BAL' | translate }} : {{ this.balTamponNbr }}</li>
 
         <li>
-          {{ 'CRITERE_DETAMPO_LABEL' | translate }} :
+          {{ 'CRITERE_MISE_DISPO_LABEL' | translate }} :
           <ng-container *ngIf="REMISE_DISPO_OBJ.etatBal">
             &nbsp; {{ 'ETAT' | translate }}:
             <div>
@@ -148,7 +150,7 @@
           </ng-container>
         </li>
       </ul>
-    </ng-container> 
+    </ng-container>
     <ng-container *ngIf="openNotifRemiseDispoError">
       {{ notificationErrorMessage }}
     </ng-container>
@@ -298,7 +300,7 @@
         {{ 'BALs' | translate }}
       </button>
       <button
-      *ngIf="showRemiseDispositionBtn"
+        *ngIf="showRemiseDispositionBtn"
         class="main-btn btn-second"
         (click)="openRemiseDispositionModal()"
       >
@@ -375,10 +377,11 @@
     (isModalClose)="closeRemiseDispositionModal($event)"
     (valide)="remise_dispo_submit($event)"
   >
-    <app-remise-disposition 
-    [balSelected]="selectedBal"
-    [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"    
-    (REMISE_DISPO_EVENT)="REMISE_DISPO_EVENT_HANDLER($event)"></app-remise-disposition>
+    <app-remise-disposition
+      [selectedBal]="selectedBal"
+      [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
+      (REMISE_DISPO_EVENT)="REMISE_DISPO_EVENT_HANDLER($event)"
+    ></app-remise-disposition>
   </app-template-modal>
 
   <div class="flex space-between mgb40">
