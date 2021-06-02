@@ -1,0 +1,27 @@
+<div [formGroup]="miseDispoForm" class="app-remise-dispo pd20">
+    <div class="flex">
+      <div class="totalInbox mgb30">
+        <span class="val">{{ balNumber }}</span>
+        {{ 'BOITES_AUX_LETTRES' | translate }}
+      </div>
+      <div class="info-bulle">
+        <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
+      </div>
+    </div>
+  <h3 >{{ 'REMETTRE_DISPO_CRITERE_TITLE' | translate }}</h3>
+
+    <!-- Select BOX  -->
+    <div class="select-field field-lists flex mgt40">
+        <div class="inputField" style="flex-grow: 1">
+          <ng-select [items]="LIST_OF_CRITERIA" bindLabel="label" bindValue="id" placeholder="Etat" name="filterField"
+            class="ngselectCustom" (change)="SELECT_FIELD($event)" (focus)="ngSelectOpened = true">
+          </ng-select>
+          <label for="Critères de recherche du message" [ngClass]="ngSelectOpened ? 'ng-select-label' : ''">
+            {{'REMETTRE_DISPO_FILTER_1' | translate}}
+            
+          </label>
+        </div>
+        <button class="main-btn icon mgl20" [disabled]="list1Empty" (click)="INSERT_FIELD()">
+          {{'AJOUTER_CRITERE' | translate}}
+        </button>
+      </div>

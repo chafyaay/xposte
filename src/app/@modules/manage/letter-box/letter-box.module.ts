@@ -21,6 +21,7 @@ import { TemponnageComponent } from './temponnage/temponnage.component';
 import { TamponnageNotificationComponent } from './tamponnage-notification/tamponnage-notification.component';
 import { RemiseDispositionComponent } from './remise-disposition/remise-disposition.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModifierMasseBalsComponent } from '../modifier-masse-bals/modifier-masse-bals.component';
 @NgModule({
   declarations: [
     LetterBoxListComponent,
@@ -35,6 +36,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TamponnageNotificationComponent,
     UpdateBalComponent,
     RemiseDispositionComponent,
+    ModifierMasseBalsComponent
   ],
   imports: [
     LetterBoxRoutingModule,
@@ -46,6 +48,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     NgbModule,
   ],
-  exports: [RemiseDispositionComponent],
+  exports: [RemiseDispositionComponent,ModifierMasseBalsComponent],
 })
 export class LetterBoxModule {}
