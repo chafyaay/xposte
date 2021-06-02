@@ -1,4 +1,4 @@
-<div class="app-remise-dispo pd20" [formGroup]="createBALForm">
+<div class="app-remise-dispo pd20">
     <div class="flex">
         <div class="totalInbox mgb30">
             <span class="val">{{ balNumber }}</span>
@@ -28,13 +28,15 @@
 
     <!-- fields -->
 
+    
+
     <div class="form mbt40">
-       
+        <form action="#" [formGroup]="createBALForm">
 
 
-            <div *ngFor="let field of list1">
+            <div *ngFor="let field of LIST_OF_CRITERIA">
                
-<div  *ngIf="field.disabled" class="inputField frontal">
+<div  *ngIf="field.disabled" class="inputField">
     <ng-select *ngIf="!field.disabled && field.type==='list'"
     [items]="field.id==2?typeBALList:selectListDataNew.frontal" bindLabel="label" bindValue="id"
     placeholder="Frontal" class="form-control ngselectCustom" id="frontal-bal-cration"
@@ -86,7 +88,7 @@
             <input type="hidden" formControlName="balRelais" />
 
 
-
+        </form>
 
         <div class="wrapper-btn">
             <button class="main-btn btn-reset" (click)="closeFormulaire()">
