@@ -298,12 +298,13 @@
       <div class="modifier-mass-bals mbt20">
         <i class="zmdi zmdi-edit"></i>
         <ng-select class="main-btn btn-second" selectedLabel=""
-         (change)="openSidebarCanvas($event)" 
          [items]="[
          {id:0,label:'Exporter au forma Excel  '+this.selectedBal.length+' BALs'},
          {id:1,label:'Modifier en masse '+this.selectedBal.length+' BALs'},
          {id:2,label:'Désactiver en masse '+this.selectedBal.length+' BALs'}]"
          bindLabel="label" bindValue="id"
+         (change)="openSidebarCanvas($event)" 
+
          ></ng-select>
       </div>
 
@@ -314,6 +315,8 @@
       (closeFormulaire)="CloseCreateBALForm()"
     >
       <app-modifier-masse-bals
+      [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
+      [selectedBal]="selectedBal"
       ></app-modifier-masse-bals>
     </app-template-formulaire>
 

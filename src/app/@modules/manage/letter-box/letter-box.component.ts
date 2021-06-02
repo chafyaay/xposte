@@ -407,17 +407,21 @@ err=>{
 // yassine chafyaay
 // modifier masse bals
 isModMassbalsFormulaireopen=false;
-  openModifierMasseBals(): void {
-    this.hideNotificationMessage();
-    this.isModMassbalsFormulaireopen = !this.isModMassbalsFormulaireopen;
-  }
 
   openSidebarCanvas(event:any){
-    const id=event.id;
-    if(id===1){
-      this.openModifierMasseBals();
-    }
-    console.log(event)
+    setTimeout(() => {
+      if(event){
+        const id=event.id;
+        if(id===1){
+          this.hideNotificationMessage();
+          this.isModMassbalsFormulaireopen = !this.isModMassbalsFormulaireopen;
+        }
+        this.ngSelectComponent.handleClearClick();
+        this.ngSelectComponent.close()
+  
+      }
+  
+    }, 100);
   }
 
   /* ----------- */
