@@ -6210,3 +6210,50 @@ ngb-popover-window {
   background: #0063a9;
   color: white;
 }
+// modifier masse bals
+.modifier-mass-bals{
+  min-width: 3rem;
+  .main-btn.btn-second {
+    background: #ffffff;
+    color: #fff;
+    padding: 0;
+    width: 5rem !important;
+}
+.ng-value{
+top: 0 !important;
+visibility: hidden;
+}
+.ng-input{
+  display: none !important;
+}
+.ng-arrow-wrapper {
+  right: 9px;
+  top: 6px;
+ 
+}
+.ng-select-container {
+  border-bottom: 0 !important;
+}
+ng-dropdown-panel {
+  border-color: #5092c4;
+  border-width: 2px;
+  top: 32px !important;
+  border-radius: 5px;
+  width: 15rem;
+    opacity: 1;
+    left: -162px;
+    &.ng-select-bottom {
+      top: 100%;
+      border-top-color: #5092c4;;
+      margin-top: -1px;
+  }
+   .ng-option {
+    text-align: left;
+}
+}
+
+
+
+}
+
+

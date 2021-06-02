@@ -19,6 +19,7 @@ import { Observable } from 'rxjs';
 import { LetterBoxListComponent } from 'src/app/@modules/manage/letter-box/letter-box-list/letter-box-list.component';
 import { remiseDispoI } from 'src/app/@shared/models/remise-dispo';
 import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-letter-box',
@@ -26,6 +27,8 @@ import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service'
   styleUrls: ['./letter-box.component.scss'],
 })
 export class LetterBoxComponent implements OnInit, OnChanges {
+  @ViewChild(NgSelectComponent,{static:false}) ngSelectComponent: NgSelectComponent;
+
   // recieve highlight Information and informe the table list
   highlight: boolean;
   adresseHighlight: string;
@@ -401,8 +404,32 @@ err=>{
     this.hideNotificationMessage();
     this.isFormulaireopen = !this.isFormulaireopen;
   }
+// yassine chafyaay
+// modifier masse bals
+isModMassbalsFormulaireopen=false;
+
+  openSidebarCanvas(event:any){
+    setTimeout(() => {
+      if(event){
+        const id=event.id;
+        if(id===1){
+          this.hideNotificationMessage();
+          this.isModMassbalsFormulaireopen = !this.isModMassbalsFormulaireopen;
+        }
+        this.ngSelectComponent.handleClearClick();
+        this.ngSelectComponent.close()
+  
+      }
+  
+    }, 100);
+  }
+
+  /* ----------- */
+
   CloseCreateBALForm(): void {
     this.isFormulaireopen = false;
+    this.isModMassbalsFormulaireopen = false;
+    this.ngSelectComponent.handleClearClick();
   }
   hideNotificationMessage() {
     this.openNotifTemponnageError = false;

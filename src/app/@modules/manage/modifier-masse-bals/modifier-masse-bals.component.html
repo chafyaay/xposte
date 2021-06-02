@@ -1,0 +1,102 @@
+<div class="app-remise-dispo pd20">
+    <div class="flex">
+        <div class="totalInbox mgb30">
+            <span class="val">{{ balNumber }}</span>
+            {{ 'BOITES_AUX_LETTRES' | translate }}
+        </div>
+        <div class="info-bulle">
+            <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
+        </div>
+    </div>
+    <h3>{{ 'REMETTRE_DISPO_CRITERE_TITLE' | translate }}</h3>
+
+    <!-- Select BOX  -->
+    <div class="select-field field-lists flex mgt40">
+        <div class="inputField" style="flex-grow: 1">
+            <ng-select [items]="LIST_OF_CRITERIA" bindLabel="label" bindValue="id" placeholder="Etat" name="filterField"
+                class="ngselectCustom" (change)="SELECT_FIELD($event)" (focus)="ngSelectOpened = true">
+            </ng-select>
+            <label for="Critères de recherche du message" [ngClass]="ngSelectOpened ? 'ng-select-label' : ''">
+                {{'REMETTRE_DISPO_FILTER_1' | translate}}
+
+            </label>
+        </div>
+        <button class="main-btn icon mgl20" [disabled]="list1Empty" (click)="INSERT_FIELD()">
+            {{'AJOUTER_CRITERE' | translate}}
+        </button>
+    </div>
+
+    <!-- fields -->
+
+    
+
+    <div class="form mbt40">
+        <form action="#" [formGroup]="createBALForm">
+
+
+            <div *ngFor="let field of LIST_OF_CRITERIA">
+               
+<div  *ngIf="field.disabled" class="inputField">
+    <ng-select *ngIf="!field.disabled && field.type==='list'"
+    [items]="field.id==2?typeBALList:selectListDataNew.frontal" bindLabel="label" bindValue="id"
+    placeholder="Frontal" class="form-control ngselectCustom" id="frontal-bal-cration"
+    (keyup)="getFrontalData($event)" (blur)="checkFontralIsSet()" (focus)="onSelectFocus(field.id)"
+    (change)="selectFrontal()">
+
+</ng-select>
+                <input *ngIf="(field.type==='text' || field.type==='email' || field.type==='number')"
+                    [type]="field.type" maxlength="320" id="field.fcn" onkeypress="return event.charCode >= 48" min="0"
+                    placeholder=" " (keyup)="onKeyUp($event,field)" />
+                <!-- input text -->
+
+                <span class="helptext text-red" *ngIf="field.id===4 &&
+                  createBALForm.get('listeAdressesIPAutorises').value &&
+                  !this.createBALForm.get('listeAdressesIPAutorises').valid
+                ">{{ 'INVALID_INPUT' | translate }}</span>
+
+                <span class="helptext text-red"
+                    *ngIf="field.id===5 && f.get('adresseMailAlerte').value && !this.f.get('adresseMailAlerte').valid">{{
+                    'INVALID_INPUT' | translate }}</span>
+
+                <span *ngIf="field.id===6" class="helptext">{{ 'OPTIONAL' | translate }}</span>
+
+
+
+
+
+
+                <label *ngIf="field.type==='list' && field.id=='1'" for="{{field.label}}"
+                    [ngClass]="(isFrontalFielled)? 'ng-select-label' : ''">
+                    {{ field.label | translate }}
+                </label>
+                <label *ngIf="field.type==='list' && field.id=='2'" for="{{field.label}}"
+                    [ngClass]="(istypeBALListFielled)? 'ng-select-label' : ''">
+                    {{ field.label | translate }}
+                </label>
+
+                <label *ngIf="!(field.id=='1' || field.id=='2')" for="{{field.label}}">
+                    {{ field.label | translate }}
+                </label>
+            </div>
+            </div>
+
+            <input type="hidden" formControlName="frontal" />
+            <input type="hidden" formControlName="typeBALList" />
+            <input type="hidden" formControlName="seuil" />
+            <input type="hidden" formControlName="listeAdressesIPAutorises" />
+            <input type="hidden" formControlName="adresseMailAlerte" />
+            <input type="hidden" formControlName="balRelais" />
+
+
+        </form>
+
+        <div class="wrapper-btn">
+            <button class="main-btn btn-reset" (click)="closeFormulaire()">
+                {{ 'CANCEL' | translate }}
+            </button>
+            <button class="main-btn btn-second" [disabled]="!createBALForm.valid" (click)="CreateBal()">
+                {{ 'VALID' | translate }}
+            </button>
+        </div>
+
+    </div>
