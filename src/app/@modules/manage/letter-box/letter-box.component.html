@@ -315,6 +315,7 @@
       (closeFormulaire)="CloseCreateBALForm()"
     >
       <app-modifier-masse-bals
+      (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)"
       [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
       [selectedBal]="selectedBal"
       ></app-modifier-masse-bals>

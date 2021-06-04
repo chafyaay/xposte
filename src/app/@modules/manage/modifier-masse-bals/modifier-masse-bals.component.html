@@ -1,4 +1,4 @@
-<div class="app-remise-dispo pd20">
+<div class="app-remise-dispo pd20" [formGroup]="modMassBalsForm">
     <div class="flex">
         <div class="totalInbox mgb30">
             <span class="val">{{ balNumber }}</span>
@@ -13,90 +13,86 @@
     <!-- Select BOX  -->
     <div class="select-field field-lists flex mgt40">
         <div class="inputField" style="flex-grow: 1">
-            <ng-select [items]="LIST_OF_CRITERIA" bindLabel="label" bindValue="id" placeholder="Etat" name="filterField"
-                class="ngselectCustom" (change)="SELECT_FIELD($event)" (focus)="ngSelectOpened = true">
+            <ng-select #ngselect [items]="TEMP_CRITERIA_LIST" bindLabel="label" bindValue="id" placeholder="Etat"
+                name="filterField" class="ngselectCustom" (change)="SELECT_FIELD($event)"
+                (focus)="ngSelectOpened = true">
             </ng-select>
             <label for="Critères de recherche du message" [ngClass]="ngSelectOpened ? 'ng-select-label' : ''">
                 {{'REMETTRE_DISPO_FILTER_1' | translate}}
 
             </label>
         </div>
-        <button class="main-btn icon mgl20" [disabled]="list1Empty" (click)="INSERT_FIELD()">
+        <button class="main-btn icon mgl20" [disabled]="!isAddItem" (click)="INSERT_FIELD()">
             {{'AJOUTER_CRITERE' | translate}}
         </button>
     </div>
 
     <!-- fields -->
-
-    
-
     <div class="form mbt40">
-        <form action="#" [formGroup]="createBALForm">
+            <div class="fields-container" *ngFor="let field of TEMP_CRITERIA_LIST">
+                <div *ngIf="field.disabled" class="inputField">
+    
+                    <div *ngIf="field.disabled && field.type==='list'"> 
+                        <ng-select [items]="field.id==2?typeBALList:selectListDataNew.frontal" bindLabel="label" bindValue="id" placeholder="Etat"
+                        name="filterField" class="ngselectCustom" 
+                        (change)="onsSelectField($event,field.fcn)"
+                        (focus)="onSelectFocus(field.id)"
+                        formControlName="{{field.fcn}}"
+                        >
+                    </ng-select>
+                    </div>
+                    <input *ngIf="(field.type==='text' || field.type==='email' || field.type==='number')"
+                        [type]="field.type" maxlength="320" id="field.fcn"
+                         min="0" placeholder=" "
+                        (keyup)="onKeyUp($event,field.fcn)"
+                        (change)="onChange($event,field.fcn)"
+                        formControlName="{{field.fcn}}"
+                         />
+                    <!-- input text -->
 
+                    <button class="remove-item-btn" (click)="REMOVE_FIELD(field)"><i class="zmdi zmdi-delete"></i></button>
+                    <!-- error messages -->
+                  <div class="helptext text-red">
+                    <ng-container [ngSwitch]="field.fcn">
+                            <ng-template *ngIf="form.get('frontal').invalid" [ngSwitchCase]="'frontal'">Champ oblegatoire</ng-template>
+                            <ng-template *ngIf="form.get('typeBALList').invalid" [ngSwitchCase]="'typeBALList'">Champ oblegatoire</ng-template>
+                            <ng-template *ngIf="form.get('seuil').invalid" [ngSwitchCase]="'seuil'">{{'INVALID_INPUT' | translate }}</ng-template>
+                            <ng-template *ngIf="form.get('listeAdressesIPAutorises').invalid" [ngSwitchCase]="'listeAdressesIPAutorises'">{{'INVALID_INPUT' | translate }}</ng-template>
+                            <ng-template *ngIf="form.get('adresseMailAlerte').invalid" [ngSwitchCase]="'adresseMailAlerte'">{{form.get('adresseMailAlerte').invalid}}-{{'INVALID_INPUT' | translate }}</ng-template>
+                            <ng-template *ngIf="form.get('balRelais').invalid" [ngSwitchCase]="'balRelais'">{{'INVALID_INPUT' | translate }}</ng-template>
+                    </ng-container>
+                </div>
+                   
 
-            <div *ngFor="let field of LIST_OF_CRITERIA">
-               
-<div  *ngIf="field.disabled" class="inputField">
-    <ng-select *ngIf="!field.disabled && field.type==='list'"
-    [items]="field.id==2?typeBALList:selectListDataNew.frontal" bindLabel="label" bindValue="id"
-    placeholder="Frontal" class="form-control ngselectCustom" id="frontal-bal-cration"
-    (keyup)="getFrontalData($event)" (blur)="checkFontralIsSet()" (focus)="onSelectFocus(field.id)"
-    (change)="selectFrontal()">
+                    <span *ngIf="field.id===6" class="helptext">{{ 'OPTIONAL' | translate }}</span>
 
-</ng-select>
-                <input *ngIf="(field.type==='text' || field.type==='email' || field.type==='number')"
-                    [type]="field.type" maxlength="320" id="field.fcn" onkeypress="return event.charCode >= 48" min="0"
-                    placeholder=" " (keyup)="onKeyUp($event,field)" />
-                <!-- input text -->
+                    <label *ngIf="field.type==='list' && field.id=='1'" for="{{field.label}}"
+                        [ngClass]="(isFrontalFielled)? 'ng-select-label' : ''">
+                        {{ field.label | translate }}
+                    </label>
 
-                <span class="helptext text-red" *ngIf="field.id===4 &&
-                  createBALForm.get('listeAdressesIPAutorises').value &&
-                  !this.createBALForm.get('listeAdressesIPAutorises').valid
-                ">{{ 'INVALID_INPUT' | translate }}</span>
+                    <label *ngIf="field.type==='list' && field.id=='2'" for="{{field.label}}"
+                        [ngClass]="(istypeBALListFielled)? 'ng-select-label' : ''">
+                        {{ field.label | translate }}
+                    </label>
 
-                <span class="helptext text-red"
-                    *ngIf="field.id===5 && f.get('adresseMailAlerte').value && !this.f.get('adresseMailAlerte').valid">{{
-                    'INVALID_INPUT' | translate }}</span>
-
-                <span *ngIf="field.id===6" class="helptext">{{ 'OPTIONAL' | translate }}</span>
-
-
-
-
-
-
-                <label *ngIf="field.type==='list' && field.id=='1'" for="{{field.label}}"
-                    [ngClass]="(isFrontalFielled)? 'ng-select-label' : ''">
-                    {{ field.label | translate }}
-                </label>
-                <label *ngIf="field.type==='list' && field.id=='2'" for="{{field.label}}"
-                    [ngClass]="(istypeBALListFielled)? 'ng-select-label' : ''">
-                    {{ field.label | translate }}
-                </label>
-
-                <label *ngIf="!(field.id=='1' || field.id=='2')" for="{{field.label}}">
-                    {{ field.label | translate }}
-                </label>
+                    <label *ngIf="!(field.id=='1' || field.id=='2')" for="{{field.label}}">
+                        {{ field.label | translate }}
+                    </label>
+                </div>
             </div>
-            </div>
 
-            <input type="hidden" formControlName="frontal" />
-            <input type="hidden" formControlName="typeBALList" />
-            <input type="hidden" formControlName="seuil" />
-            <input type="hidden" formControlName="listeAdressesIPAutorises" />
-            <input type="hidden" formControlName="adresseMailAlerte" />
-            <input type="hidden" formControlName="balRelais" />
-
-
-        </form>
 
         <div class="wrapper-btn">
             <button class="main-btn btn-reset" (click)="closeFormulaire()">
                 {{ 'CANCEL' | translate }}
             </button>
-            <button class="main-btn btn-second" [disabled]="!createBALForm.valid" (click)="CreateBal()">
+          
+            <button class="main-btn btn-second" [disabled]="!is_form_valid()" (click)="onSubmit()">
                 {{ 'VALID' | translate }}
             </button>
+          
         </div>
 
     </div>
+</div>
