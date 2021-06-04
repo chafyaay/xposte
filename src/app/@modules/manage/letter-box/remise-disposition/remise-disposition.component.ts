@@ -61,8 +61,6 @@ export class RemiseDispositionComponent implements OnInit {
   public  FIELD_LISTS= {list1:[],list2:[] }
 
   constructor(private formBuilder: FormBuilder,public translate: TranslateService) {
-   // const currentlang=this.translate.currentLang;
-   // this.FIELDS=this.translate.translations[currentlang];
    }
 
   ngOnInit() {

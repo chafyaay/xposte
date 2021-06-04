@@ -409,13 +409,13 @@ err=>{
 // modifier masse bals
 isModMassbalsSuccess=false;
 isModMassbalsFail=false;
-isModMassbalsFormulaireopen=false;
+isModMassbalsSidBarCanvasOpen=false;
 modifMassObj={};
 MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
   if(data){
     console.log(data)
     this.modifMassObj=data;
-    this.isFormulaireopen=false;
+    this.isModMassbalsSidBarCanvasOpen=false;
     this.isModMassbalsSuccess=true;
   }else{
     this.isModMassbalsSuccess=false;
@@ -429,7 +429,7 @@ MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
         const id=event.id;
         if(id===1){
           this.hideNotificationMessage();
-          this.isModMassbalsFormulaireopen = !this.isModMassbalsFormulaireopen;
+          this.isModMassbalsSidBarCanvasOpen = !this.isModMassbalsSidBarCanvasOpen;
         }
         this.ngSelectComponent.handleClearClick();
         this.ngSelectComponent.close()
@@ -443,7 +443,7 @@ MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
 
   CloseCreateBALForm(): void {
     this.isFormulaireopen = false;
-    this.isModMassbalsFormulaireopen = false;
+    this.isModMassbalsSidBarCanvasOpen = false;
     this.ngSelectComponent.handleClearClick();
   }
   hideNotificationMessage() {
@@ -553,6 +553,8 @@ MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
     this.openNotifBalUpdateSucces = false;
     this.openNotifRemiseDispoSuccess=false;
     this.openNotifRemiseDispoError=false;
+    this.isModMassbalsSuccess=false;
+    this.isModMassbalsFail=false;
 
     this.notificationErrorMessage = '';
     this.balTampoCriteria = new BalTampoCriteria();

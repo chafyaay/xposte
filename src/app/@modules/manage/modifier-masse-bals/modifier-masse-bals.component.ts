@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, ViewChild,EventEmitter } from '@angul
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { ModifEnMassService } from 'src/app/@core/services/modif-en-mass.service';
 import { BAL } from 'src/app/@shared/models/BAL';
 import { InputFilterData } from 'src/app/@shared/models/InputFilterData';
@@ -40,18 +41,21 @@ export class ModifierMasseBalsComponent implements OnInit {
   selected_field_Id: number;
   isAddItem = false;
   selectedFCN = "";
-  CRITERIA_LIST = [
-    { id: 1, label: 'Frontal', fcn: 'frontal', type: 'list', disabled: false },
-    { id: 2, label: 'Type de boites aux lettres', fcn: 'typeBALList', type: 'list', disabled: false },
-    { id: 3, label: 'Seuil', fcn: 'seuil', type: 'number', disabled: false },
-    { id: 4, label: 'IPs', fcn: 'listeAdressesIPAutorises', type: 'text', disabled: false },
-    { id: 5, label: 'Email d\'alerte', fcn: 'adresseMailAlerte', type: 'email', disabled: false },
-    { id: 6, label: 'Relais de messagerie', fcn: 'balRelais', type: 'text', disabled: false },
-  ];
+  CRITERIA_LIST = [];
   TEMP_CRITERIA_LIST: any[] = [];
   selectedCriteria:any[]=[];
 
-  constructor(private fb: FormBuilder, private store: Store<any>,private modifEnMassService:ModifEnMassService) {
+  constructor(private fb: FormBuilder, private store: Store<any>,private modifEnMassService:ModifEnMassService,public translate: TranslateService) {
+    const FIELD:any=this.translate.translations[this.translate.currentLang];
+    this.CRITERIA_LIST=[
+      { id: 1, label: FIELD.FRONTAL, fcn: 'frontal', type: 'list', disabled: false },
+     // { id: 2, label: FIELD.TYPE_BOITE_LETTRE, fcn: 'typeBALList', type: 'list', disabled: false },
+      { id: 2, label: FIELD.MOD_MASS_SEUIL, fcn: 'seuil', type: 'number', disabled: false },
+      { id: 3, label: FIELD.IPs, fcn: 'listeAdressesIPAutorises', type: 'text', disabled: false },
+      { id: 4, label: FIELD.EMAIL_ALERT, fcn: 'adresseMailAlerte', type: 'email', disabled: false },
+      { id: 5, label: FIELD.RELAIS_MESSAGERIE, fcn: 'balRelais', type: 'text', disabled: false },
+    ]
+
     this.modMassBalsForm = new FormGroup({
       frontal: new FormControl(),
       typeBALList: new FormControl(),
@@ -238,24 +242,12 @@ export class ModifierMasseBalsComponent implements OnInit {
 
     if (this.form.valid) {
       this.modifEnMassService.modifEnMass(this.form.value).subscribe(res => {
-        this.MODIF_EN_MASS_EVENT_EMITTER.emit(obj)
+        this.MODIF_EN_MASS_EVENT_EMITTER.emit(obj);
       }, err => {
         this.MODIF_EN_MASS_EVENT_EMITTER.emit({})
 
       })
     }
-
-
-   /*  console.log(this.is_form_valid())
-    if (this.is_form_valid())
-      this.modifEnMassService.modifEnMass(this.form.value).subscribe(res => {
-        this.MODIF_EN_MASS_EVENT_EMITTER.emit({ res: res, DATA: this.form.value })
-        console.log(res)
-      }, err => {
-        this.MODIF_EN_MASS_EVENT_EMITTER.emit({ res: err, DATA: {} })
-        console.log("err",err)
-
-      }) */
   }
 
 }
