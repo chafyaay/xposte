@@ -22,8 +22,7 @@
       openNotifRemiseDispoError ||
       openNotifTemponnageError ||
       isModMassbalsSuccess ||
-      isModMassbalsFail
-    " [notificationColor]="
+      isModMassbalsFail" [notificationColor]="
       openNotifTemponnageError || openNotifRemiseDispoError || isModMassbalsFail
         ? 'alerteMessage'
         : notificationColor
@@ -43,7 +42,6 @@
       </h3>
       <ul>
         <li>{{ 'DETAMPO_BAL' | translate }} : {{ balTamponNbr }}</li>
-
         <li>
           {{ 'CRITERE_DETAMPO_LABEL' | translate }} :
           <ng-container *ngIf="BalTamponner.etatBal">
@@ -115,18 +113,20 @@
       </h3>
       <ul class="flex">
         <li class="notif-items">
-          {{ 'MOD_MASS_NOTIF_BALS_MOD' | translate }} : {{selectedBal.length === 0 ? totalResult : selectedBal.length  }}</li>
-        <li *ngIf="modifMassObj.frontal" class="notif-items">{{ 'FRONTAL' | translate }} : {{ modifMassObj.frontal }}</li>
+          {{ 'MOD_MASS_NOTIF_BALS_MOD' | translate }} : {{selectedBal.length === 0 ? totalResult : selectedBal.length }}
+        </li>
+        <li *ngIf="modifMassObj.frontal" class="notif-items">{{ 'FRONTAL' | translate }} : {{ modifMassObj.frontal }}
+        </li>
         <li *ngIf="modifMassObj.identifiantFrontal" class="notif-items">{{ 'TYPE_BOITE_LETTRE' | translate }} : {{
           modifMassObj.identifiantFrontal }}</li>
         <li *ngIf="modifMassObj.seuil" class="notif-items">{{ 'SEUIL' | translate }} : {{ modifMassObj.seuil }}</li>
-        <li *ngIf="modifMassObj.adressesIP" class="notif-items">{{ 'IPs' | translate }} : {{ modifMassObj.adressesIP }}</li>
-        <li *ngIf="modifMassObj.mailAlerte" class="notif-items">{{ 'EMAIL_ALERT' | translate }} : {{ modifMassObj.mailAlerte }}
+        <li *ngIf="modifMassObj.adressesIP" class="notif-items">{{ 'IPs' | translate }} : {{ modifMassObj.adressesIP }}
+        </li>
+        <li *ngIf="modifMassObj.mailAlerte" class="notif-items">{{ 'EMAIL_ALERT' | translate }} : {{
+          modifMassObj.mailAlerte }}
         </li>
         <li *ngIf="modifMassObj.relaiMessagerie" class="notif-items">{{ 'RELAIS_MESSAGERIE' | translate }} : {{
           modifMassObj.relaiMessagerie }}</li>
-
-
       </ul>
 
     </ng-container>
@@ -154,7 +154,6 @@
             MMMM d, h:mm'}}</span>
         </li>
       </ul>
-
     </ng-container>
 
     <ng-container *ngIf="openNotifRemiseDispoError">
@@ -289,7 +288,7 @@
       </button>
       <!-- yassine chafyaay -->
       <!-- modifier masse bals button -->
-      <div class="modifier-mass-bals mbt20">
+      <div *ngIf="showRemiseDispositionBtn" class="modifier-mass-bals mbt20">
         <i class="zmdi zmdi-edit"></i>
         <ng-select class="main-btn btn-second" selectedLabel="" [items]="[
          {id:0,label:'Exporter au forma Excel  '+(selectedBal.length === 0 ? totalResult : selectedBal.length)+' BALs'},
@@ -301,7 +300,9 @@
       <app-template-formulaire *ngIf="isModMassbalsSidBarCanvasOpen"
         [titleFormulaire]="'MOD_MASS_NOTIF_TITLE' | translate" [isFormulaireopen]="isModMassbalsSidBarCanvasOpen"
         (closeFormulaire)="CloseCreateBALForm()">
-        <app-modifier-masse-bals [etatBal]="balFilter.etatBal" [filtreAdresse]="adresseHighlight"
+        <app-modifier-masse-bals 
+        (closeEvent)="closeEventHandler($event)"
+        [etatBal]="balFilter.etatBal" [filtreAdresse]="adresseHighlight"
           [identifiantFrontal]="inputFilterData.frontal"
           (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)"
           [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length" [selectedBal]="selectedBal">

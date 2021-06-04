@@ -27,6 +27,8 @@ export class ModifierMasseBalsComponent implements OnInit {
   @Input()
   identifiantFrontal: any;
   @Output() MODIF_EN_MASS_EVENT_EMITTER:EventEmitter<any>=new EventEmitter();
+  @Output()
+  closeEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   modMassBalsForm: FormGroup;
   isFormValid :boolean;
@@ -187,7 +189,11 @@ export class ModifierMasseBalsComponent implements OnInit {
     this.setValidator(fcn, event.id);
   }
 
-  closeFormulaire() { }
+  closeFormulaire() {
+    console.log('closeFormulaire')
+    window.scrollTo(0, 0); //  to scroll to the top of the page
+    this.closeEvent.emit(false);
+  }
 
   onSelectFocus(id: any) {
     if (!this.isFrontalFielled && !this.istypeBALListFielled) {

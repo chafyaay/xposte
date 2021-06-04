@@ -28,7 +28,7 @@ import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
   styleUrls: ['./letter-box.component.scss'],
 })
 export class LetterBoxComponent implements OnInit, OnChanges {
-  @ViewChild(NgSelectComponent,{static:false}) ngSelectComponent: NgSelectComponent;
+  @ViewChild(NgSelectComponent, { static: false }) ngSelectComponent: NgSelectComponent;
 
   // recieve highlight Information and informe the table list
   highlight: boolean;
@@ -105,7 +105,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
   constructor(
     private store: Store<AppState>,
-private remise_dispo_service:RemiseDispoService,
+    private remise_dispo_service: RemiseDispoService,
     private rechercheBalService: RechercheBalService
   ) {
     this.getState = this.store.select(selectAccountState);
@@ -114,7 +114,7 @@ private remise_dispo_service:RemiseDispoService,
     this.BalTamponner.identifiantFrontal = this.balFilter.identifiantFrontal;
   }
 
-  ngOnChanges() {}
+  ngOnChanges() { }
 
   ngOnInit() {
     this.ShowDetamponnage();
@@ -125,19 +125,19 @@ private remise_dispo_service:RemiseDispoService,
   }
 
   // remise à disposition
-  REMISE_DISPO_OBJ:remiseDispoI = {};
-  isFormValid=false;
-  openNotifRemiseDispoSuccess=false;
-  openNotifRemiseDispoError=false;
-  
+  REMISE_DISPO_OBJ: remiseDispoI = {};
+  isFormValid = false;
+  openNotifRemiseDispoSuccess = false;
+  openNotifRemiseDispoError = false;
+
 
   REMISE_DISPO_EVENT_HANDLER(event: any) {
-    this.isFormValid=event.isFormValid;
-    this.REMISE_DISPO_OBJ={
-      etatBal:this.balFilter.etatBal,
-      adresseBal:this.balFilter.adresseBal,
-      identifiantFrontal:this.balFilter.identifiantFrontal,
-      listeIdentifiantsBALs:this.selectedBal,
+    this.isFormValid = event.isFormValid;
+    this.REMISE_DISPO_OBJ = {
+      etatBal: this.balFilter.etatBal,
+      adresseBal: this.balFilter.adresseBal,
+      identifiantFrontal: this.balFilter.identifiantFrontal,
+      listeIdentifiantsBALs: this.selectedBal,
       ...event.DATA
     }
   }
@@ -150,20 +150,20 @@ private remise_dispo_service:RemiseDispoService,
   }
   remise_dispo_submit(event: any) {
 
-this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
-  res=>{
-    this.openNotifRemiseDispoSuccess=true;
-    this.showRemiseDispositionModal=false;
-},
-err=>{
-  this.openNotifRemiseDispoSuccess=false;
-  this.openNotifBalCreationSucces=false;
-  this.openNotifRemiseDispoError=true;
-  this.showRemiseDispositionModal=false;
-  this.notificationErrorMessage="Erreur lors de remise à disposition"
+    this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
+      res => {
+        this.openNotifRemiseDispoSuccess = true;
+        this.showRemiseDispositionModal = false;
+      },
+      err => {
+        this.openNotifRemiseDispoSuccess = false;
+        this.openNotifBalCreationSucces = false;
+        this.openNotifRemiseDispoError = true;
+        this.showRemiseDispositionModal = false;
+        this.notificationErrorMessage = "Erreur lors de remise à disposition"
 
-}
-)
+      }
+    )
     console.log(this.REMISE_DISPO_OBJ);
 
 
@@ -254,7 +254,7 @@ err=>{
     if (this.balFilter.etatBal === 'Active') {
       this.isShowTemponnage = true;
       this.showRemiseDispositionBtn = true;
-      
+
     }
     this.selectedBal = [];
     this.resetNotificationDataAndClose();
@@ -405,37 +405,37 @@ err=>{
     this.hideNotificationMessage();
     this.isFormulaireopen = !this.isFormulaireopen;
   }
-// yassine chafyaay
-// modifier masse bals
-isModMassbalsSuccess=false;
-isModMassbalsFail=false;
-isModMassbalsSidBarCanvasOpen=false;
-modifMassObj={};
-MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
-  if(data){
-    console.log(data)
-    this.modifMassObj=data;
-    this.isModMassbalsSidBarCanvasOpen=false;
-    this.isModMassbalsSuccess=true;
-  }else{
-    this.isModMassbalsSuccess=false;
-    this.isModMassbalsFail=true;
+  // yassine chafyaay
+  // modifier masse bals
+  isModMassbalsSuccess = false;
+  isModMassbalsFail = false;
+  isModMassbalsSidBarCanvasOpen = false;
+  modifMassObj = {};
+  MODIF_EN_MASS_EVENT_HANDLER(data: ModifEnMassI) {
+    if (data) {
+      console.log(data)
+      this.modifMassObj = data;
+      this.isModMassbalsSidBarCanvasOpen = false;
+      this.isModMassbalsSuccess = true;
+    } else {
+      this.isModMassbalsSuccess = false;
+      this.isModMassbalsFail = true;
 
+    }
   }
-}
-  openSidebarCanvas(event:any){
+  openSidebarCanvas(event: any) {
     setTimeout(() => {
-      if(event){
-        const id=event.id;
-        if(id===1){
+      if (event) {
+        const id = event.id;
+        if (id === 1) {
           this.hideNotificationMessage();
           this.isModMassbalsSidBarCanvasOpen = !this.isModMassbalsSidBarCanvasOpen;
         }
         this.ngSelectComponent.handleClearClick();
         this.ngSelectComponent.close()
-  
+
       }
-  
+
     }, 100);
   }
 
@@ -443,8 +443,11 @@ MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
 
   CloseCreateBALForm(): void {
     this.isFormulaireopen = false;
-    this.isModMassbalsSidBarCanvasOpen = false;
+
     this.ngSelectComponent.handleClearClick();
+  }
+  closeEventHandler(event) {
+    this.isModMassbalsSidBarCanvasOpen = false;
   }
   hideNotificationMessage() {
     this.openNotifTemponnageError = false;
@@ -551,10 +554,10 @@ MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
     this.openNotifBalCreationSucces = false;
     this.openNotifBalUpdateFail = false;
     this.openNotifBalUpdateSucces = false;
-    this.openNotifRemiseDispoSuccess=false;
-    this.openNotifRemiseDispoError=false;
-    this.isModMassbalsSuccess=false;
-    this.isModMassbalsFail=false;
+    this.openNotifRemiseDispoSuccess = false;
+    this.openNotifRemiseDispoError = false;
+    this.isModMassbalsSuccess = false;
+    this.isModMassbalsFail = false;
 
     this.notificationErrorMessage = '';
     this.balTampoCriteria = new BalTampoCriteria();
