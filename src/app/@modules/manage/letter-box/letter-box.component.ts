@@ -20,6 +20,7 @@ import { LetterBoxListComponent } from 'src/app/@modules/manage/letter-box/lette
 import { remiseDispoI } from 'src/app/@shared/models/remise-dispo';
 import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
 
 @Component({
   selector: 'app-letter-box',
@@ -406,12 +407,20 @@ err=>{
   }
 // yassine chafyaay
 // modifier masse bals
+isModMassbalsSuccess=false;
+isModMassbalsFail=false;
 isModMassbalsFormulaireopen=false;
-MODIF_EN_MASS_EVENT_HANDLER(event:any){
-  if(event.res && event.DATA){
-    console.log(event)
+modifMassObj={};
+MODIF_EN_MASS_EVENT_HANDLER(data:ModifEnMassI){
+  if(data){
+    console.log(data)
+    this.modifMassObj=data;
+    this.isFormulaireopen=false;
+    this.isModMassbalsSuccess=true;
   }else{
-console.log('ERR',event.res)
+    this.isModMassbalsSuccess=false;
+    this.isModMassbalsFail=true;
+
   }
 }
   openSidebarCanvas(event:any){

@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { ModifEnMassService } from 'src/app/@core/services/modif-en-mass.service';
 import { BAL } from 'src/app/@shared/models/BAL';
 import { InputFilterData } from 'src/app/@shared/models/InputFilterData';
+import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
 import { selectBALStateState, selectFrontalState } from 'src/app/@store';
 
 @Component({
@@ -18,6 +19,12 @@ export class ModifierMasseBalsComponent implements OnInit {
   selectedBal: any;
   @Input()
   balNumber: any;
+  @Input()
+  etatBal: any;
+  @Input()
+  filtreAdresse: any;
+  @Input()
+  identifiantFrontal: any;
   @Output() MODIF_EN_MASS_EVENT_EMITTER:EventEmitter<any>=new EventEmitter();
 
   modMassBalsForm: FormGroup;
@@ -209,7 +216,37 @@ export class ModifierMasseBalsComponent implements OnInit {
 
 
   onSubmit() {
-    console.log(this.is_form_valid())
+    console.log(this.form.get('listeAdressesIPAutorises').value?true:false)
+    let obj:ModifEnMassI;
+    const listeAdresses =this.form.get('listeAdressesIPAutorises').value? this.form.get('listeAdressesIPAutorises').value.split(','):[];
+    /* const frontal = this.selectListDataNew.frontal.find(
+      (elt) => elt.identifiant === this.form.value.frontal
+    ); */
+
+    obj={
+        "listeAdresses":this.selectedBal,
+        "etatBal": this.etatBal,
+        "filtreAdresse": this.filtreAdresse,
+        "identifiantFrontal": this.form.get('typeBALList')?this.form.get('typeBALList').value:'',
+        "frontal": "frontal",
+        "seuil": this.form.get('seuil')?parseInt(this.form.get('seuil').value):0,
+        "adressesIP": listeAdresses,
+        "mailAlerte":this.form.get('mailAlerte')? this.form.get('mailAlerte').value:'',
+        "relaiMessagerie":  this.form.get('relaiMessagerie')?this.form.get('relaiMessagerie').value:'',
+    }
+   
+
+    if (this.form.valid) {
+      this.modifEnMassService.modifEnMass(this.form.value).subscribe(res => {
+        this.MODIF_EN_MASS_EVENT_EMITTER.emit(obj)
+      }, err => {
+        this.MODIF_EN_MASS_EVENT_EMITTER.emit({})
+
+      })
+    }
+
+
+   /*  console.log(this.is_form_valid())
     if (this.is_form_valid())
       this.modifEnMassService.modifEnMass(this.form.value).subscribe(res => {
         this.MODIF_EN_MASS_EVENT_EMITTER.emit({ res: res, DATA: this.form.value })
@@ -218,7 +255,7 @@ export class ModifierMasseBalsComponent implements OnInit {
         this.MODIF_EN_MASS_EVENT_EMITTER.emit({ res: err, DATA: {} })
         console.log("err",err)
 
-      })
+      }) */
   }
 
 }
