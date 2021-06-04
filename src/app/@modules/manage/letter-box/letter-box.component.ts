@@ -407,7 +407,13 @@ err=>{
 // yassine chafyaay
 // modifier masse bals
 isModMassbalsFormulaireopen=false;
-
+MODIF_EN_MASS_EVENT_HANDLER(event:any){
+  if(event.res && event.DATA){
+    console.log(event)
+  }else{
+console.log('ERR',event.res)
+  }
+}
   openSidebarCanvas(event:any){
     setTimeout(() => {
       if(event){
