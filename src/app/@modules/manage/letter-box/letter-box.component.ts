@@ -288,7 +288,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   public get FiltreType(): typeof FiltreType {
     return FiltreType;
   }
-
+  identifiantFrontal: string;
   getFiltredData(filterEvent: Filter) {
     this.hideNotificationMessage();
     this.resetNotificationDataAndClose();
@@ -358,6 +358,9 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
+        console.clear()
+        console.log("--------- chafyy -")
+        console.log(bal)
         this.balDataList = bal.body;
 
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
@@ -411,16 +414,21 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   isModMassbalsFail = false;
   isModMassbalsSidBarCanvasOpen = false;
   modifMassObj = {};
-  MODIF_EN_MASS_EVENT_HANDLER(data: ModifEnMassI) {
-    if (data) {
-      console.log(data)
-      this.modifMassObj = data;
-      this.isModMassbalsSidBarCanvasOpen = false;
-      this.isModMassbalsSuccess = true;
-    } else {
-      this.isModMassbalsSuccess = false;
-      this.isModMassbalsFail = true;
+  modMassErrMessage = "";
+  MODIF_EN_MASS_EVENT_HANDLER(data: any) {
+    this.isModMassbalsSidBarCanvasOpen = false;
 
+    if (data.DATA) {
+      const result = data.DATA;
+      if (result.etatBal) {
+        this.modifMassObj=result;
+        this.isModMassbalsSuccess = true;
+        this.isModMassbalsFail = false;
+      }else{
+        this.isModMassbalsSuccess = false;
+        this.isModMassbalsFail = true;
+        this.modMassErrMessage=result.message;
+      }
     }
   }
   openSidebarCanvas(event: any) {
@@ -443,8 +451,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
   CloseCreateBALForm(): void {
     this.isFormulaireopen = false;
-
     this.ngSelectComponent.handleClearClick();
+    this.isModMassbalsSidBarCanvasOpen = false;
   }
   closeEventHandler(event) {
     this.isModMassbalsSidBarCanvasOpen = false;

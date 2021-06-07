@@ -31,7 +31,7 @@
                 <div *ngIf="field.disabled" class="inputField">
     
                     <div *ngIf="field.disabled && field.type==='list'"> 
-                        <ng-select [items]="field.id==1?typeBALList:selectListDataNew.frontal" bindLabel="label" bindValue="id" placeholder="Etat"
+                        <ng-select [items]="field.fcn!=='frontal'?typeBALList:selectListDataNew.frontal" bindLabel="label" bindValue="id" placeholder="Etat"
                         name="filterField" class="ngselectCustom" 
                         (change)="onsSelectField($event,field.fcn)"
                         (focus)="onSelectFocus(field.id)"

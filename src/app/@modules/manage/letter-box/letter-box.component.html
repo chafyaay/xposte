@@ -102,6 +102,9 @@
     <ng-container *ngIf="openNotifDetemponnageFail">
       {{ notificationErrorMessage }}
     </ng-container>
+    <ng-container *ngIf="isModMassbalsFail">
+      {{ modMassErrMessage }}
+    </ng-container>
     <!-- show Modofcation en mass  notification  -->
     <ng-container *ngIf="isModMassbalsSuccess">
       <h3 class="message_title">
@@ -120,7 +123,7 @@
         <li *ngIf="modifMassObj.identifiantFrontal" class="notif-items">{{ 'TYPE_BOITE_LETTRE' | translate }} : {{
           modifMassObj.identifiantFrontal }}</li>
         <li *ngIf="modifMassObj.seuil" class="notif-items">{{ 'SEUIL' | translate }} : {{ modifMassObj.seuil }}</li>
-        <li *ngIf="modifMassObj.adressesIP" class="notif-items">{{ 'IPs' | translate }} : {{ modifMassObj.adressesIP }}
+        <li *ngIf="modifMassObj.adressesIP" class="notif-items">{{ 'IPs' | translate }} : {{ modifMassObj.adressesIP.join(',') }}
         </li>
         <li *ngIf="modifMassObj.mailAlerte" class="notif-items">{{ 'EMAIL_ALERT' | translate }} : {{
           modifMassObj.mailAlerte }}
@@ -261,7 +264,8 @@
   </app-notification>
   <!-- ======= START .Bloc FILTRES ======= -->
   <app-filter #balFilterComp [inputFilterData]="inputFilterDataNew" [filtreType]="FiltreType.BAL"
-    (filterEvent)="getFiltredData($event)" (frontalAutocompletEvent)="getFrontalData($event)"
+    (filterEvent)="getFiltredData($event)" 
+    (frontalAutocompletEvent)="getFrontalData($event)"
     (filterDefaultEvent)="getFiltredDataDefault()"></app-filter>
 
   <!-- ======= END .Bloc FILTRES ======= -->
@@ -302,10 +306,12 @@
         (closeFormulaire)="CloseCreateBALForm()">
         <app-modifier-masse-bals 
         (closeEvent)="closeEventHandler($event)"
-        [etatBal]="balFilter.etatBal" [filtreAdresse]="adresseHighlight"
-          [identifiantFrontal]="inputFilterData.frontal"
+        [etatBal]="balFilter.etatBal"
+        [filtreAdresse]="adresseHighlight"
+        [identifiantFrontal]="balFilter.identifiantFrontal"
           (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)"
-          [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length" [selectedBal]="selectedBal">
+          [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length" 
+          [selectedBal]="selectedBal">
         </app-modifier-masse-bals>
       </app-template-formulaire>
 

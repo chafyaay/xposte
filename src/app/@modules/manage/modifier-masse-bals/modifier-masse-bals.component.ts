@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild, EventEmitter, AfterContentInit, OnChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { selectBALStateState, selectFrontalState } from 'src/app/@store';
   templateUrl: './modifier-masse-bals.component.html',
   styleUrls: ['./modifier-masse-bals.component.scss']
 })
-export class ModifierMasseBalsComponent implements OnInit {
+export class ModifierMasseBalsComponent implements OnInit,OnChanges {
   @ViewChild(NgSelectComponent, { static: false }) ngSelectComponent: NgSelectComponent;
   @Input()
   selectedBal: any;
@@ -26,12 +26,12 @@ export class ModifierMasseBalsComponent implements OnInit {
   filtreAdresse: any;
   @Input()
   identifiantFrontal: any;
-  @Output() MODIF_EN_MASS_EVENT_EMITTER:EventEmitter<any>=new EventEmitter();
+  @Output() MODIF_EN_MASS_EVENT_EMITTER: EventEmitter<any> = new EventEmitter();
   @Output()
   closeEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   modMassBalsForm: FormGroup;
-  isFormValid :boolean;
+  isFormValid: boolean;
   itemSelected = 0;
   ngSelectOpened = false;
   _CRITERIA_LIST = [];
@@ -45,13 +45,13 @@ export class ModifierMasseBalsComponent implements OnInit {
   selectedFCN = "";
   CRITERIA_LIST = [];
   TEMP_CRITERIA_LIST: any[] = [];
-  selectedCriteria:any[]=[];
+  selectedCriteria: any[] = [];
 
-  constructor(private fb: FormBuilder, private store: Store<any>,private modifEnMassService:ModifEnMassService,public translate: TranslateService) {
-    const FIELD:any=this.translate.translations[this.translate.currentLang];
-    this.CRITERIA_LIST=[
+  constructor(private fb: FormBuilder, private store: Store<any>, private modifEnMassService: ModifEnMassService, public translate: TranslateService) {
+    const FIELD: any = this.translate.translations[this.translate.currentLang];
+    this.CRITERIA_LIST = [
       { id: 1, label: FIELD.FRONTAL, fcn: 'frontal', type: 'list', disabled: false },
-     // { id: 2, label: FIELD.TYPE_BOITE_LETTRE, fcn: 'typeBALList', type: 'list', disabled: false },
+      // { id: 2, label: FIELD.TYPE_BOITE_LETTRE, fcn: 'typeBALList', type: 'list', disabled: false },
       { id: 2, label: FIELD.MOD_MASS_SEUIL, fcn: 'seuil', type: 'number', disabled: false },
       { id: 3, label: FIELD.IPs, fcn: 'listeAdressesIPAutorises', type: 'text', disabled: false },
       { id: 4, label: FIELD.EMAIL_ALERT, fcn: 'adresseMailAlerte', type: 'email', disabled: false },
@@ -75,6 +75,11 @@ export class ModifierMasseBalsComponent implements OnInit {
     this.isFormValid = !this.TEMP_CRITERIA_LIST.every(item => item.disabled === false);
   }
 
+  ngOnChanges(){
+    console.log("selectedBal")
+    console.log(this.selectedBal)
+  }
+
   loadFromStoredRef() {
     this.store.select(selectFrontalState).subscribe((stat) => {
       this.selectListData.frontal = stat.frontal;
@@ -86,72 +91,65 @@ export class ModifierMasseBalsComponent implements OnInit {
     return this.modMassBalsForm;
   }
 
-
-
   SELECT_FIELD(field: any) {
     this.selected_field_Id = field.id;
     this.selectedFCN = field.fcn
     this.isAddItem = true;
   }
-  is_form_valid(){
-    const slected=this.TEMP_CRITERIA_LIST.every(item=>item.disabled===false);
-    this.isFormValid=!slected && this.form.valid;
+  is_form_valid() {
+    const slected = this.TEMP_CRITERIA_LIST.every(item => item.disabled === false);
+    this.isFormValid = !slected && this.form.valid;
     return this.isFormValid;
   }
 
   INSERT_FIELD() {
     this.updateListOfFields(this.selected_field_Id);
-    
-
-    setTimeout(() => {
-      if ((this.selectedFCN === 'frontal') ||
-        (this.selectedFCN === 'typeBALList') ||
-        (this.selectedFCN === 'seuil') ||
-        (this.selectedFCN === 'balRelais')
-      ) {
-        this.form.setControl(this.selectedFCN, new FormControl('', { validators: Validators.required }))
-      }
-      else if (this.selectedFCN === 'listeAdressesIPAutorises') {
-        this.form.setControl(this.selectedFCN, new FormControl('', { validators: [Validators.required, customIPListValidator()] }))
-      }
-      else if (this.selectedFCN === 'adresseMailAlerte') {
-        this.form.setControl(this.selectedFCN, new FormControl('', { validators: [Validators.required, customEmailValidator()] }))
-      }
-      this.is_form_valid()
-    }, 300);
-
-    this.isAddItem=false;
-
+    if ((this.selectedFCN === 'frontal') ||
+      (this.selectedFCN === 'typeBALList') ||
+      (this.selectedFCN === 'seuil') ||
+      (this.selectedFCN === 'balRelais')
+    ) {
+      this.form.setControl(this.selectedFCN, new FormControl('', { validators: Validators.required }))
+    }
+    else if (this.selectedFCN === 'listeAdressesIPAutorises') {
+      this.form.setControl(this.selectedFCN, new FormControl('', { validators: [Validators.required, customIPListValidator()] }))
+    }
+    else if (this.selectedFCN === 'adresseMailAlerte') {
+      this.form.setControl(this.selectedFCN, new FormControl('', { validators: [Validators.required, customEmailValidator()] }))
+    }
+    this.is_form_valid()
+    this.isAddItem = false;
+    this.form.updateValueAndValidity();
   };
 
   REMOVE_FIELD(field: any) {
     this.updateListOfFields(field.id);
-    
-    setTimeout(() => {
-      if ((field.fcn === 'frontal') ||
-        (field.fcn === 'typeBALList') ||
-        (field.fcn === 'seuil') ||
-        (field.fcn === 'balRelais')
-      ) {
-        this.form.setControl(field.fcn, new FormControl('', { validators: []}))
-      }
-      else if (field.fcn === 'listeAdressesIPAutorises') {
-        this.form.setControl(field.fcn, new FormControl('', { validators: []}))
-      }
-      else if (field.fcn === 'adresseMailAlerte') {
-        this.form.setControl(field.fcn, new FormControl('',  { validators: []}))
-      }
-      this.is_form_valid()
-      if (this.TEMP_CRITERIA_LIST.every(item => item.disabled === false))
-       {
-        this.isFormValid=false;
-         this.isAddItem = false;
-       } 
-    }, 300);
-    if(!this.TEMP_CRITERIA_LIST.every(item=>item.disabled===true)){
-      this.isAddItem=true;
-    }else
-    this.isAddItem=false
+
+    if ((field.fcn === 'frontal') ||
+      (field.fcn === 'typeBALList') ||
+      (field.fcn === 'seuil') ||
+      (field.fcn === 'balRelais')
+    ) {
+      this.form.setControl(field.fcn, new FormControl('', { validators: [] }))
+    }
+    else if (field.fcn === 'listeAdressesIPAutorises') {
+      this.form.setControl(field.fcn, new FormControl('', { validators: [] }))
+    }
+    else if (field.fcn === 'adresseMailAlerte') {
+      this.form.setControl(field.fcn, new FormControl('', { validators: [] }))
+    }
+    this.is_form_valid()
+    if (this.TEMP_CRITERIA_LIST.every(item => item.disabled === false)) {
+      this.isFormValid = false;
+      this.isAddItem = false;
+    }
+
+    this.form.updateValueAndValidity();
+
+    if (!this.TEMP_CRITERIA_LIST.every(item => item.disabled === true)) {
+      this.isAddItem = true;
+    } else
+      this.isAddItem = false
   }
 
   private updateListOfFields(id?: any) {
@@ -171,8 +169,6 @@ export class ModifierMasseBalsComponent implements OnInit {
 
   setValidator(fcn: any, value: any) {
     this.form.get(fcn).patchValue(value);
-   
-
     this.is_form_valid()
   }
 
@@ -182,7 +178,6 @@ export class ModifierMasseBalsComponent implements OnInit {
 
   onChange(event: any, fcn: any) {
     this.setValidator(fcn, event.target.value);
-
   }
 
   onsSelectField(event: any, fcn: any) {
@@ -200,10 +195,8 @@ export class ModifierMasseBalsComponent implements OnInit {
       if (id === 1) { this.isFrontalFielled = true; this.istypeBALListFielled = false; }
       else if (id === 2) { this.isFrontalFielled = false; this.istypeBALListFielled = true; }
     } else {
-
       this.isFrontalFielled = true;
       this.istypeBALListFielled = true;
-
     }
   }
 
@@ -224,38 +217,35 @@ export class ModifierMasseBalsComponent implements OnInit {
     return arr;
   }
 
-
   onSubmit() {
-    console.log(this.form.get('listeAdressesIPAutorises').value?true:false)
-    let obj:ModifEnMassI;
-    const listeAdresses =this.form.get('listeAdressesIPAutorises').value? this.form.get('listeAdressesIPAutorises').value.split(','):[];
-    /* const frontal = this.selectListDataNew.frontal.find(
-      (elt) => elt.identifiant === this.form.value.frontal
-    ); */
+    let obj: ModifEnMassI;
+    const listeAdresses = this.form.get('listeAdressesIPAutorises').value ? this.form.get('listeAdressesIPAutorises').value.split(',') : [];
 
-    obj={
-        "listeAdresses":this.selectedBal,
-        "etatBal": this.etatBal,
-        "filtreAdresse": this.filtreAdresse,
-        "identifiantFrontal": this.form.get('typeBALList')?this.form.get('typeBALList').value:'',
-        "frontal": "frontal",
-        "seuil": this.form.get('seuil')?parseInt(this.form.get('seuil').value):0,
-        "adressesIP": listeAdresses,
-        "mailAlerte":this.form.get('mailAlerte')? this.form.get('mailAlerte').value:'',
-        "relaiMessagerie":  this.form.get('relaiMessagerie')?this.form.get('relaiMessagerie').value:'',
+    obj = {
+      "listeAdresses": this.selectedBal,
+      "etatBal": this.etatBal,
+      "filtreAdresse": this.filtreAdresse,
+      "identifiantFrontal": this.identifiantFrontal,
+      "frontal": this.form.get('frontal') ? this.form.get('frontal').value : '',
+      "seuil": this.form.get('seuil') ? this.form.get('seuil').value : 0,
+      "adressesIP": listeAdresses,
+      "mailAlerte": this.form.get('mailAlerte') ? this.form.get('mailAlerte').value : '',
+      "relaiMessagerie": this.form.get('relaiMessagerie') ? this.form.get('relaiMessagerie').value : '',
     }
-   
 
     if (this.form.valid) {
-      this.modifEnMassService.modifEnMass(this.form.value).subscribe(res => {
-        this.MODIF_EN_MASS_EVENT_EMITTER.emit(obj);
-      }, err => {
-        this.MODIF_EN_MASS_EVENT_EMITTER.emit({})
-
-      })
+      try {
+        this.modifEnMassService.modifEnMass(this.form.value).subscribe(res => {
+         this.MODIF_EN_MASS_EVENT_EMITTER.emit({closeModal:true,DATA:obj});
+        }, err => {
+          this.MODIF_EN_MASS_EVENT_EMITTER.emit({closeModal:true,DATA:err})
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    
     }
   }
-
 }
 
 function customEmailValidator(): ValidatorFn {
@@ -268,7 +258,6 @@ function customEmailValidator(): ValidatorFn {
     if (!regex.test(control.value)) {
       isEmailValid = false;
     }
-
     return isEmailValid ? null : { emailError: true };
   };
 }
