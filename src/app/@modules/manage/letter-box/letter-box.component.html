@@ -24,12 +24,20 @@
   </app-template-modal>
   <!-- ======= END .Bloc TILTE & BUTTON ======= -->
   <!--notification de tamponnage -->
+
+   <!-- desactiver en masse  -->
+  <!--
+    openNotifDescativerMassSuccess=false;
+  openNotifDescativerMassFail=false;
+ -->
+
   <app-notification
     *ngIf="
       openNotifDetemponnageSucces ||
       openNotifTemponnage ||
       openNotifTemponnageError ||
       isModMassbalsSuccess ||
+      openNotifDescativerMassSuccess ||
       isModMassbalsFail
     "
     [notificationColor]="
@@ -37,6 +45,7 @@
       isModMassbalsFail ||
       openNotifRemiseDispoSuccess ||
       openNotifRemiseDispoError ||
+      openNotifDescativerMassFail ||
       openNotifTemponnageError
         ? 'alerteMessage'
         : notificationColor
@@ -121,7 +130,31 @@
     <ng-container *ngIf="isModMassbalsFail">
       {{ modMassErrMessage }}
     </ng-container>
-    <!-- show Modofcation en mass  notification  -->
+    
+    <!-- show Desctiver en mass  notification  -->
+    <ng-container *ngIf="openNotifDescativerMassSuccess">
+      <h3 class="message_title">
+        {{
+          isModMassbalsSuccess
+            ? ('DES_MASS_NOTIF_MSG_SUCCESS' | translate)
+            : ('DES_MASS_NOTIF_MSG_FAIL' | translate)
+        }}
+      </h3>
+      <ul class="flex">
+        <li class="notif-items">
+          {{ 'DES_MASS_NOTIF_BALS_MOD' | translate }} :
+          {{ selectedBal.length === 0 ? totalResult : selectedBal.length }}
+        </li>
+        <li *ngIf="balFilter.etatBal" class="notif-items">
+          {{ 'ETAT' | translate }} : {{ balFilter.etatBal }}
+        </li>
+        <li *ngIf="balFilter.identifiantFrontal" class="notif-items">
+          {{ 'FRONTAL' | translate }} : {{ balFilter.identifiantFrontal }}
+        </li>
+        
+      </ul>
+    </ng-container>
+    <!-- show Modification en mass  notification  -->
     <ng-container *ngIf="isModMassbalsSuccess">
       <h3 class="message_title">
         {{
@@ -334,7 +367,7 @@
       (paginationChangeEvent)="getPagination($event)"
     ></app-pagination>
 
-    <div>
+    <div class="flex buttons-container">
       <button
         *ngIf="showDetamponnage"
         class="main-btn btn-second"
@@ -352,7 +385,16 @@
         {{ selectedBal.length === 0 ? totalResult : selectedBal.length }}
         {{ 'BALs' | translate }}
       </button>
-
+      <!-- remise a disposition button -->
+      <!-- author yassine -->
+      <button
+      *ngIf="showRemiseDispositionBtn"
+      class="main-btn btn-second"
+      (click)="openRemiseDispositionModal()"
+    >
+      {{ 'MAKE_AVAILABALITY_BTN' | translate }}
+      {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
+    </button>
       <!-- modifier masse bals button -->
       <!-- author yassine -->
       <div
@@ -411,14 +453,6 @@
         >
         </app-modifier-masse-bals>
       </app-template-formulaire>
-      <button
-        *ngIf="showRemiseDispositionBtn"
-        class="main-btn btn-second"
-        (click)="openRemiseDispositionModal()"
-      >
-        {{ 'MAKE_AVAILABALITY_BTN' | translate }}
-        {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
-      </button>
     </div>
   </div>
   <!-- ======= START .Bloc MAIN TABLE ======= -->
@@ -480,8 +514,9 @@
       [tooltipBALs]="tooltipBALs"
     ></app-detamponnage>
   </app-template-modal>
-  <!-- remise a disposition -->
 
+  <!-- remise a disposition -->
+  <!-- author yassine -->
   <app-template-modal
     *ngIf="showRemiseDispositionModal"
     [TitleModal]="'REMETTRE_DISPO_MODAL_TITLE' | translate"

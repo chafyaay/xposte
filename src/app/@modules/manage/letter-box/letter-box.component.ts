@@ -24,7 +24,8 @@ import { LetterBoxListComponent } from 'src/app/@modules/manage/letter-box/lette
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
 import { RemiseDispoI } from 'src/app/@shared/models/remise-dispo';
-import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service';
+import { DesactiverEnMassService } from 'src/app/@core/services/remise-dispo.service';
+import { RemiseDispoService } from '@core/services/desactiver-en-mass.service';
 
 @Component({
   selector: 'app-letter-box',
@@ -107,9 +108,25 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   showRemiseDispositionBtn = false;
   showRemiseDispositionModal = false;
 
+  REMISE_DISPO_OBJ: RemiseDispoI = {};
+  isFormValid = false;
+  openNotifRemiseDispoSuccess = false;
+  openNotifRemiseDispoError = false;
+  openNotifDescativerMassSuccess = false;
+  openNotifDescativerMassFail = false;
+  openDescativerEnMassModal = false;
+  isDesactiverEnMassFormvalid = false;
+  identifiantFrontal: string;
+  isModMassbalsSuccess = false;
+  isModMassbalsFail = false;
+  isModMassbalsSidBarCanvasOpen = false;
+  modifMassObj: ModifEnMassI;
+  modMassErrMessage = '';
+
   constructor(
     private store: Store<AppState>,
     private remise_dispo_service: RemiseDispoService,
+    private desactiver_en_mass_service: DesactiverEnMassService,
     private rechercheBalService: RechercheBalService
   ) {
     this.getState = this.store.select(selectAccountState);
@@ -118,7 +135,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.BalTamponner.identifiantFrontal = this.balFilter.identifiantFrontal;
   }
 
-  ngOnChanges() {}
+  ngOnChanges() { }
 
   ngOnInit() {
     this.ShowDetamponnage();
@@ -129,10 +146,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   // remise à disposition
-  REMISE_DISPO_OBJ: RemiseDispoI = {};
-  isFormValid = false;
-  openNotifRemiseDispoSuccess = false;
-  openNotifRemiseDispoError = false;
 
   REMISE_DISPO_EVENT_HANDLER(event: any) {
     this.isFormValid = event.isFormValid;
@@ -151,6 +164,25 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   closeRemiseDispositionModal(event) {
     this.showRemiseDispositionModal = false;
   }
+
+  desactiver_en_mass_submit($event: any) {
+    this.openDescativerEnMassModal = false;
+    const obj = {}
+    this.desactiver_en_mass_service.desactiver(obj).subscribe(
+      data => {
+        this.openNotifDescativerMassSuccess = true;
+        this.openDescativerEnMassModal = false;
+      },
+      err => {
+        this.openNotifDescativerMassSuccess = false;
+        this.openDescativerEnMassModal = false;
+        this.openNotifBalCreationSucces = false;
+        this.openNotifDescativerMassFail = true;
+      }
+    )
+
+  }
+
   remise_dispo_submit(event: any) {
     this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
       (res) => {
@@ -205,19 +237,23 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
     this.selectedBal = [];
   }
+
   testRoleUser(): void {
     this.getState.subscribe((state) => {
       if (state.roles.indexOf('SuperAdmin') !== -1) {
         this.isShowTemponnage = true;
         this.showModifEnMassDispositionBtn = true;
+        this.showRemiseDispositionBtn = true;
         this.isRoleAdmin = true;
       } else if (state.roles.indexOf('Admin') !== -1) {
         this.isShowTemponnage = false;
         this.showModifEnMassDispositionBtn = false;
+        this.showRemiseDispositionBtn = false;
         this.isRoleAdmin = false;
       } else if (state.roles.indexOf('Admin') !== -1) {
         this.isShowTemponnage = false;
         this.showRemiseDispositionBtn = false;
+        this.showModifEnMassDispositionBtn = false;
         this.isRoleAdmin = false;
       } else {
         this.isShowTemponnage = false;
@@ -295,7 +331,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   public get FiltreType(): typeof FiltreType {
     return FiltreType;
   }
-  identifiantFrontal: string;
+
   getFiltredData(filterEvent: Filter) {
     this.hideNotificationMessage();
     this.resetNotificationDataAndClose();
@@ -308,10 +344,12 @@ export class LetterBoxComponent implements OnInit, OnChanges {
         this.showPaginationTamonnage = true;
         this.isShowTemponnage = true;
         this.showModifEnMassDispositionBtn = true;
+        this.showRemiseDispositionBtn = true;
       } else {
         this.showPaginationTamonnage = false;
         this.isShowTemponnage = false;
         this.showModifEnMassDispositionBtn = false;
+        this.showRemiseDispositionBtn = false;
       }
     }
     this.balFilter.etatBal = filterEvent.filterData.etat;
@@ -341,9 +379,11 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     // check if we should show the button Detamponnage
     this.ShowDetamponnage();
   }
+
   closeNotifTempoError(event): void {
     this.openNotifTemponnageError = event;
   }
+
   getFiltredDataDefault() {
     if (this.balFilter.etatBal === 'Active') {
       this.isShowTemponnage = true;
@@ -397,6 +437,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       name: 'Tous',
     });
   }
+
   openModalTempo(): void {
     this.isFormulaireopen = false;
     this.openNotifTemponnage = false;
@@ -409,6 +450,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
         ? this.totalResult
         : this.selectedBal.length;
   }
+
   modalCloseBoolean(test): void {
     this.isModalOpen = test;
   }
@@ -417,13 +459,9 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.hideNotificationMessage();
     this.isFormulaireopen = !this.isFormulaireopen;
   }
+
   // yassine chafyaay
   // modifier masse bals
-  isModMassbalsSuccess = false;
-  isModMassbalsFail = false;
-  isModMassbalsSidBarCanvasOpen = false;
-  modifMassObj: ModifEnMassI;
-  modMassErrMessage = '';
   MODIF_EN_MASS_EVENT_HANDLER(data: any) {
     this.isModMassbalsSidBarCanvasOpen = false;
 
@@ -440,19 +478,16 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       }
     }
   }
-  openDescativerEnMassModal = false;
-  isDesactiverEnMassFormvalid = false;
+
   closeDesactiverEnMassModal(event) {
     console.log(this.selectAllBAL)
     this.openDescativerEnMassModal = false;
   }
-  DESACTIVER_EN_MASS_EVENT_HANDLER(event) {
-console.log(event)
-this.isDesactiverEnMassFormvalid=event;
 
-  }
-  desactiver_en_mass_submit($event:any){
-    this.openDescativerEnMassModal=false;
+  DESACTIVER_EN_MASS_EVENT_HANDLER(event) {
+    console.log(event)
+    this.isDesactiverEnMassFormvalid = event;
+
   }
 
   openSidebarCanvas(event: any) {
@@ -471,7 +506,6 @@ this.isDesactiverEnMassFormvalid=event;
       }
     }, 100);
   }
-
   /* ----------- */
 
   CloseCreateBALForm(): void {
@@ -479,9 +513,11 @@ this.isDesactiverEnMassFormvalid=event;
     this.ngSelectComponent.handleClearClick();
     this.isModMassbalsSidBarCanvasOpen = false;
   }
+
   closeEventHandler(event) {
     this.isModMassbalsSidBarCanvasOpen = false;
   }
+
   hideNotificationMessage() {
     this.openNotifTemponnageError = false;
     this.openNotifTemponnage = false;
@@ -541,7 +577,6 @@ this.isDesactiverEnMassFormvalid=event;
   }
 
   // tamponnage
-
   ShowDetamponnage() {
     this.store.select(selectAccountState).subscribe((state) => {
       if (
@@ -573,6 +608,7 @@ this.isDesactiverEnMassFormvalid=event;
     this.filterComponent.inputAddress.nativeElement.focus();
     this.ShowDetamponnage(); // to hide the button after we reset the  filter
   }
+
   resetNotificationDataAndClose() {
     this.openNotifTemponnage = false;
     this.openNotifTemponnageError = false;
@@ -586,6 +622,8 @@ this.isDesactiverEnMassFormvalid=event;
     this.isModMassbalsFail = false;
     this.openNotifRemiseDispoSuccess = false;
     this.openNotifRemiseDispoError = false;
+    this.openNotifDescativerMassSuccess = false;
+    this.openNotifDescativerMassFail = false;
     this.notificationErrorMessage = '';
     this.balTampoCriteria = new BalTampoCriteria();
     this.letterBoxListComponent.toggelSelectAllcheckbox(false);
