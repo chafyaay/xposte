@@ -50,15 +50,8 @@
             <ul>
               <li>
                 <a
-                  [ngClass]="getSubMenuItem() === 'step 1' ? 'current' : ''"
-                  routerLink="/manage/config/domaine"
-                  >{{ 'DOMAINE' | translate }}</a
-                >
-              </li>
-              <li>
-                <a
                   [ngClass]="getSubMenuItem() === 'step 2' ? 'current' : ''"
-                  routerLink="/manage/config/Frontal"
+                  routerLink="/manage/config/frontal"
                   >{{ 'FRONTAL' | translate }}</a
                 >
               </li>
@@ -67,13 +60,6 @@
                   [ngClass]="getSubMenuItem() === 'step 3' ? 'current' : ''"
                   routerLink="/manage/config/WhiteList"
                   >{{ 'WHITE_LIST' | translate }}</a
-                >
-              </li>
-              <li>
-                <a
-                  [ngClass]="getSubMenuItem() === 'step 4' ? 'current' : ''"
-                  routerLink="/manage/config/roles"
-                  >{{ 'ROLES' | translate }}</a
                 >
               </li>
             </ul>

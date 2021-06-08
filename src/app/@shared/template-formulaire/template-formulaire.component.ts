@@ -2,18 +2,20 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToggleBodyScroll } from '@shared/utils';
 
 @Component({
   selector: 'app-template-formulaire',
   templateUrl: './template-formulaire.component.html',
   styleUrls: ['./template-formulaire.component.scss'],
 })
-export class TemplateFormulaireComponent implements OnInit {
+export class TemplateFormulaireComponent implements OnInit, OnDestroy {
   @Input() titleFormulaire: string;
 
   @Input() isFormulaireopen = false;
@@ -25,7 +27,13 @@ export class TemplateFormulaireComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    ToggleBodyScroll.disableBodyScroll();
+  }
+
+  ngOnDestroy(): void {
+    ToggleBodyScroll.enableBodyScroll();
+  }
 
   closeForm() {
     this.closeFormulaire.emit(false);

@@ -1,5 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AppState, selectBALStateState, selectFrontalState } from 'src/app/@store';
+import {
+  AppState,
+  selectBALStateState,
+  selectFrontalState,
+} from 'src/app/@store';
 import { InputFilterData } from 'src/app/@shared/models/InputFilterData';
 import { Store } from '@ngrx/store';
 import { BAL } from 'src/app/@shared/models/BAL';
@@ -10,9 +14,10 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { BALFilter } from 'src/app/@shared/models/BALFilter';
-import { RechercheBalService } from 'src/app/@core/services/recherche-bal.service';
-import { UtilisateurService } from 'src/app/@core/services/utilisateur.service';
+import { BALFilter } from '@shared/models/BALFilter';
+import { RechercheBalService } from '@core/services/recherche-bal.service';
+import { UtilisateurService } from '@core/services/utilisateur.service';
+import { customEmailValidator, customIPListValidator } from '@shared/utils';
 
 @Component({
   selector: 'app-formulaire',
@@ -25,7 +30,7 @@ export class FormCreateBalComponent implements OnInit {
   @Output()
   closeEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   selectListData: InputFilterData = new InputFilterData();
-  selectListDataNew: InputFilterData = new InputFilterData();
+  //selectListDataNew: InputFilterData = new InputFilterData();
 
   bal: BAL = new BAL();
   createBALForm: FormGroup;
@@ -49,6 +54,7 @@ export class FormCreateBalComponent implements OnInit {
   ngOnInit() {
     this.loadFromStoredRef();
     this.createBALForm = this.createFormGroup();
+    this.disableMdpRejeu();
     this.typeBALList = this.formatToSelectOptions(this.typeBALList);
     this.generatePasswords();
   }
@@ -59,7 +65,7 @@ export class FormCreateBalComponent implements OnInit {
         '',
         [
           Validators.required,
-          this.customEmailValidator(),
+          customEmailValidator(),
           Validators.maxLength(320),
         ],
       ],
@@ -71,32 +77,33 @@ export class FormCreateBalComponent implements OnInit {
       ], // POUR IPS Réél 255 ^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ // hadi khdama ip valid ^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9][0-9]?)$
       listeAdressesIPAutorises: [
         '',
-        [Validators.required, this.customIPListValidator()],
+        [Validators.required, customIPListValidator()],
       ],
-      adresseMailAlerte: [
+      adresseMailAlerte: ['', [Validators.required, customEmailValidator()]],
+      mdpProd: [
         '',
-        [Validators.required, this.customEmailValidator()],
+        [Validators.required, Validators.minLength(8), this.strongPwd()],
       ],
-      mdpProd: ['', [Validators.required, Validators.minLength(6)]],
       balRejeu: [false, []],
       mdpRejeu: ['', []],
-      balRelais: ['', [Validators.email, Validators.maxLength(320)]],
+      balRelais: ['', [customEmailValidator(), Validators.maxLength(320)]],
     });
-    /*balForm.patchValue({
-      balRejeu:false
-    }
-    );*/
   }
   balRejeuPwd: string;
+  disableMdpRejeu() {
+    this.createBALForm.get('mdpRejeu').disable();
+    this.createBALForm.get('mdpRejeu').setValue('');
+    this.createBALForm.get('mdpRejeu').setValidators([]);
+  }
 
   generatePasswords() {
-    this.utilisateurService.getGeneratedPWD().subscribe(
+    this.utilisateurService.getGeneratedPWD(true).subscribe(
       (resp) => {
         this.createBALForm.get('mdpProd').setValue(resp);
       },
       (error) => {}
     );
-    this.utilisateurService.getGeneratedPWD().subscribe(
+    this.utilisateurService.getGeneratedPWD(true).subscribe(
       (resp) => {
         this.balRejeuPwd = resp;
       },
@@ -106,12 +113,18 @@ export class FormCreateBalComponent implements OnInit {
 
   checkBALRejeu() {
     if (this.createBALForm.value.balRejeu) {
+      this.createBALForm.get('mdpRejeu').enable();
       this.createBALForm.get('mdpRejeu').setValue(this.balRejeuPwd);
       // add validator  to mdpRejeu because it linked to this checked box
       this.createBALForm.get('mdpRejeu').validator = <any>(
-        Validators.compose([Validators.required, Validators.minLength(6)])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(8),
+          this.strongPwd(),
+        ])
       );
     } else {
+      this.createBALForm.get('mdpRejeu').disable();
       this.createBALForm.get('mdpRejeu').reset();
       this.createBALForm.get('mdpRejeu').clearValidators();
     }
@@ -136,7 +149,7 @@ export class FormCreateBalComponent implements OnInit {
     newBAL.listeAdressesIPAutorises = this.createBALForm
       .get('listeAdressesIPAutorises')
       .value.split(',');
-    newBAL.frontal = this.selectListDataNew.frontal.find(
+    newBAL.frontal = this.selectListData.frontal.find(
       (elt) => elt.identifiant === this.createBALForm.value.frontal
     );
 
@@ -151,54 +164,22 @@ export class FormCreateBalComponent implements OnInit {
     this.closeEvent.emit(false);
   }
 
-  customIPListValidator(): ValidatorFn {
-    return (control: AbstractControl) => {
-      const regex = new RegExp(
-        '^(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])[.]){3}(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])$'
-      );
-      const inputValue = control.value ? control.value : ''; //  to not have this error  Cannot read property 'split' of null
-      const ips: string[] = inputValue.split(',');
-      let isIpValid = true;
-      ips.forEach((ip) => {
-        if (!regex.test(ip)) {
-          isIpValid = false;
-        }
-      });
-      return isIpValid ? null : { ipError: true };
-    };
-  }
-
-  customEmailValidator(): ValidatorFn {
-    return (control: AbstractControl) => {
-      const regex = new RegExp(
-        '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
-      );
-      let isEmailValid = true;
-      if (!regex.test(control.value)) {
-        isEmailValid = false;
-      }
-
-      return isEmailValid ? null : { emailError: true };
-    };
-  }
-
   loadFromStoredRef() {
     this.store.select(selectFrontalState).subscribe((stat) => {
       this.selectListData.frontal = stat.frontal;
-      this.selectListDataNew.frontal = this.selectListData.frontal.slice(0, 10); // extract the first 10 elements
     });
 
-    this.store.select(selectBALStateState).subscribe((stat) => {
+    /*this.store.select(selectBALStateState).subscribe((stat) => {
       this.selectListData.etat = stat.balState.map((ele) => ({
         id: ele.identifiant,
         name: ele.libelle,
       }));
 
-      this.selectListDataNew.etat = this.selectListData.etat;
-    });
+      // this.selectListDataNew.etat = this.selectListData.etat;
+    });*/
   }
 
-  getFrontalData(event?) {
+  /*getFrontalData(event?) {
     let FrontalInputText: string = '';
     if (event) {
       FrontalInputText = event.target.value;
@@ -213,7 +194,7 @@ export class FormCreateBalComponent implements OnInit {
       )
       .slice(0, 10); // extract only the  first 10 elements
   }
-
+*/
   checkBALUnicity() {
     let balFilter: BALFilter = new BALFilter();
     if (this.createBALForm.get('adresseBal').valid) {
@@ -241,7 +222,6 @@ export class FormCreateBalComponent implements OnInit {
     if (this.createBALForm.value.frontal) {
       this.isFrontalFielled = true;
     } else {
-      this.getFrontalData(); // to load the initial data back
       this.isFrontalFielled = false; // for animation
     }
   }
@@ -255,7 +235,7 @@ export class FormCreateBalComponent implements OnInit {
   }
 
   selectFrontal() {
-    this.createBALForm.value.frontal = this.selectListDataNew.frontal.find(
+    this.createBALForm.value.frontal = this.selectListData.frontal.find(
       (elt) => elt.identifiant === this.createBALForm.value.frontal
     );
 
@@ -279,5 +259,21 @@ export class FormCreateBalComponent implements OnInit {
       arr.push({ id: tag, value: tag });
     });
     return arr;
+  }
+
+  disablePwd: boolean = true;
+
+  strongPwd(): ValidatorFn {
+    return (control: AbstractControl) => {
+      let hasNumber = /\d/.test(control.value);
+      let hasUpper = /[A-Z]/.test(control.value);
+      let hasLower = /[a-z]/.test(control.value);
+      const valid = hasNumber && hasUpper && hasLower;
+      if (!valid) {
+        // return what´s not valid
+        return { strong: true };
+      }
+      return null;
+    };
   }
 }

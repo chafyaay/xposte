@@ -8,8 +8,14 @@
     <button class="main-btn btn-reset" (click)="annuler()">
       {{ 'CANCEL' | translate }}
     </button>
-    <button class="main-btn btn-second" [disabled]="!isValid" (click)="valider()">
+    <button
+      class="main-btn btn-second"
+      [disabled]="!isValid"
+      (click)="valider()"
+    >
       {{ 'VALID' | translate }}
     </button>
   </div>
 </div>
+<!-- block accee to the screen out the popup -->
+<div class="overley" [ngClass]="isModalOpen ? 'show' : ''"></div>

@@ -29,9 +29,7 @@ import { noop } from 'rxjs';
 @Component({
   selector: 'app-date-time-picker',
   templateUrl: './date-time-picker.component.html',
-  styleUrls: [
-    './date-time-picker.component.scss'
-  ],
+  styleUrls: ['./date-time-picker.component.scss'],
   providers: [
     DatePipe,
     {
@@ -39,11 +37,11 @@ import { noop } from 'rxjs';
       useExisting: forwardRef(() => DateTimePickerComponent),
       multi: true,
     },
-    {provide: NgbDatepickerI18n, useClass: DateTimePickerComponent},
-
+    { provide: NgbDatepickerI18n, useClass: DateTimePickerComponent },
   ],
 })
-export class DateTimePickerComponent extends NgbDatepickerI18n
+export class DateTimePickerComponent
+  extends NgbDatepickerI18n
   implements ControlValueAccessor, OnInit, AfterViewInit {
   @Input()
   dateString: string;
@@ -89,7 +87,7 @@ export class DateTimePickerComponent extends NgbDatepickerI18n
   private ngControl: NgControl;
 
   constructor(private config: NgbPopoverConfig, private inj: Injector) {
-    super()
+    super();
     config.autoClose = 'outside';
     config.placement = 'auto';
   }
@@ -105,35 +103,57 @@ export class DateTimePickerComponent extends NgbDatepickerI18n
   }
 
   getWeekdayShortName(weekday: number): string {
-    switch(weekday){
-      case 1: return 'Lu';
-      case 2: return 'Ma';
-      case 3: return 'Me';
-      case 4: return 'Je';
-      case 5: return 'Ve';
-      case 6: return 'Sa';
-      case 7: return 'Di';
+    switch (weekday) {
+      case 1:
+        return 'Lu';
+      case 2:
+        return 'Ma';
+      case 3:
+        return 'Me';
+      case 4:
+        return 'Je';
+      case 5:
+        return 'Ve';
+      case 6:
+        return 'Sa';
+      case 7:
+        return 'Di';
     }
-    };
+  }
   getMonthShortName(month: number): string {
-     switch(month){
-      case 1: return 'Janvier';
-      case 2: return 'Féverier';
-      case 3: return 'Mars';
-      case 4: return 'Avril';
-      case 5: return 'Mai';
-      case 6: return 'Juin';
-      case 7: return 'Juillet';
-      case 8: return 'Août';
-      case 9: return 'Septembre';
-      case 10: return 'Octobre';
-      case 11: return 'Novembre';
-      case 12: return 'Décembre';
+    switch (month) {
+      case 1:
+        return 'Janvier';
+      case 2:
+        return 'Féverier';
+      case 3:
+        return 'Mars';
+      case 4:
+        return 'Avril';
+      case 5:
+        return 'Mai';
+      case 6:
+        return 'Juin';
+      case 7:
+        return 'Juillet';
+      case 8:
+        return 'Août';
+      case 9:
+        return 'Septembre';
+      case 10:
+        return 'Octobre';
+      case 11:
+        return 'Novembre';
+      case 12:
+        return 'Décembre';
     }
-  };
-  getMonthFullName(month: number): string {return "Mois"};
-  getDayAriaLabel(date: NgbDateStruct): string {return "e"};
-  
+  }
+  getMonthFullName(month: number): string {
+    return 'Mois';
+  }
+  getDayAriaLabel(date: NgbDateStruct): string {
+    return 'e';
+  }
 
   writeValue(newModel: string) {
     console.log(newModel);
@@ -204,25 +224,25 @@ export class DateTimePickerComponent extends NgbDatepickerI18n
     }
 
     this.setDateStringModel();
-    console.log(this.datetime)
+    console.log(this.datetime);
     this.datetimevalueEvent.emit(this.setDateStringModel());
   }
 
   onTimeChange(event: NgbTimeStruct) {
-    if(!event) event={
-      hour:new Date().getHours(),
-      minute:new Date().getMinutes(),
-      second:new Date().getSeconds()
-    }
-    console.log(event)
-    if(this.datetime){
+    if (!event)
+      event = {
+        hour: new Date().getHours(),
+        minute: new Date().getMinutes(),
+        second: new Date().getSeconds(),
+      };
+    console.log(event);
+    if (this.datetime) {
       this.datetime.hour = event.hour;
       this.datetime.minute = event.minute;
       this.datetime.second = event.second;
-  
+
       this.setDateStringModel();
       this.datetimevalueEvent.emit(this.setDateStringModel());
-  
     }
   }
 

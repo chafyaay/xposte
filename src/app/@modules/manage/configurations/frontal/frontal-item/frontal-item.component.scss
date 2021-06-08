@@ -1,0 +1,73 @@
+td {
+  align-items: center;
+  padding-right: 10px;
+  word-break: break-all;
+}
+
+.ellipsis {
+  position: static;
+  height: 22px;
+  width: 22px;
+  background-color: #f2f2f2;
+  color: #706f6f;
+  font-family: "Barlow";
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 8px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+td:nth-child(2) {
+  width: 16% !important;
+}
+
+td:nth-child(4) {
+  width: 21% !important;
+}
+
+// Alert email
+td:nth-child(3) {
+  width: 10% !important;
+}
+
+// IPs
+td:nth-child(5) {
+  width: 10% !important;
+}
+
+// Users
+td:nth-child(6) {
+  width: 30% !important;
+}
+
+.with-details {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+.details {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  z-index: 100;
+  cursor: text;
+  padding: 8px 16px 0px;
+  max-width: 200px;
+  background-color: #5f5e5e;
+  border-radius: 3px;
+  color: #fff;
+  text-align: center;
+  font-family: Barlow;
+  font-weight: 400;
+  font-size: 0.875rem;
+  div {
+    margin-bottom: 8px;
+  }
+}
+.ellipsis:hover > .details,
+.details:hover {
+  display: block;
+}

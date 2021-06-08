@@ -1,13 +1,14 @@
-import { UserAccount } from 'src/app/@shared/models/user-account';
 import * as fromActions from '../actions/frontal.action';
 import { Frontal } from 'src/app/@shared/models/Frontal';
 
 export interface State {
   frontal: Frontal[];
+  filtredFrontals: Frontal[];
 }
 
 const initialState: State = {
   frontal: [],
+  filtredFrontals: [],
 };
 
 export function reducer(
@@ -20,6 +21,12 @@ export function reducer(
       return {
         ...state,
         frontal: frontals,
+      };
+    }
+    case fromActions.FrontalActionTypes.FILTER_FRONTAL_LIST: {
+      return {
+        ...state,
+        filtredFrontals: action.payload,
       };
     }
 

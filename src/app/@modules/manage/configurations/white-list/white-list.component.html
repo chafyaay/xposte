@@ -1,1 +1,102 @@
-<p>white-list works!</p>
+<app-spinner></app-spinner>
+<div class="container pd20">
+  <div class="wrapper-title flex">
+    <h1 class="main-title">{{ 'WHITELIST_TITLE' | translate }}</h1>
+
+    <button class="main-btn icon" (click)="(false)">
+      {{ 'ADD_TO_WHITELIST_BUTTON' | translate }}
+    </button>
+  </div>
+
+  <!-- ======= START .Bloc NOTIFICATION  ======= -->
+
+  <!--notification de suppression de Whitelist -->
+  <app-notification
+    *ngIf="openNotifHostDeleteSucces || openNotifHostDeleteFail"
+    [notificationColor]="openNotifHostDeleteFail ? 'alerteMessage' : 'message'"
+    (closeNotfification)="resetNotificationDataAndClose()"
+  >
+    <h3 class="message_title">
+      {{
+        openNotifHostDeleteSucces
+          ? ('WHITELIST_HOST_SUPP_NOTIFICATION_SUCCES' | translate)
+          : ('WHITELIST_HOST_SUPP_NOTIFICATION_FAIL' | translate)
+      }}
+    </h3>
+    <ng-container *ngIf="openNotifHostDeleteSucces">
+      <ul>
+        <li>
+          {{ 'WHITELIST_TYPE' | translate }} :
+          {{ whitelistHostToDelete?.typeListe | translate }}
+        </li>
+        |
+        <li>
+          &nbsp; {{ 'DOMAINE_IP_LABEL' | translate }} :
+          {{ whitelistHostToDelete?.domainIp }}
+        </li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="openNotifHostDeleteFail">
+      {{ notificationErrorMessage }}
+    </ng-container>
+  </app-notification>
+
+  <!-- ======= START .Bloc FILTRES ======= -->
+  <app-filter
+    #whitelistFilterComp
+    [filtreType]="FiltreType.WHITELIST"
+    [inputFilterData]="inputFilterData"
+    (filterEvent)="getFiltredData($event)"
+    (filterDefaultEvent)="getFiltredDataDefault()"
+  ></app-filter>
+  <!-- ======= END .Bloc FILTRES ======= -->
+  <!-- ======= START .Bloc PAGINATION + Action  ======= -->
+  <div class="flex space-between mgb40">
+    <app-pagination
+      [titlePagination]="'DOMAINES_IP_LABEL' | translate"
+      [totalResult]="totalResult"
+      [pageNumber]="whiteListFilter.numeroPage"
+      [pageSiz]="whiteListFilter.nbResultatsParPage"
+      (paginationChangeEvent)="getPagination($event)"
+    ></app-pagination>
+
+    <div>
+      <!-- button -->
+    </div>
+  </div>
+  <!-- ======= END .Bloc PAGINATION ======= -->
+
+  <app-white-list-table
+    #whiteListTable
+    [whiteListHosts]="whiteListHosts"
+    [selectedHosts]="selectedHosts"
+    [highlighRowEnable]="highlighRowEnable"
+    (selectedHostEvent)="saveSelectedHost($event)"
+    (orderingFilter)="updateOrder($event)"
+    (deleteHostEvent)="openModalSup($event)"
+  >
+  </app-white-list-table>
+
+  <div class="flex space-between mgb40">
+    <app-pagination
+      *ngIf="isShowPagiantion"
+      [titlePagination]="'DOMAINES_IP_LABEL' | translate"
+      [totalResult]="totalResult"
+      [pageNumber]="whiteListFilter.numeroPage"
+      [pageSiz]="whiteListFilter.nbResultatsParPage"
+      (paginationChangeEvent)="getPagination($event)"
+    ></app-pagination>
+  </div>
+
+  <!--modal Suppression Whitelist -->
+  <app-template-modal
+    *ngIf="isModalOpen"
+    [TitleModal]="'WHITELIST_SUPP_MODAL_TITLE' | translate"
+    [isModalOpen]="isModalOpen"
+    (isModalClose)="closeModalSup($event)"
+    (valide)="valideSupp($event)"
+  >
+    <app-whitelist-suppresion [whitelistHost]="whitelistHostToDelete">
+    </app-whitelist-suppresion>
+  </app-template-modal>
+</div>

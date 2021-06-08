@@ -1,0 +1,38 @@
+<div id="filter">
+  <div class="filter-left">
+    <h2 class="title">{{ 'FILTER_LABEL' | translate }}</h2>
+
+    <!--Using items input-->
+    <div class="inputField frontal">
+      <ng-select
+        [items]="inputFilterData"
+        bindLabel="name"
+        bindValue="identifiant"
+        placeholder=" "
+        class="global-select"
+        id="frontal"
+        [(ngModel)]="filter.identifiantFrontal"
+        (change)="changeSelectedFrontal($event)"
+      >
+      </ng-select>
+      <label
+        for="Frontal"
+        [ngClass]="filter.identifiantFrontal ? 'ng-select-label' : ''"
+      >
+        {{ 'FRONTAL' | translate }}
+      </label>
+    </div>
+  </div>
+  <div>
+    <button class="reset" style="margin-right: 2rem" (click)="resetData()">
+      {{ 'RESET_SINGLE_FILTER' | translate }}
+    </button>
+    <button
+      class="main-btn"
+      (click)="clickFilter()"
+      [disabled]="!changedFilter"
+    >
+      {{ 'FILTER_BUTTON' | translate }}
+    </button>
+  </div>
+</div>

@@ -19,7 +19,7 @@
       bindLabel="nom"
       bindValue="identifiant"
       placeholder="Frontal"
-      class="form-control ngselectCustom"
+      class="form-control ngselectCustom global-select"
       id="frontal-bal-cration"
       formControlName="frontal"
       [(ngModel)]="this.selectedFrontalId"
@@ -43,7 +43,7 @@
       [items]="typeBALList"
       bindLabel="value"
       bindValue="id"
-      class="form-control ngselectCustom"
+      class="form-control ngselectCustom global-select"
       id="type-bal-cration"
       formControlName="typeBal"
       (blur)="checkEtatBALIsSet()"
@@ -176,7 +176,7 @@
       class="helptext text-red"
       *ngIf="
         updateBALForm.get('mdpRejeu').value &&
-        !this.updateBALForm.get('mdpRejeu').valid
+        this.updateBALForm.get('mdpRejeu').invalid
       "
       >{{ 'Le champ est erroné' | translate }}</span
     >

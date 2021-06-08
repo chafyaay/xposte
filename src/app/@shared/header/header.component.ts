@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit {
   getSubMenuItem(): string {
     if (this.router.url.includes('/manage/config/domaine')) {
       return 'step 1';
-    } else if (this.router.url.includes('/manage/config/Frontal')) {
+    } else if (this.router.url.includes('/manage/config/frontal')) {
       return 'step 2';
     } else if (this.router.url.includes('/manage/config/WhiteList')) {
       return 'step 3';

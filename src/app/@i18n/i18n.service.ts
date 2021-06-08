@@ -16,8 +16,6 @@ export class I18nService {
     // Embed languages to avoid extra HTTP requests
     translateService.setTranslation('en', en);
     translateService.setTranslation('fr', fr);
-
-
   }
 
   getSupportedLangs() {
@@ -38,6 +36,7 @@ export class I18nService {
 
   set language(language: string) {
     language = language || this.translateService.getBrowserCultureLang();
+
     let isSupportedLanguage = this.supportedLanguages.includes(language);
     if (language && !isSupportedLanguage) {
       language = language.split('-')[0];
@@ -51,7 +50,9 @@ export class I18nService {
       language = this.defaultLanguage;
     }
     // log.debug(`Language set to ${​​​​​language}​​​​​`);
-    this.translateService.use(language);
+
+    // TODO: fix i18n when browser is in english
+    this.translateService.use('fr');
   }
 
   get language(): string {

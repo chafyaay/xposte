@@ -34,10 +34,41 @@
   <td>{{ balData.frontal.nom }}</td>
   <td>{{ balData.seuil }}</td>
   <td>{{ balData.adresseMailAlerte }}</td>
-  <td class="ips">
-    <span *ngFor="let ip of balData.listeAdressesIPAutorises" class="icone">
-      {{ ip }}
-    </span>
+  <td class="with-details">
+    <ng-container *ngIf="balData.listeAdressesIPAutorises">
+      <div>
+        <div
+          class="ellipsis interogation-mark"
+          *ngIf="isFrontalIPsChangedAndNotEmpty()"
+        >
+          <span class="icone help"></span>
+          <div class="details">
+            <div *ngFor="let ip of balData.frontal.listeAdressesIPs">
+              {{ ip }}
+            </div>
+          </div>
+        </div>
+
+        <div class="first-ip">
+          <span *ngIf="balData.listeAdressesIPAutorises.length > 0">
+            {{ balData.listeAdressesIPAutorises[0] }}
+          </span>
+        </div>
+      </div>
+      <div>
+        <div
+          class="ellipsis flex-display"
+          *ngIf="balData.listeAdressesIPAutorises.length > 1"
+        >
+          <span class="rounded-squar">...</span>
+          <div class="details">
+            <div *ngFor="let ip of balData.listeAdressesIPAutorises | slice: 1">
+              {{ ip }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </td>
   <td class="event">
     <i

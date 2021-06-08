@@ -17,6 +17,8 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DateTimePickerComponent } from './date-time-picker/date-time-picker.component';
 import { InfoBulleComponent } from './info-bulle/info-bulle.component';
+import { TemplateFormulaireComponent } from './template-formulaire/template-formulaire.component';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { InfoBulleComponent } from './info-bulle/info-bulle.component';
     PaginationComponent,
     DateTimePickerComponent,
     InfoBulleComponent,
+    TemplateFormulaireComponent,
+    NotificationComponent,
   ],
   imports: [
     CommonModule,
@@ -49,6 +53,8 @@ import { InfoBulleComponent } from './info-bulle/info-bulle.component';
     PaginationComponent,
     InfoBulleComponent,
     DateTimePickerComponent,
+    TemplateFormulaireComponent,
+    NotificationComponent,
   ],
   entryComponents: [],
 })

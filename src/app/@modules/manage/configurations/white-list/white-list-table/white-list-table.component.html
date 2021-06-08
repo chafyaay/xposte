@@ -1,0 +1,56 @@
+<table class="main-table">
+  <thead>
+    <tr>
+      <th>
+        <div class="inputCheck checkTable">
+          <input
+            type="checkbox"
+            name="check"
+            id="check"
+            (click)="selectAllHost($event)"
+            [(ngModel)]="selectAll"
+            [checked]="selectAll"
+          />
+
+          <label for="check"></label>
+        </div>
+      </th>
+      <th>
+        {{ 'HOSTNAME' | translate }}
+
+        <i
+          class="zmdi"
+          (click)="toggleTrie('nom')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'nom',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'nom' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'nom' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+        <!--Mostafa : une fois rachid me donne l'icon bleu je vais les changés ici ,ce n'est pas zmdi zmdi-caret-down-->
+      </th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <app-white-list-item
+      *ngFor="let host of whiteListHosts; let index = index"
+      [whiteListHost]="host"
+      [RowNumber]="index"
+      [selectedHosts]="selectedHosts"
+      [highlighRowEnable]="highlighRowEnable"
+      (selectedHostEvent)="emitToParent($event)"
+      (deleteHostEvent)="deleteHost($event)"
+    ></app-white-list-item>
+  </tbody>
+</table>

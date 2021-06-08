@@ -1,1 +1,152 @@
-<p>frontal works!</p>
+<!-- <app-spinner></app-spinner> -->
+<div class="container pd20">
+  <div class="wrapper-title flex">
+    <h1 class="main-title">{{ 'CONFIGURATION_FRONTAL' | translate }}</h1>
+    <button class="main-btn icon" (click)="openFormulaire()">
+      {{ 'CREER_FRONTAL' | translate }}
+    </button>
+  </div>
+
+  <!--BEGIN notification de Creation frontal -->
+  <app-notification
+    *ngIf="openNotifFrontalCreationSucces || openNotifFrontalCreationFail"
+    [notificationColor]="
+      openNotifFrontalCreationFail ? 'alerteMessage' : 'message'
+    "
+    (closeNotfification)="resetNotificationDataAndClose()"
+  >
+    <h3 class="message_title">
+      {{
+        openNotifFrontalCreationSucces
+          ? ('FRONTAL_CREATION_NOTIFICATION_SUCCES' | translate)
+          : ('FRONTAL_CREATION_NOTIFICATION_FAIL' | translate)
+      }}
+    </h3>
+    <ng-container *ngIf="openNotifFrontalCreationSucces">
+      <ul>
+        <li>
+          {{ 'FRONTAL' | translate }} :
+          {{ savedFrontal?.nom }}
+        </li>
+        <li>
+          &nbsp; {{ 'SEUIL' | translate }} :
+          {{ savedFrontal?.seuil }}
+        </li>
+        <li>
+          &nbsp; {{ 'MAIL_ALERTE' | translate }} :
+          {{ savedFrontal?.adresseMailAlerte }}
+        </li>
+        <li>
+          &nbsp; {{ 'IPS' | translate }} :
+          {{ savedFrontal?.listeAdressesIPs?.join(', ') }}
+        </li>
+        <li>
+          {{ 'UTILISATEURS_LABEL' | translate }} :
+          {{ savedFrontal?.listeIdentifiantsUtilisateurs.join(', ') }}
+        </li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="openNotifFrontalCreationFail">
+      {{ notificationErrorMessage }}
+    </ng-container>
+  </app-notification>
+  <!--END notification de Creation frontal -->
+
+  <!--BEGIN notification update frontal -->
+  <app-notification
+    *ngIf="openNotifFrontalUpdateSucces || openNotifFrontalUpdateFail"
+    [notificationColor]="
+      openNotifFrontalUpdateFail ? 'alerteMessage' : 'message'
+    "
+    (closeNotfification)="resetNotificationDataAndClose()"
+  >
+    <h3 class="message_title">
+      {{
+        openNotifFrontalUpdateSucces
+          ? ('FRONTAL_UPDATE_NOTIFICATION_SUCCES' | translate)
+          : ('FRONTAL_UPDATE_NOTIFICATION_FAIL' | translate)
+      }}
+    </h3>
+    <ng-container *ngIf="openNotifFrontalUpdateSucces">
+      <ul>
+        <li>
+          {{ 'FRONTAL' | translate }} :
+          {{ savedFrontal?.nom }}
+        </li>
+        <li>
+          &nbsp; {{ 'SEUIL' | translate }} :
+          {{ savedFrontal?.seuil }}
+        </li>
+        <li>
+          &nbsp; {{ 'MAIL_ALERTE' | translate }} :
+          {{ savedFrontal?.adresseMailAlerte }}
+        </li>
+        <li>
+          &nbsp; {{ 'IPS' | translate }} :
+          {{ savedFrontal?.listeAdressesIPs?.join(', ') }}
+        </li>
+        <li>
+          {{ 'UTILISATEURS_LABEL' | translate }} :
+          {{ savedFrontal?.listeIdentifiantsUtilisateurs.join(', ') }}
+        </li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="openNotifFrontalUpdateFail">
+      {{ notificationErrorMessage }}
+    </ng-container>
+  </app-notification>
+  <!--END notification update frontal -->
+
+  <app-filter-frontal
+    #frontalFilterComp
+    (filterEvent)="getFiltredData($event)"
+    (filterDefaultEvent)="getFiltredDataDefault()"
+  ></app-filter-frontal>
+
+  <!-- BEGIN creation modal -->
+  <app-template-formulaire
+    *ngIf="isFormulaireopen"
+    titleFormulaire="CREER_FRONTAL"
+    [isFormulaireopen]="isFormulaireopen"
+    (closeFormulaire)="closeFormulaire()"
+  >
+    <app-create-frontal
+      [frontalToUpdate]="frontalToUpdate"
+      (closeEvent)="CloseCreateFrontalForm()"
+      (valideCreateFrontal)="saveFrontal($event)"
+    >
+    </app-create-frontal>
+  </app-template-formulaire>
+  <!-- END creation modal -->
+
+  <div class="flex space-between mgb40">
+    <app-pagination
+      [titlePagination]="'FRONTALS' | translate"
+      [totalResult]="totalResult"
+      [pageNumber]="frontalFilter.numeroPage"
+      [pageSiz]="frontalFilter.nbResultatsParPage"
+      (paginationChangeEvent)="getPagination($event)"
+    ></app-pagination>
+  </div>
+  <!-- ======= START .Bloc MAIN TABLE ======= -->
+  <app-frontal-list
+    #frontalList
+    [listFrontal]="frontalDataList"
+    [frontalFilter]="frontalFilter"
+    [selectedFrontalList]="selectedFrontal"
+    (selectedFrontalEvent)="saveSelectedFrontal($event)"
+    (orderingFilter)="updateOrder($event)"
+    (frontalToUpdateEvent)="updateFrontal($event)"
+  ></app-frontal-list>
+
+  <div class="flex space-between mgb40">
+    <app-pagination
+      *ngIf="isShowPagiantion"
+      [titlePagination]="'FRONTALS' | translate"
+      [totalResult]="totalResult"
+      [pageNumber]="frontalFilter.numeroPage"
+      [pageSiz]="frontalFilter.nbResultatsParPage"
+      (paginationChangeEvent)="getPagination($event)"
+    ></app-pagination>
+  </div>
+</div>

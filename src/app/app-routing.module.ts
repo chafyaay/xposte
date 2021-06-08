@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HelpComponent } from './pages/help/help.component';
 import { NotfoundpageComponent } from './pages/notfoundpage/notfoundpage.component';
-import { AuthGuard } from 'src/app/@core';
-import { ManageResolverService } from 'src/app/@core/services/manageResolver.service';
-import { ReferenceDataResolverService } from 'src/app/@core/resolver/reference-data-resolver.service';
+import { AuthGuard } from '@core';
+import { ManageResolverService } from '@core/services/manageResolver.service';
+import { ReferenceDataResolverService } from '@core/resolver/reference-data-resolver.service';
+import { RoleGuardService } from '@core/guards/role-guard.service';
+import { Role } from '@shared';
 
 const routes: Routes = [
   {
@@ -20,7 +22,18 @@ const routes: Routes = [
       manage: ManageResolverService,
     },
     loadChildren: () =>
-      import('src/app/@modules/manage/manage.module').then((m) => m.ManageModule),
+      import('src/app/@modules/manage/manage.module').then(
+        (m) => m.ManageModule
+      ),
+  },
+  {
+    path: 'config',
+    canActivate: [RoleGuardService],
+    data: { roles: [Role.SuperAdmin] },
+    loadChildren: () =>
+      import('@modules/manage/configurations/configurations.module').then(
+        (m) => m.ConfigurationsModule
+      ),
   },
   { path: 'help', component: HelpComponent },
   { path: 'notroute', component: NotfoundpageComponent },

@@ -3,7 +3,11 @@ import { FiltreType } from 'src/app/@shared/models/FiltreType';
 import { InputFilterData } from 'src/app/@shared/models/InputFilterData';
 import { selectFrontalState } from 'src/app/@store/selectors/frontal.selector';
 import { Store } from '@ngrx/store';
-import { AppState, selectAccountState, selectBALStateState } from 'src/app/@store';
+import {
+  AppState,
+  selectAccountState,
+  selectBALStateState,
+} from 'src/app/@store';
 import { Filter } from 'src/app/@shared/models/Filter';
 import { BALFilter } from 'src/app/@shared/models/BALFilter';
 import { Pagination } from 'src/app/@shared/models/pagination';
@@ -17,10 +21,10 @@ import { FilterComponent } from 'src/app/@shared/filter/filter.component';
 import { BalTampoCriteria } from 'src/app/@shared/models/BalTampoCriteria';
 import { Observable } from 'rxjs';
 import { LetterBoxListComponent } from 'src/app/@modules/manage/letter-box/letter-box-list/letter-box-list.component';
-import { remiseDispoI } from 'src/app/@shared/models/remise-dispo';
-import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
+import { RemiseDispoI } from 'src/app/@shared/models/remise-dispo';
+import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service';
 
 @Component({
   selector: 'app-letter-box',
@@ -28,7 +32,8 @@ import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
   styleUrls: ['./letter-box.component.scss'],
 })
 export class LetterBoxComponent implements OnInit, OnChanges {
-  @ViewChild(NgSelectComponent, { static: false }) ngSelectComponent: NgSelectComponent;
+  @ViewChild(NgSelectComponent, { static: false })
+  ngSelectComponent: NgSelectComponent;
 
   // recieve highlight Information and informe the table list
   highlight: boolean;
@@ -43,12 +48,10 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   isFormulaireopen = false;
   isUpdateBalFormOpen = false;
   titlePagination = 'BAL';
-  TitleModalRemise: string = 'Remise à dispoosition des messages lus';
   TitleModal: string = 'Confirmation de tamponnage';
   balFilterState: BALFilter = new BALFilter();
   openNotifTemponnageError = false;
   isModalOpen = false;
-  modalRemise = false;
   isShowPagiantion = true;
   isCloseTamponnage = false;
   selectedBal: string[] = [];
@@ -98,8 +101,9 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   openNotifBalUpdateFail = false;
   highlighRowEnable = false;
 
-  // Remise à disposition
   messageSelected: any;
+  showModifEnMassDispositionBtn = false;
+  // Remise à disposition
   showRemiseDispositionBtn = false;
   showRemiseDispositionModal = false;
 
@@ -114,7 +118,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.BalTamponner.identifiantFrontal = this.balFilter.identifiantFrontal;
   }
 
-  ngOnChanges() { }
+  ngOnChanges() {}
 
   ngOnInit() {
     this.ShowDetamponnage();
@@ -125,11 +129,10 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   // remise à disposition
-  REMISE_DISPO_OBJ: remiseDispoI = {};
+  REMISE_DISPO_OBJ: RemiseDispoI = {};
   isFormValid = false;
   openNotifRemiseDispoSuccess = false;
   openNotifRemiseDispoError = false;
-
 
   REMISE_DISPO_EVENT_HANDLER(event: any) {
     this.isFormValid = event.isFormValid;
@@ -138,8 +141,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       adresseBal: this.balFilter.adresseBal,
       identifiantFrontal: this.balFilter.identifiantFrontal,
       listeIdentifiantsBALs: this.selectedBal,
-      ...event.DATA
-    }
+      ...event.DATA,
+    };
   }
 
   openRemiseDispositionModal() {
@@ -149,24 +152,20 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.showRemiseDispositionModal = false;
   }
   remise_dispo_submit(event: any) {
-
     this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
-      res => {
+      (res) => {
         this.openNotifRemiseDispoSuccess = true;
         this.showRemiseDispositionModal = false;
       },
-      err => {
+      (err) => {
         this.openNotifRemiseDispoSuccess = false;
         this.openNotifBalCreationSucces = false;
         this.openNotifRemiseDispoError = true;
         this.showRemiseDispositionModal = false;
-        this.notificationErrorMessage = "Erreur lors de remise à disposition"
-
+        this.notificationErrorMessage = 'Erreur lors de remise à disposition';
       }
-    )
+    );
     console.log(this.REMISE_DISPO_OBJ);
-
-
   }
   //-----------------
   //-----------------+
@@ -174,6 +173,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   loadBALTable() {
     if (this.isRoleAdmin) {
       this.isShowTemponnage = true;
+      this.showModifEnMassDispositionBtn = true;
       this.showRemiseDispositionBtn = true;
     }
     this.rechercheBalService.getBal(this.balFilter).subscribe(
@@ -207,8 +207,12 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.getState.subscribe((state) => {
       if (state.roles.indexOf('SuperAdmin') !== -1) {
         this.isShowTemponnage = true;
-        this.showRemiseDispositionBtn = true;
+        this.showModifEnMassDispositionBtn = true;
         this.isRoleAdmin = true;
+      } else if (state.roles.indexOf('Admin') !== -1) {
+        this.isShowTemponnage = false;
+        this.showModifEnMassDispositionBtn = false;
+        this.isRoleAdmin = false;
       } else if (state.roles.indexOf('Admin') !== -1) {
         this.isShowTemponnage = false;
         this.showRemiseDispositionBtn = false;
@@ -216,6 +220,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       } else {
         this.isShowTemponnage = false;
         this.showRemiseDispositionBtn = false;
+        this.showModifEnMassDispositionBtn = false;
       }
     });
   }
@@ -253,8 +258,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   getPagination(pagination) {
     if (this.balFilter.etatBal === 'Active') {
       this.isShowTemponnage = true;
+      this.showModifEnMassDispositionBtn = true;
       this.showRemiseDispositionBtn = true;
-
     }
     this.selectedBal = [];
     this.resetNotificationDataAndClose();
@@ -300,11 +305,11 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       ) {
         this.showPaginationTamonnage = true;
         this.isShowTemponnage = true;
-        this.showRemiseDispositionBtn = true;
+        this.showModifEnMassDispositionBtn = true;
       } else {
         this.showPaginationTamonnage = false;
         this.isShowTemponnage = false;
-        this.showRemiseDispositionBtn = false;
+        this.showModifEnMassDispositionBtn = false;
       }
     }
     this.balFilter.etatBal = filterEvent.filterData.etat;
@@ -338,6 +343,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   getFiltredDataDefault() {
     if (this.balFilter.etatBal === 'Active') {
       this.isShowTemponnage = true;
+      this.showModifEnMassDispositionBtn = true;
       this.showRemiseDispositionBtn = true;
     }
     this.ShowDetamponnage();
@@ -352,17 +358,14 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.initBALFilter();
     if (this.isRoleAdmin) {
       this.isShowTemponnage = true;
+      this.showModifEnMassDispositionBtn = true;
       this.showRemiseDispositionBtn = true;
     }
     this.ShowDetamponnage(); // after the reset of BAL Filter  we should hide the button detamponnage
 
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
-        console.clear()
-        console.log("--------- chafyy -")
-        console.log(bal)
         this.balDataList = bal.body;
-
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
         this.balFilter.numeroPage = parseInt(bal.headers.get('X-NUMERO-PAGE'));
         this.balFilter.nbResultatsParPage = parseInt(
@@ -413,37 +416,40 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   isModMassbalsSuccess = false;
   isModMassbalsFail = false;
   isModMassbalsSidBarCanvasOpen = false;
-  modifMassObj = {};
-  modMassErrMessage = "";
+  modifMassObj: ModifEnMassI;
+  modMassErrMessage = '';
   MODIF_EN_MASS_EVENT_HANDLER(data: any) {
     this.isModMassbalsSidBarCanvasOpen = false;
 
     if (data.DATA) {
       const result = data.DATA;
       if (result.etatBal) {
-        this.modifMassObj=result;
+        this.modifMassObj = result;
         this.isModMassbalsSuccess = true;
         this.isModMassbalsFail = false;
-      }else{
+      } else {
         this.isModMassbalsSuccess = false;
         this.isModMassbalsFail = true;
-        this.modMassErrMessage=result.message;
+        this.modMassErrMessage = result.message;
       }
     }
   }
+  openDescativerEnMassModal = false;
+  DESACTIVER_EN_MASS_EVENT_HANDLER(event) {}
   openSidebarCanvas(event: any) {
     setTimeout(() => {
       if (event) {
         const id = event.id;
         if (id === 1) {
           this.hideNotificationMessage();
-          this.isModMassbalsSidBarCanvasOpen = !this.isModMassbalsSidBarCanvasOpen;
+          this.isModMassbalsSidBarCanvasOpen = !this
+            .isModMassbalsSidBarCanvasOpen;
+        } else if (id === 2) {
+          this.openDescativerEnMassModal = true;
         }
         this.ngSelectComponent.handleClearClick();
-        this.ngSelectComponent.close()
-
+        this.ngSelectComponent.close();
       }
-
     }, 100);
   }
 
@@ -484,12 +490,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.CloseCreateBALForm();
     this.filterComponent.resetData();
   }
-  CloseRemise(test): void {
-    this.modalRemise = test;
-  }
-  openModalRemise(): void {
-    this.modalRemise = !this.modalRemise;
-  }
+
   closeNotif(event): void {
     this.openNotification = event;
   }
@@ -562,11 +563,10 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.openNotifBalCreationSucces = false;
     this.openNotifBalUpdateFail = false;
     this.openNotifBalUpdateSucces = false;
-    this.openNotifRemiseDispoSuccess = false;
-    this.openNotifRemiseDispoError = false;
     this.isModMassbalsSuccess = false;
     this.isModMassbalsFail = false;
-
+    this.openNotifRemiseDispoSuccess = false;
+    this.openNotifRemiseDispoError = false;
     this.notificationErrorMessage = '';
     this.balTampoCriteria = new BalTampoCriteria();
     this.letterBoxListComponent.toggelSelectAllcheckbox(false);

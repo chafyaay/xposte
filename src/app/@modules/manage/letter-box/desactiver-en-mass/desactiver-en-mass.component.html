@@ -1,0 +1,30 @@
+<div class="pd20">
+  <div class="flex">
+    <div class="totalInbox mgb30">
+      <span class="val">{{ balNumber }}</span>
+      {{ 'BOITES_AUX_LETTRES' | translate }}
+    </div>
+    <div class="info-bulle">
+      <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
+    </div>
+  </div>
+  <h3>
+    {{ 'DES_MODAL_CRITERIA_TITLE' | translate }}
+  </h3>
+
+  <h4 class="title_modal mgl30 mgb10">{{ 'CRITERE_TEMPO' | translate }}</h4>
+  <div class="flex mgl30">
+    <div *ngIf="balFilter.etatBal" class="totalInbox left mgb30">
+      {{ 'ETAT' | translate }}
+      <span class="val">{{ balFilter.etatBal }}</span>
+    </div>
+    <div *ngIf="balFilter.adresseBal" class="totalInbox left mgb30">
+      {{ 'ADRESS' | translate }}
+      <span class="val">{{ balFilter.adresseBal }}</span>
+    </div>
+    <div *ngIf="balFilter.identifiantFrontal" class="totalInbox left mgb30">
+      {{ 'FRONTAL' | translate }}
+      <span class="val">{{ balFilter.identifiantFrontal }}</span>
+    </div>
+  </div>
+</div>

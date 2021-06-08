@@ -3,4 +3,5 @@ export enum FiltreType {
   UTILISATEUR,
   REJEU,
   CONFIGURATION,
+  WHITELIST,
 }

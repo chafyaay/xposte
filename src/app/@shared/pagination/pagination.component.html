@@ -1,4 +1,4 @@
-<div class="flex">
+<div *ngIf="totalResult > 0" class="flex">
   <div class="totalInbox">
     <span class="val">{{ totalResult }}</span>
     {{ titlePagination }}
@@ -6,6 +6,7 @@
   <div class="wrapperPagination">
     <span class="icone file">
       <ng-select
+        class="global-select"
         [items]="PageNumbers"
         bindLabel="name"
         bindValue="name"
@@ -18,6 +19,7 @@
   <div class="wrapperPagination">
     <span class="icone eye">
       <ng-select
+        class="global-select"
         [items]="pageSize"
         bindLabel="name"
         bindValue="id"

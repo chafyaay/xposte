@@ -1,0 +1,29 @@
+<tr
+  [ngClass]="
+    whiteListHost.isChecked
+      ? 'selectedRow ' + highlighBalClass
+      : highlighBalClass
+  "
+>
+  <td>
+    <div class="inputCheck checkTable">
+      <input
+        type="checkbox"
+        id="RowNumber-{{ RowNumber }}"
+        (click)="selectRow(whiteListHost.domainIp, $event)"
+        [(ngModel)]="whiteListHost.isChecked"
+      />
+
+      <label for="RowNumber-{{ RowNumber }}"></label>
+    </div>
+  </td>
+
+  <td>{{ whiteListHost.domainIp }}</td>
+  <td class="event">
+    <i
+      class="zmdi zmdi-delete"
+      [ngClass]="highlighBalClass ? 'displayBlock ' : ''"
+      (click)="deleteHost(whiteListHost)"
+    ></i>
+  </td>
+</tr>

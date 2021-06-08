@@ -38,10 +38,9 @@ import localeFr from '@angular/common/locales/fr';
 
 registerLocaleData(localeFr);
 
-
 export const Providers = [
   { provide: 'api_url', useFactory: apiUrl, deps: [WindowRefService] },
-   {provide: LOCALE_ID, useValue: "fr-FR" } 
+  { provide: LOCALE_ID, useValue: 'fr-FR' },
 ];
 
 @NgModule({

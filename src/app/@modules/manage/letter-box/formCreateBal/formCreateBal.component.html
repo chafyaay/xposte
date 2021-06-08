@@ -23,14 +23,13 @@
 
   <div class="inputField frontal">
     <ng-select
-      [items]="selectListDataNew.frontal"
+      [items]="selectListData.frontal"
       bindLabel="nom"
       bindValue="identifiant"
       placeholder="Frontal"
-      class="form-control ngselectCustom"
+      class="form-control ngselectCustom global-select"
       id="frontal-bal-cration"
       formControlName="frontal"
-      (keyup)="getFrontalData($event)"
       (blur)="checkFontralIsSet()"
       (focus)="isFrontalFielled = true"
       (change)="selectFrontal()"
@@ -50,7 +49,7 @@
       bindLabel="value"
       bindValue="id"
       placeholder="Frontal"
-      class="form-control ngselectCustom"
+      class="form-control ngselectCustom global-select"
       id="type-bal-cration"
       formControlName="typeBal"
       (blur)="checkEtatBALIsSet()"
@@ -179,7 +178,7 @@
     ></i>
     <span
       class="helptext text-red"
-      *ngIf="!this.createBALForm.get('mdpRejeu').valid"
+      *ngIf="this.createBALForm.get('mdpRejeu').invalid"
       >{{ 'INVALID_INPUT' | translate }}</span
     >
   </div>

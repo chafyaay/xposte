@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -28,7 +29,7 @@ import { selectFrontalState } from 'src/app/@store/selectors/frontal.selector';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, AfterViewInit {
   @Input()
   filtreType: FiltreType;
 
@@ -52,16 +53,32 @@ export class FilterComponent implements OnInit {
   isEtatSelected = false;
   @ViewChild('inputAddress', { static: false })
   inputAddress: ElementRef;
+  filterEnabled = false;
 
-  constructor(private config: NgSelectConfig, private store: Store<AppState>) {}
+  // whitelist properties
+  @ViewChild('inputWhitelistHost', { static: false })
+  inputWhitelistHost: ElementRef;
+
+  isWhiteListTypeFocused: boolean = false;
+
+  constructor() {}
 
   ngOnInit() {
     this.initFilterData();
   }
 
+  ngAfterViewInit() {
+    if (this.inputWhitelistHost) {
+      this.inputWhitelistHost.nativeElement.focus();
+    }
+    if (this.inputAddress) {
+      this.inputAddress.nativeElement.focus();
+    }
+  }
   changeSelectedEtat() {
     this.filter.filterData.etat = this.selectedEtat;
     this.isEtatSelected = true;
+    this.filterEnable();
   }
   clickAdress() {
     this.clickLabel = true;
@@ -73,6 +90,9 @@ export class FilterComponent implements OnInit {
     this.isFielled = false;
     this.isEtatSelected = false;
     this.selectedEtat = 'Active';
+    this.filter.filterData.typeListe = 'liste_avant';
+
+    this.filterEnabled = false;
   }
 
   public get FiltreType(): typeof FiltreType {
@@ -80,6 +100,10 @@ export class FilterComponent implements OnInit {
   }
 
   clickFilter() {
+    // if we are in the whitelist scope we don't need this.filter.filterData.etat value
+    if (this.filtreType === FiltreType.WHITELIST) {
+      delete this.filter.filterData.etat;
+    }
     this.filterEvent.emit(this.filter);
   }
 
@@ -98,10 +122,9 @@ export class FilterComponent implements OnInit {
 
   canFilter() {
     if (
-      this.filter.filterData &&
-      !this.filter.filterData.adresse &&
-      !this.isFielled &&
-      !this.isEtatSelected
+      this.filterEnabled ||
+      this.filter.filterData.adresse ||
+      this.filter.filterData.domainIp
     ) {
       return true;
     } else {
@@ -118,13 +141,26 @@ export class FilterComponent implements OnInit {
     }
   }
   animateFrontalLabel() {
-    if (!this.isFielled) this.isFielled = true;
+    if (this.filter.filterData.frontal) this.isFielled = true;
     else this.isFielled = false;
   }
-  adres() {
-    this.adress = true;
+
+  filterEnable() {
+    this.filterEnabled = true;
   }
+
   changeSelectedFrontal() {
     this.isFielled = true;
+    this.filterEnable();
+  }
+  changeWhitelistType() {
+    this.isFielled = true;
+    this.filterEnable();
+  }
+  focusOnWhiteList() {
+    this.isWhiteListTypeFocused = true;
+  }
+  focusOutWhiteList() {
+    this.isWhiteListTypeFocused = false;
   }
 }

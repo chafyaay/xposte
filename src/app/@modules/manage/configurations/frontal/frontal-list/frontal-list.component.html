@@ -1,0 +1,101 @@
+<table class="main-table table-frontal">
+  <thead>
+    <tr>
+      <th>
+        <div class="inputCheck checkTable">
+          <input
+            #input
+            type="checkbox"
+            name="check"
+            id="check"
+            (click)="selectAllFrontal($event)"
+            [(ngModel)]="selectAll"
+            [checked]="selectAll"
+          />
+          <label for="check"></label>
+        </div>
+      </th>
+      <th>
+        {{ 'FRONTAL' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('nom')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'nom',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'nom' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'nom' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>
+        {{ 'SEUIL' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('seuil')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy || (sortBy && sortBy === '') || sortBy !== 'seuil',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'seuil' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'seuil' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>
+        {{ 'MAIL_ALERTE' | translate }}
+        <i
+          class="zmdi"
+          (click)="toggleTrie('adresseMailAlerte')"
+          [ngClass]="{
+            'zmdi-caret-default':
+              !sortBy ||
+              (sortBy && sortBy === '') ||
+              sortBy !== 'adresseMailAlerte',
+            'zmdi-caret-down SEL':
+              sortBy &&
+              sortBy === 'adresseMailAlerte' &&
+              sortDirection &&
+              sortDirection === 'asc',
+            'zmdi-caret-up selected':
+              sortBy &&
+              sortBy === 'adresseMailAlerte' &&
+              sortDirection &&
+              sortDirection === 'desc'
+          }"
+        ></i>
+      </th>
+      <th>IPs</th>
+      <th>
+        {{ 'Utilisateurs' | translate }}
+      </th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <app-frontal-item
+      *ngFor="let frontal of listFrontal; let index = index"
+      [frontalData]="frontal"
+      [RowNumber]="index"
+      [selectedFrontalist]="selectedFrontalList"
+      (selectedFrontalEvent)="emitToParent($event)"
+      (frontalToUpdateEvent)="frontalToUpdate($event)"
+    ></app-frontal-item>
+  </tbody>
+</table>

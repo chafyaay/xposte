@@ -24,9 +24,9 @@ const routes: Routes = [
     canActivate: [RoleGuardService],
     data: { roles: [Role.SuperAdmin] },
     loadChildren: () =>
-      import('src/app/@modules/manage/letter-box-replay/letter-box-replay.module').then(
-        (m) => m.LetterBoxReplayModule
-      ),
+      import(
+        'src/app/@modules/manage/letter-box-replay/letter-box-replay.module'
+      ).then((m) => m.LetterBoxReplayModule),
   },
   {
     path: 'config',
@@ -34,9 +34,9 @@ const routes: Routes = [
     canActivate: [RoleGuardService],
     data: { roles: [Role.SuperAdmin] },
     loadChildren: () =>
-      import('src/app/@modules/manage/configurations/configurations.module').then(
-        (m) => m.ConfigurationsModule
-      ),
+      import(
+        'src/app/@modules/manage/configurations/configurations.module'
+      ).then((m) => m.ConfigurationsModule),
   },
   {
     path: 'users',
@@ -44,7 +44,9 @@ const routes: Routes = [
     canActivate: [RoleGuardService],
     data: { roles: [Role.SuperAdmin] },
     loadChildren: () =>
-      import('src/app/@modules/manage/users/users.module').then((m) => m.UsersModule),
+      import('src/app/@modules/manage/users/users.module').then(
+        (m) => m.UsersModule
+      ),
   },
 ];
 

@@ -1,0 +1,101 @@
+<form [formGroup]="frontalFomGroup" class="frontal-form">
+  <div class="inputField" [ngClass]="frontalUnicity">
+    <input
+      formControlName="nom"
+      class="form-control"
+      type="text"
+      maxlength="255"
+      id="nom"
+      name="address"
+      placeholder=" "
+      (blur)="checkFrontalUnicity()"
+    />
+    <label for="nom"> {{ 'FRONTAL' | translate }} </label>
+    <span
+      class="helptext text-red"
+      *ngIf="controls.nom.value && controls.nom.errors"
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField">
+    <input
+      type="number"
+      onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+      min="0"
+      id="seuil"
+      name="seuil"
+      formControlName="seuil"
+      placeholder=" "
+    />
+    <label for="seuil"> {{ 'SEUIL' | translate }} </label>
+    <span
+      class="helptext text-red"
+      *ngIf="controls.seuil.value && controls.seuil.errors"
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField">
+    <input
+      type="text"
+      id="ips"
+      name="listeAdressesIPs"
+      formControlName="listeAdressesIPs"
+      placeholder=" "
+    />
+    <label for="ips"> {{ 'IPS' | translate }} </label>
+    <span class="helptext">{{ 'IP_TOOLTIP_MSG' | translate }}</span>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        controls.listeAdressesIPs.value && controls.listeAdressesIPs.errors
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+
+  <div class="inputField">
+    <input
+      type="text"
+      id="email-alert"
+      name="email"
+      formControlName="adresseMailAlerte"
+      placeholder=" "
+    />
+    <label for="email-alert"> {{ 'MAIL_ALERTE' | translate }} </label>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        controls.adresseMailAlerte.value && controls.adresseMailAlerte.errors
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+  <div>
+    <label for="users">
+      {{ 'UTILISATEURS_LABEL' | translate }}
+    </label>
+    <ng-select
+      [items]="listUsers"
+      bindLabel="identifiant"
+      bindValue="identifiant"
+      id="users"
+      [multiple]="true"
+      formControlName="users"
+    >
+    </ng-select>
+  </div>
+</form>
+<div class="wrapper-btn">
+  <button class="main-btn btn-reset" (click)="closeFormulaire()">
+    {{ 'CANCEL' | translate }}
+  </button>
+  <button
+    class="main-btn btn-second"
+    [disabled]="!isValidForm()"
+    (click)="createFrontal()"
+  >
+    {{ 'VALID' | translate }}
+  </button>
+</div>

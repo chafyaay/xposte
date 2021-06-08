@@ -2,17 +2,19 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
+import { ToggleBodyScroll } from '@shared/utils';
 
 @Component({
   selector: 'app-template-modal',
   templateUrl: './template-modal.component.html',
   styleUrls: ['./template-modal.component.scss'],
 })
-export class TemplateModalComponent implements OnInit {
+export class TemplateModalComponent implements OnInit, OnDestroy {
   @Input() TitleModal: string;
 
   @Input() isModalOpen = false;
@@ -26,7 +28,13 @@ export class TemplateModalComponent implements OnInit {
   @Output() valide: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    ToggleBodyScroll.disableBodyScroll();
+  }
+
+  ngOnDestroy(): void {
+    ToggleBodyScroll.enableBodyScroll();
+  }
 
   closePopin() {
     this.isModalClose.emit(false);

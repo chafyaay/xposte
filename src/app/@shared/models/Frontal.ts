@@ -1,10 +1,11 @@
 export class Frontal {
-  identifiant?: number;
+  identifiant?: string;
   nom?: string;
   seuil?: string;
   adresseMailAlerte?: string;
-  listeAdressesIPs?: string[];
+  listeAdressesIPs: string[] = [];
   listeIdentifiantsUtilisateurs?: string[];
+  isChecked?: boolean;
 
   constructor() {}
 }

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BALState } from 'src/app/@shared/models/State';
 import { Observable } from 'rxjs';
-import { Frontal } from 'src/app/@shared/models/Frontal';
+import { SpinnerService } from '@core/services/spinner.service';
+import { User } from '@shared/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,7 @@ import { Frontal } from 'src/app/@shared/models/Frontal';
 export class UtilisateurService {
   constructor(
     private http: HttpClient,
+    private spinnerService: SpinnerService,
     @Inject('api_url') private api_url: string
   ) {}
 
@@ -18,10 +19,17 @@ export class UtilisateurService {
    * by default HttpClient is expected json response type and try to parse it later .
    * You can solve this by set the respond type to text like this
    * */
-  getGeneratedPWD(): Observable<string> {
+  getGeneratedPWD(silent: boolean): Observable<string> {
+    this.spinnerService.silentApiCall = silent;
     return this.http.get<string>(
       this.api_url + '/utilisateur/generation-motdepasse',
       { responseType: 'text' as 'json' }
+    );
+  }
+
+  getListUsers(): Observable<User[]> {
+    return this.http.get<User[]>(
+      this.api_url + 'utilisateur/liste-utilisateurs'
     );
   }
 }

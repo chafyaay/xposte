@@ -1,5 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AppState, selectBALStateState, selectFrontalState } from 'src/app/@store';
+import {
+  AppState,
+  selectBALStateState,
+  selectFrontalState,
+} from 'src/app/@store';
 import { InputFilterData } from 'src/app/@shared/models/InputFilterData';
 import { Store } from '@ngrx/store';
 import { BAL } from 'src/app/@shared/models/BAL';
@@ -51,29 +55,43 @@ export class UpdateBalComponent implements OnInit {
     this.updateBALForm = this.createFormGroup();
     this.typeBALList = this.formatToSelectOptions(this.typeBALList);
     this.patchUpdateBALForm(this.bal);
+    this.checkBALRejeu();
   }
 
   createFormGroup() {
     return this.formBuilder.group({
       adresseBal: [
         '',
-        [Validators.required, Validators.email, Validators.maxLength(320)],
+        [
+          Validators.required,
+          this.customEmailValidator(),
+          Validators.maxLength(320),
+        ],
       ],
       frontal: [new Frontal(), [Validators.required]],
       typeBal: ['', [Validators.required]],
       seuil: [
         '',
         [Validators.required, Validators.min(1), Validators.pattern('^\\d+$')],
-      ], // POUR IPS Réél 255 ^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ // hadi khdama ip valid ^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9][0-9]?)$
+      ],
       listeAdressesIPAutorises: [
         '',
         [Validators.required, this.customIPListValidator()],
       ],
-      adresseMailAlerte: ['', [Validators.required, Validators.email]],
-      mdpProd: ['', [Validators.required, Validators.minLength(6)]],
+      adresseMailAlerte: [
+        '',
+        [Validators.required, this.customEmailValidator()],
+      ],
+      mdpProd: [
+        '',
+        [Validators.required, Validators.minLength(8), this.strongPwd()],
+      ],
       balRejeu: [false, []],
       mdpRejeu: ['', []],
-      relaisMessagerie: ['', [Validators.email, Validators.maxLength(320)]],
+      relaisMessagerie: [
+        '',
+        [this.customEmailValidator(), Validators.maxLength(320)],
+      ],
     });
   }
 
@@ -108,11 +126,18 @@ export class UpdateBalComponent implements OnInit {
 
   checkBALRejeu() {
     if (this.updateBALForm.value.balRejeu) {
+      this.updateBALForm.get('mdpRejeu').enable();
+      this.updateBALForm.get('mdpRejeu').setValue('');
       // add validator  to mdpRejeu because it linked to this checked box
       this.updateBALForm.get('mdpRejeu').validator = <any>(
-        Validators.compose([Validators.required, Validators.minLength(6)])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(8),
+          this.strongPwd(),
+        ])
       );
     } else {
+      this.updateBALForm.get('mdpRejeu').disable();
       this.updateBALForm.get('mdpRejeu').reset();
       this.updateBALForm.get('mdpRejeu').clearValidators();
     }
@@ -123,6 +148,20 @@ export class UpdateBalComponent implements OnInit {
   closeFormulaire() {
     this.closeEvent.emit(false);
     window.scrollTo(0, 0); //  to scroll to the top of the page
+  }
+
+  customEmailValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      const regex = new RegExp(
+        '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
+      );
+      let isEmailValid = true;
+      if (control.value && !regex.test(control.value)) {
+        isEmailValid = false;
+      }
+
+      return isEmailValid ? null : { emailError: true };
+    };
   }
 
   customIPListValidator(): ValidatorFn {
@@ -154,7 +193,6 @@ export class UpdateBalComponent implements OnInit {
     if (this.updateBALForm.value.frontal) {
       this.isFrontalFielled = true;
     } else {
-      //this.getFrontalData(); // to load the initial data back
       this.isFrontalFielled = false; // for animation
     }
   }
@@ -188,12 +226,28 @@ export class UpdateBalComponent implements OnInit {
     updatedBal = this.updateBALForm.value;
     updatedBal.listeAdressesIPAutorises = this.updateBALForm
       .get('listeAdressesIPAutorises')
-      .value.split(', ');
+      .value.split(',');
     updatedBal.frontal = this.selectListData.frontal.find(
       (elt) => elt.identifiant === this.selectedFrontalId
     );
 
     this.valideUpdateBal.emit(updatedBal);
     window.scrollTo(0, 0); //  to scroll to the top of the page
+  }
+
+  disablePwd: boolean = true;
+
+  strongPwd(): ValidatorFn {
+    return (control: AbstractControl) => {
+      let hasNumber = /\d/.test(control.value);
+      let hasUpper = /[A-Z]/.test(control.value);
+      let hasLower = /[a-z]/.test(control.value);
+      const valid = hasNumber && hasUpper && hasLower;
+      if (!valid) {
+        // return what´s not valid
+        return { strong: true };
+      }
+      return null;
+    };
   }
 }

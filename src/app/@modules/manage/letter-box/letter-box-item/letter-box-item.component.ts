@@ -13,7 +13,7 @@ import { element } from 'protractor';
 @Component({
   selector: 'app-letter-box-item',
   templateUrl: './letter-box-item.component.html',
-  styleUrls: ['./letter-box-item.component.scss'],
+  styleUrls: ['letter-box-item.component.scss'],
 })
 export class LetterBoxItemComponent implements OnInit, OnChanges {
   constructor() {}
@@ -87,5 +87,23 @@ export class LetterBoxItemComponent implements OnInit, OnChanges {
   updateBal() {
     this.highlighBalClass = 'highlight-table-row';
     this.updateBALEvent.emit(this.balData);
+  }
+
+  isFrontalIPsChangedAndNotEmpty() {
+    const balIPs = Array.isArray(this.balData.listeAdressesIPAutorises)
+      ? this.balData.listeAdressesIPAutorises
+      : [];
+    const frontalIPS = Array.isArray(this.balData.frontal.listeAdressesIPs)
+      ? this.balData.frontal.listeAdressesIPs
+      : [];
+
+    const isChangedAndNotEmpty =
+      frontalIPS.length > 0 &&
+      (balIPs.length !== frontalIPS.length ||
+        !balIPs.every(function (element) {
+          return frontalIPS.indexOf(element) !== -1;
+        }));
+
+    return isChangedAndNotEmpty;
   }
 }

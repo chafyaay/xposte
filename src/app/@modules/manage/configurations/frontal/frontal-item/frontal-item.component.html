@@ -1,0 +1,68 @@
+<tr>
+  <td>
+    <div class="inputCheck checkTable">
+      <input
+        type="checkbox"
+        id="RowNumber-{{ RowNumber }}"
+        (click)="selectRow(frontalData.identifiant, $event)"
+        [(ngModel)]="frontalData.isChecked"
+      />
+
+      <label for="RowNumber-{{ RowNumber }}"></label>
+    </div>
+  </td>
+  <td>{{ frontalData.nom }}</td>
+  <td>{{ frontalData.seuil }}</td>
+  <td>{{ frontalData.adresseMailAlerte }}</td>
+  <td class="with-details">
+    <ng-container *ngIf="frontalData.listeAdressesIPs">
+      <div>
+        <span *ngIf="frontalData.listeAdressesIPs.length > 0">
+          {{ frontalData.listeAdressesIPs[0] }}
+        </span>
+      </div>
+      <div class="ellipsis" *ngIf="frontalData.listeAdressesIPs.length > 1">
+        ...
+        <div class="details">
+          <div *ngFor="let ip of frontalData.listeAdressesIPs | slice: 1">
+            {{ ip }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </td>
+  <td class="with-details">
+    <ng-container
+      *ngIf="
+        frontalData.listeIdentifiantsUtilisateurs &&
+        frontalData.listeIdentifiantsUtilisateurs.length > 0
+      "
+    >
+      <div>
+        {{ usersToShow }}
+      </div>
+      <div
+        class="ellipsis"
+        *ngIf="frontalData.listeIdentifiantsUtilisateurs.length > 3"
+      >
+        ...
+        <div class="details">
+          <div
+            *ngFor="
+              let user of frontalData.listeIdentifiantsUtilisateurs | slice: 3
+            "
+          >
+            {{ user }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </td>
+  <td class="event">
+    <i
+      [title]="'UPDATE' | translate"
+      class="zmdi zmdi-edit"
+      (click)="goToUpdate()"
+    ></i>
+  </td>
+</tr>

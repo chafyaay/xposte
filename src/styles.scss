@@ -763,7 +763,7 @@ hr {
 }
 
 .wrapperPagination .ng-select {
-  width: 50px !important;
+  width: 55px !important;
   margin-left: 0.625rem !important;
 }
 
@@ -5327,22 +5327,23 @@ hr {
 .inputField.icon-field.date:after {
   content: "\f32e";
 }
-.calendar-icone{
+.calendar-icone {
   right: 0;
   position: absolute;
   width: 20px;
   height: 20px;
   &::after {
-  content: "\f32e";
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-family: Material-Design-Iconic-Font;
-  font-size: 1rem;
-  color: #0063a9;
-  cursor: pointer;
-  z-index: 1;
-}}
+    content: "\f32e";
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-family: Material-Design-Iconic-Font;
+    font-size: 1rem;
+    color: #0063a9;
+    cursor: pointer;
+    z-index: 1;
+  }
+}
 .inputField.icon-field.time:after {
   content: "\e87d";
 }
@@ -6204,14 +6205,13 @@ ngb-popover-window {
     background: white;
     border: 1px;
   }
-
 }
 .ngb-dp-day.ngb-dp-today .btn-light {
   background: #0063a9;
   color: white;
 }
 // modifier masse bals
-.modifier-mass-bals{
+.modifier-mass-bals {
   min-width: 3rem;
   width: 5rem;
   .main-btn.btn-second {
@@ -6219,42 +6219,53 @@ ngb-popover-window {
     color: #fff;
     padding: 0;
     width: 5rem !important;
-}
-.ng-value{
-top: 0 !important;
-visibility: hidden;
-}
-.ng-input{
-  display: none !important;
-}
-.ng-arrow-wrapper {
-  right: 9px;
-  top: 6px;
- 
-}
-.ng-select-container {
-  border-bottom: 0 !important;
-}
-ng-dropdown-panel {
-  border-color: #5092c4;
-  border-width: 2px;
-  top: 32px !important;
-  border-radius: 5px;
-  width: 15rem;
+  }
+  .ng-value {
+    top: 0 !important;
+    visibility: hidden;
+  }
+  .ng-input {
+    display: none !important;
+  }
+  .ng-arrow-wrapper {
+    right: 9px;
+    top: 6px;
+  }
+  .ng-select-container {
+    border-bottom: 0 !important;
+  }
+  ng-dropdown-panel {
+    border-color: #5092c4;
+    border-width: 2px;
+    top: 32px !important;
+    border-radius: 5px;
+    width: 15rem;
     opacity: 1;
     left: -162px;
     &.ng-select-bottom {
       top: 100%;
-      border-top-color: #5092c4;;
+      border-top-color: #5092c4;
       margin-top: -1px;
+    }
+    .ng-option {
+      text-align: left;
+    }
   }
-   .ng-option {
-    text-align: left;
+  .highlight-table-row {
+    background: #ecf4ff !important;
+  }
+
+  .move-bottom-righ {
+    position: fixed;
+    bottom: 20px;
+    right: 0px;
+  }
+  .disableScroll {
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+
+  .highlight-table-row {
+    background: #ecf4ff !important;
+  }
 }
-}
-
-
-
-}
-
-
