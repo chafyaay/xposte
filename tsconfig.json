@@ -16,14 +16,14 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
-      "@core": ["src/app/@corere"],
-      "@core/*": ["src/app/@core/"],
-      "@modules": ["src/app/@moduleses"],
-      "@modules/*": ["src/app/@modules/"],
-      "@shared": ["src/app/@shareded"],
-      "@shared/*": ["src/app/@shared/"],
-      "@env/*": ["src/environments/"],
-      "@app/*": ["src/app/"]
+      "@core": ["src/app/@core"],
+      "@core/*": ["src/app/@core/*"],
+      "@modules": ["src/app/@modules"],
+      "@modules/*": ["src/app/@modules/*"],
+      "@shared": ["src/app/@shared"],
+      "@shared/*": ["src/app/@shared/*"],
+      "@env/*": ["src/environments/*"],
+      "@app/*": ["src/app/*"]
     }
   },
 
