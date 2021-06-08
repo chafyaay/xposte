@@ -5,15 +5,15 @@
       {{ 'BOITES_AUX_LETTRES' | translate }}
     </div>
     <div class="info-bulle">
-      <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
+      <app-info-bulle 
+      [balDataList]="balDataList"
+      [selectedBal]="selectedBal"></app-info-bulle>
     </div>
   </div>
-  <h3>
-    {{ 'DES_MODAL_CRITERIA_TITLE' | translate }}
-  </h3>
 
-  <h4 class="title_modal mgl30 mgb10">{{ 'CRITERE_TEMPO' | translate }}</h4>
-  <div class="flex mgl30">
+
+  <h4 class="title_modal  mgb10">{{ 'DES_MODAL_CRITERIA_TITLE' | translate }}</h4>
+  <div class="flex">
     <div *ngIf="balFilter.etatBal" class="totalInbox left mgb30">
       {{ 'ETAT' | translate }}
       <span class="val">{{ balFilter.etatBal }}</span>
@@ -26,5 +26,8 @@
       {{ 'FRONTAL' | translate }}
       <span class="val">{{ balFilter.identifiantFrontal }}</span>
     </div>
+  </div>
+  <div *ngIf="nbMessagesNonLus.length>0">
+    {{'DES_MODAL_MESSAGE' | translate}}
   </div>
 </div>

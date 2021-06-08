@@ -353,8 +353,8 @@
         {{ 'BALs' | translate }}
       </button>
 
-      <!-- yassine chafyaay -->
       <!-- modifier masse bals button -->
+      <!-- author yassine -->
       <div
         *ngIf="showModifEnMassDispositionBtn"
         class="modifier-mass-bals mbt20"
@@ -503,14 +503,15 @@
     *ngIf="openDescativerEnMassModal"
     [TitleModal]="'DES_MODAL_TITLE' | translate"
     [isModalOpen]="openDescativerEnMassModal"
-    [isValid]="isFormValid"
-    (isModalClose)="closeRemiseDispositionModal($event)"
-    (valide)="remise_dispo_submit($event)"
+    [isValid]="isDesactiverEnMassFormvalid"
+    (isModalClose)="closeDesactiverEnMassModal($event)"
+    (valide)="desactiver_en_mass_submit($event)"
   >
     <app-desactiver-en-mass
       [selectedBal]="selectedBal"
       [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
       [balFilter]="balFilter"
+      [balDataList]="balDataList"
       (DESACTIVER_EN_MASS_EVENT)="DESACTIVER_EN_MASS_EVENT_HANDLER($event)"
     ></app-desactiver-en-mass>
   </app-template-modal>

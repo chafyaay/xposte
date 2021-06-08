@@ -13,13 +13,18 @@ export class DesactiverEnMassComponent implements OnInit {
   @Input()
   balFilter: any;
 
+  @Input()
+  balDataList: any[]=[];
+
   @Output()
   DESACTIVER_EN_MASS_EVENT: EventEmitter<any> = new EventEmitter();
+
+  nbMessagesNonLus:any[]=[];
 
   constructor() {}
 
   ngOnInit() {
-    console.clear();
-    console.clear();
+   this.nbMessagesNonLus= this.balDataList.filter(item=>(item.dossierInbox.nbMessagesNonLus!==0 || item.dossierInbox.nbMessagesNonLus!=null));
+   this.DESACTIVER_EN_MASS_EVENT.emit(true)
   }
 }

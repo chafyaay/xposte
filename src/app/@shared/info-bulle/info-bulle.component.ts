@@ -9,6 +9,9 @@ export class InfoBulleComponent implements OnInit {
   showInfoBulle: boolean;
   @Input()
   selectedBal: any[] = [];
+
+  @Input()
+  balDataList: any[] = [];
   constructor() {
     this.showInfoBulle = false;
   }

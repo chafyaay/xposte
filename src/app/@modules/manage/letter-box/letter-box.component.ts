@@ -178,6 +178,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     }
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
+        console.clear()
+        console.log(bal)
         this.balDataList = bal.body;
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
         this.pagination.pageNumber = bal.headers.get('X-NUMERO-PAGE');
@@ -324,6 +326,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.adresseHighlight = filterEvent.filterData.adresse;
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
+        console.clear()
+        console.log(bal)
         this.balDataList = bal.body;
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
         this.balFilter.numeroPage = parseInt(bal.headers.get('X-NUMERO-PAGE'));
@@ -365,6 +369,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
+        console.clear()
+        console.log(bal)
         this.balDataList = bal.body;
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
         this.balFilter.numeroPage = parseInt(bal.headers.get('X-NUMERO-PAGE'));
@@ -435,7 +441,20 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     }
   }
   openDescativerEnMassModal = false;
-  DESACTIVER_EN_MASS_EVENT_HANDLER(event) {}
+  isDesactiverEnMassFormvalid = false;
+  closeDesactiverEnMassModal(event) {
+    console.log(this.selectAllBAL)
+    this.openDescativerEnMassModal = false;
+  }
+  DESACTIVER_EN_MASS_EVENT_HANDLER(event) {
+console.log(event)
+this.isDesactiverEnMassFormvalid=event;
+
+  }
+  desactiver_en_mass_submit($event:any){
+    this.openDescativerEnMassModal=false;
+  }
+
   openSidebarCanvas(event: any) {
     setTimeout(() => {
       if (event) {
