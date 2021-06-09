@@ -6,13 +6,14 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class RemiseDispoService {
+export class DesactiverEnMassService {
   constructor(
     private http: HttpClient,
     @Inject('api_url') private api_url: string
   ) {}
 
-  miseDisposition(obj: any) {
-    return this.http.post(this.api_url + 'bal/remise-a-disposition', obj);
+  desactiver(obj: any) {
+    return this.http.post(this.api_url + 'bal/desactivation-en-masse', obj);
   }
 }
+

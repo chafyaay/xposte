@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -247,6 +248,8 @@ export class RemiseDispositionComponent implements OnInit {
   }
 
   /* input change */
+  @ViewChild('inputText', { static: false })
+  inputText: ElementRef;
   onKeyUp($event: any, field: any) {
     //set validators
     let validator: any[];
@@ -259,13 +262,18 @@ export class RemiseDispositionComponent implements OnInit {
     )
       validator = [Validators.maxLength(50)];
     else if (field.fcn === 'version') validator = [Validators.maxLength(6)];
-    else if (field.fcn === 'codeCompostage')
+    else if (field.fcn === 'codeCompostage'){
       validator = [Validators.maxLength(5)];
+     
+      this.inputText.nativeElement.maxLength="5"
+
+    }
     this.form.get(field.fcn).setValidators(validator);
 
     // set value
     this.form.get(field.fcn).patchValue($event.target.value);
     this.fillObj(field.fcn);
+
   }
 
   /* input change */
@@ -282,10 +290,12 @@ export class RemiseDispositionComponent implements OnInit {
       this.REMISE_DISPO_OBJ[fcn] = this.form.get(fcn).value;
 
     if (this.form.get(fcn).valid)
-      this.REMISE_DISPO_EVENT.emit({
+      {
+        this.REMISE_DISPO_EVENT.emit({
         isFormValid: this.form.valid,
         DATA: this.REMISE_DISPO_OBJ,
       });
+    }
     else this.REMISE_DISPO_EVENT.emit({ isFormValid: this.form.valid });
   }
 
@@ -304,7 +314,7 @@ export class RemiseDispositionComponent implements OnInit {
       this.form.get(fcn).setValidators(validator);
 
       const text = event.target.value;
-      const str = '000000000';
+      const str = '0000';
       const output = [str.slice(0, str.length - text.length), text].join('');
       this.form.get(fcn).patchValue(output);
     }

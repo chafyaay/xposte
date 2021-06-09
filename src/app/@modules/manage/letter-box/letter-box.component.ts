@@ -24,8 +24,8 @@ import { LetterBoxListComponent } from 'src/app/@modules/manage/letter-box/lette
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
 import { RemiseDispoI } from 'src/app/@shared/models/remise-dispo';
-import { DesactiverEnMassService } from 'src/app/@core/services/remise-dispo.service';
-import { RemiseDispoService } from '@core/services/desactiver-en-mass.service';
+import { RemiseDispoService } from '@core/services/remise-dispo.service';
+import { DesactiverEnMassService } from '@core/services/desactiver-en-mass.service';
 
 @Component({
   selector: 'app-letter-box',
@@ -160,9 +160,11 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
   openRemiseDispositionModal() {
     this.showRemiseDispositionModal = true;
+    document.getElementsByTagName('body')[0].style.overflow="hidden";
   }
   closeRemiseDispositionModal(event) {
     this.showRemiseDispositionModal = false;
+    document.getElementsByTagName('body')[0].style.overflow="auto";
   }
 
   desactiver_en_mass_submit($event: any) {
@@ -188,6 +190,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       (res) => {
         this.openNotifRemiseDispoSuccess = true;
         this.showRemiseDispositionModal = false;
+        this.isFormValid =false
       },
       (err) => {
         this.openNotifRemiseDispoSuccess = false;
@@ -195,6 +198,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
         this.openNotifRemiseDispoError = true;
         this.showRemiseDispositionModal = false;
         this.notificationErrorMessage = 'Erreur lors de remise à disposition';
+        this.isFormValid =false
+
       }
     );
     console.log(this.REMISE_DISPO_OBJ);

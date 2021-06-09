@@ -8,19 +8,19 @@
       <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
     </div>
   </div>
-  <h3>
-    {{ 'REMETTRE_DISPO_CRITERE_TITLE' | translate }}
-  </h3>
+  <h4 class="title_modal mgb10">{{ 'REMETTRE_DISPO_CRITERE_TITLE' | translate }}</h4>
   <!-- periode -->
-  <h3 class="mgt40">{{ 'REMETTRE_DISPO_PERIODE' | translate }}</h3>
+  <h3 class="title_modal mgt40">{{ 'REMETTRE_DISPO_PERIODE' | translate }}</h3>
   <div class="period-container flex mgt20">
     <app-date-time-picker
+    [isPeriod]="true"
       label="{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }}"
       (datetimevalueEvent)="onPeriodeSelect($event, 'dd')"
       formControlName="dateHeureDebut"
       name="activeEndDate"
     ></app-date-time-picker>
     <app-date-time-picker
+    [isPeriod]="true"
       class="mgl20"
       label="{{ 'REMETTRE_DISPO_DATE_FIN' | translate }}"
       (datetimevalueEvent)="onPeriodeSelect($event, 'df')"
@@ -153,6 +153,7 @@
         <ng-container [ngSwitch]="field.type">
           <ng-template [ngSwitchCase]="'text'">
             <input
+            #inputText
               type="text"
               [name]="field.fcn"
               value="{{ form.get(field.fcn).value }}"
@@ -164,6 +165,7 @@
           </ng-template>
           <ng-template [ngSwitchCase]="'date'">
             <app-date-time-picker
+            [isPeriod]="false"
               [label]="field.label"
               [label]="field.label"
               (datetimevalueEvent)="onDateTimeChange($event, field)"

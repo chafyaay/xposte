@@ -47,7 +47,7 @@ export class DateTimePickerComponent
   dateString: string;
 
   @Input()
-  inputDatetimeFormat = 'M/d/yyyy H:mm:ss';
+  inputDatetimeFormat = 'd/M/yyyy H:mm:ss';
   @Input()
   hourStep = 1;
   @Input()
@@ -61,6 +61,9 @@ export class DateTimePickerComponent
 
   @Input()
   disabled = false;
+
+  @Input()
+  isPeriod = false;
 
   @Input()
   dateType: string;
@@ -100,6 +103,13 @@ export class DateTimePickerComponent
     this.popover.hidden.subscribe(($event) => {
       this.showTimePickerToggle = false;
     });
+  }
+
+  isDisabled(date: NgbDateStruct) {
+    const now=new Date();
+    const py = now.setFullYear(now.getFullYear() - 1);
+    const d = new Date(date.year, date.month - 1, date.day);
+    return d.getTime() > new Date().getTime() || d.getTime()<py;
   }
 
   getWeekdayShortName(weekday: number): string {

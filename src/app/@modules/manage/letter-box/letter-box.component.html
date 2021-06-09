@@ -8,50 +8,32 @@
   </div>
 
   <!--modal tamponnage -->
-  <app-template-modal
-    *ngIf="isModalOpen"
-    [TitleModal]="TitleModal"
-    [isModalOpen]="isModalOpen"
-    (isModalClose)="modalCloseTamponnage($event)"
-    (valide)="valideTempo($event)"
-  >
-    <app-temponnage
-      [temponnageSelecte]="balTamponNbr"
-      [balTemponne]="selectedBal"
-      [balFilter]="balFilter"
-    >
+  <app-template-modal *ngIf="isModalOpen" [TitleModal]="TitleModal" [isModalOpen]="isModalOpen"
+    (isModalClose)="modalCloseTamponnage($event)" (valide)="valideTempo($event)">
+    <app-temponnage [temponnageSelecte]="balTamponNbr" [balTemponne]="selectedBal" [balFilter]="balFilter">
     </app-temponnage>
   </app-template-modal>
   <!-- ======= END .Bloc TILTE & BUTTON ======= -->
   <!--notification de tamponnage -->
-
-   <!-- desactiver en masse  -->
-  <!--
-    openNotifDescativerMassSuccess=false;
-  openNotifDescativerMassFail=false;
- -->
-
-  <app-notification
-    *ngIf="
+  <!-- desactiver en masse  -->
+  <app-notification *ngIf="
       openNotifDetemponnageSucces ||
+      openNotifRemiseDispoSuccess ||
       openNotifTemponnage ||
       openNotifTemponnageError ||
       isModMassbalsSuccess ||
       openNotifDescativerMassSuccess ||
       isModMassbalsFail
-    "
-    [notificationColor]="
+    " [notificationColor]="
       openNotifTemponnageError ||
       isModMassbalsFail ||
-      openNotifRemiseDispoSuccess ||
+      openNotifRemiseDispoError ||
       openNotifRemiseDispoError ||
       openNotifDescativerMassFail ||
       openNotifTemponnageError
         ? 'alerteMessage'
         : notificationColor
-    "
-    (closeNotfification)="resetNotificationDataAndClose()"
-  >
+    " (closeNotfification)="resetNotificationDataAndClose()">
     <ng-container *ngIf="openNotifTemponnageError">
       <h3 class="message_title">{{ 'TAMPO_FAILURE' | translate }}</h3>
       {{ messageErrorTamponnage }}
@@ -60,9 +42,9 @@
     <ng-container *ngIf="openNotifDetemponnageSucces">
       <h3 class="message_title">
         {{
-          openNotifDetemponnageSucces
-            ? ('DETAMPON_NOTIFICATION_SUCCES' | translate)
-            : ('DETAMPON_NOTIFICATION_FAIL' | translate)
+        openNotifDetemponnageSucces
+        ? ('DETAMPON_NOTIFICATION_SUCCES' | translate)
+        : ('DETAMPON_NOTIFICATION_FAIL' | translate)
         }}
       </h3>
       <ul>
@@ -73,8 +55,8 @@
             &nbsp; {{ 'ETAT' | translate }}:
             <div>
               {{ BalTamponner.etatBal }}
-            </div> </ng-container
-          >&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+          </ng-container>&nbsp;&nbsp;&nbsp;&nbsp;
           <ng-container *ngIf="BalTamponner.adresseBal">
             &nbsp;{{ 'ADRESS' | translate }}&nbsp;&nbsp;
             <div>
@@ -130,14 +112,13 @@
     <ng-container *ngIf="isModMassbalsFail">
       {{ modMassErrMessage }}
     </ng-container>
-    
     <!-- show Desctiver en mass  notification  -->
     <ng-container *ngIf="openNotifDescativerMassSuccess">
       <h3 class="message_title">
         {{
-          isModMassbalsSuccess
-            ? ('DES_MASS_NOTIF_MSG_SUCCESS' | translate)
-            : ('DES_MASS_NOTIF_MSG_FAIL' | translate)
+        isModMassbalsSuccess
+        ? ('DES_MASS_NOTIF_MSG_SUCCESS' | translate)
+        : ('DES_MASS_NOTIF_MSG_FAIL' | translate)
         }}
       </h3>
       <ul class="flex">
@@ -151,16 +132,16 @@
         <li *ngIf="balFilter.identifiantFrontal" class="notif-items">
           {{ 'FRONTAL' | translate }} : {{ balFilter.identifiantFrontal }}
         </li>
-        
+
       </ul>
     </ng-container>
     <!-- show Modification en mass  notification  -->
     <ng-container *ngIf="isModMassbalsSuccess">
       <h3 class="message_title">
         {{
-          isModMassbalsSuccess
-            ? ('MOD_MASS_NOTIF_MSG_SUCCESS' | translate)
-            : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
+        isModMassbalsSuccess
+        ? ('MOD_MASS_NOTIF_MSG_SUCCESS' | translate)
+        : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
         }}
       </h3>
       <ul class="flex">
@@ -191,17 +172,18 @@
       </ul>
     </ng-container>
     <!-- show remise disposition notification  -->
+
     <ng-container *ngIf="openNotifRemiseDispoSuccess">
       <h3 class="message_title">
         {{
-          openNotifRemiseDispoSuccess
-            ? ('REMISE_DISPO_NOTIFICATION_SUCCES' | translate)
-            : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
+        openNotifRemiseDispoSuccess
+        ? ('REMISE_DISPO_NOTIFICATION_SUCCES' | translate)
+        : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
         }}
       </h3>
       <ul class="flex">
         <li class="notif-items">
-          {{ 'REMISE-DISPO_BAL' | translate }} : {{ this.balTamponNbr }}
+          {{ 'REMISE-DISPO_BAL' | translate }} :{{ selectedBal.length === 0 ? totalResult : selectedBal.length }}
         </li>
         <li class="notif-items">
           {{ 'ETAT' | translate }} : {{ REMISE_DISPO_OBJ.etatBal }}
@@ -213,24 +195,17 @@
           {{ 'FRONTAL' | translate }} :
           {{ REMISE_DISPO_OBJ.identifiantFrontal }}
         </li>
-        <li
-          *ngIf="
+        <li *ngIf="
             REMISE_DISPO_OBJ.dateHeureDebut && REMISE_DISPO_OBJ.dateHeureFin
-          "
-          class="notif-items"
-        >
-          <span class="mbl20"
-            >{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }} :
+          " class="notif-items">
+          <div class="date-label">{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }} :
             {{
-              REMISE_DISPO_OBJ.dateHeureDebut | date: 'EEEE, MMMM d, h:mm'
-            }}</span
-          >
-          <span class="mbl20"
-            >{{ 'REMETTRE_DISPO_DATE_FIN' | translate }} :
+            REMISE_DISPO_OBJ.dateHeureDebut | date: 'EEEE, MMMM d, h:mm'
+            }}</div>
+          <div class="date-label fin">{{ 'REMETTRE_DISPO_DATE_FIN' | translate }} :
             {{
-              REMISE_DISPO_OBJ.dateHeureFin | date: 'EEEE, MMMM d, h:mm'
-            }}</span
-          >
+            REMISE_DISPO_OBJ.dateHeureFin | date: 'EEEE, MMMM d, h:mm'
+            }}</div>
         </li>
       </ul>
     </ng-container>
@@ -240,21 +215,17 @@
     </ng-container>
   </app-notification>
   <!--notification de Creation de BAL -->
-  <app-notification
-    *ngIf="openNotifBalCreationSucces || openNotifBalCreationFail"
+  <app-notification *ngIf="openNotifBalCreationSucces || openNotifBalCreationFail"
     [notificationColor]="openNotifBalCreationFail ? 'alerteMessage' : 'message'"
-    (closeNotfification)="resetNotificationDataAndClose()"
-  >
+    (closeNotfification)="resetNotificationDataAndClose()">
     <h3 class="message_title">
       {{
-        openNotifBalCreationSucces
-          ? ('BAL_CREATION_NOTIFICATION_SUCCES' | translate)
-          : ('BAL_CREATION_NOTIFICATION_FAIL' | translate)
+      openNotifBalCreationSucces
+      ? ('BAL_CREATION_NOTIFICATION_SUCCES' | translate)
+      : ('BAL_CREATION_NOTIFICATION_FAIL' | translate)
       }}
     </h3>
-    <ng-container
-      *ngIf="openNotifBalCreationSucces || openNotifRemiseDispoSuccess"
-    >
+    <ng-container *ngIf="openNotifBalCreationSucces || openNotifRemiseDispoSuccess">
       <ul>
         <li>
           {{ 'ADDRESS' | translate }} :
@@ -286,18 +257,14 @@
       {{ notificationErrorMessage }}
     </ng-container>
   </app-notification>
-  <app-notification
-    *ngIf="openNotifBalUpdateSucces || openNotifBalUpdateFail"
-    [notificationColor]="
+  <app-notification *ngIf="openNotifBalUpdateSucces || openNotifBalUpdateFail" [notificationColor]="
       openNotifBalUpdateFail ? 'message notification-error-color' : 'message'
-    "
-    (closeNotfification)="resetNotificationDataAndClose()"
-  >
+    " (closeNotfification)="resetNotificationDataAndClose()">
     <h3 class="message_title">
       {{
-        openNotifBalUpdateSucces
-          ? ('BAL_MODIFICATION_NOTIFICATION_SUCCES' | translate)
-          : ('BAL_MODIFICATION_NOTIFICATION_FAIL' | translate)
+      openNotifBalUpdateSucces
+      ? ('BAL_MODIFICATION_NOTIFICATION_SUCCES' | translate)
+      : ('BAL_MODIFICATION_NOTIFICATION_FAIL' | translate)
       }}
     </h3>
     <ng-container *ngIf="openNotifBalUpdateSucces">
@@ -329,7 +296,7 @@
           <div>
             <span class="">{{
               updatedBal?.listeAdressesIPAutorises?.join(',')
-            }}</span>
+              }}</span>
           </div>
         </li>
         <li>
@@ -337,7 +304,7 @@
           <div>
             <span class="">{{
               updatedBal?.adresseMailAlerte?.toLowerCase()
-            }}</span>
+              }}</span>
           </div>
         </li>
       </ul>
@@ -347,65 +314,36 @@
     </ng-container>
   </app-notification>
   <!-- ======= START .Bloc FILTRES ======= -->
-  <app-filter
-    #balFilterComp
-    [inputFilterData]="inputFilterDataNew"
-    [filtreType]="FiltreType.BAL"
-    (filterEvent)="getFiltredData($event)"
-    (frontalAutocompletEvent)="getFrontalData($event)"
-    (filterDefaultEvent)="getFiltredDataDefault()"
-  ></app-filter>
-
+  <app-filter #balFilterComp [inputFilterData]="inputFilterDataNew" [filtreType]="FiltreType.BAL"
+    (filterEvent)="getFiltredData($event)" (frontalAutocompletEvent)="getFrontalData($event)"
+    (filterDefaultEvent)="getFiltredDataDefault()"></app-filter>
   <!-- ======= END .Bloc FILTRES ======= -->
-
   <div class="flex space-between mgb40">
-    <app-pagination
-      [titlePagination]="'MAIL_BOXS' | translate"
-      [totalResult]="totalResult"
-      [pageNumber]="balFilter.numeroPage"
-      [pageSiz]="balFilter.nbResultatsParPage"
-      (paginationChangeEvent)="getPagination($event)"
-    ></app-pagination>
+    <app-pagination [titlePagination]="'MAIL_BOXS' | translate" [totalResult]="totalResult"
+      [pageNumber]="balFilter.numeroPage" [pageSiz]="balFilter.nbResultatsParPage"
+      (paginationChangeEvent)="getPagination($event)"></app-pagination>
 
     <div class="flex buttons-container">
-      <button
-        *ngIf="showDetamponnage"
-        class="main-btn btn-second"
-        (click)="openModalDetampo()"
-      >
+      <button *ngIf="showDetamponnage" class="main-btn btn-second" (click)="openModalDetampo()">
         {{ 'DETOMPON' | translate }}
         {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
       </button>
-      <button
-        *ngIf="isShowTemponnage"
-        class="main-btn btn-second"
-        (click)="openModalTempo()"
-      >
+      <button *ngIf="isShowTemponnage" class="main-btn btn-second" (click)="openModalTempo()">
         {{ 'Tamponner' | translate }}
         {{ selectedBal.length === 0 ? totalResult : selectedBal.length }}
         {{ 'BALs' | translate }}
       </button>
       <!-- remise a disposition button -->
       <!-- author yassine -->
-      <button
-      *ngIf="showRemiseDispositionBtn"
-      class="main-btn btn-second"
-      (click)="openRemiseDispositionModal()"
-    >
-      {{ 'MAKE_AVAILABALITY_BTN' | translate }}
-      {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
-    </button>
+      <button *ngIf="showRemiseDispositionBtn" class="main-btn btn-second" (click)="openRemiseDispositionModal()">
+        {{ 'MAKE_AVAILABALITY_BTN' | translate }}
+        {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
+      </button>
       <!-- modifier masse bals button -->
       <!-- author yassine -->
-      <div
-        *ngIf="showModifEnMassDispositionBtn"
-        class="modifier-mass-bals mbt20"
-      >
+      <div *ngIf="showModifEnMassDispositionBtn" class="modifier-mass-bals mbt20">
         <i class="zmdi zmdi-edit"></i>
-        <ng-select
-          class="main-btn btn-second"
-          selectedLabel=""
-          [items]="[
+        <ng-select class="main-btn btn-second" selectedLabel="" [items]="[
             {
               id: 0,
               label:
@@ -427,139 +365,71 @@
                 (selectedBal.length === 0 ? totalResult : selectedBal.length) +
                 ' BALs'
             }
-          ]"
-          bindLabel="label"
-          bindValue="id"
-          (change)="openSidebarCanvas($event)"
-        ></ng-select>
+          ]" bindLabel="label" bindValue="id" (change)="openSidebarCanvas($event)"></ng-select>
       </div>
 
-      <app-template-formulaire
-        *ngIf="isModMassbalsSidBarCanvasOpen"
-        [titleFormulaire]="'MOD_MASS_NOTIF_TITLE' | translate"
-        [isFormulaireopen]="isModMassbalsSidBarCanvasOpen"
-        (closeFormulaire)="CloseCreateBALForm()"
-      >
-        <app-modifier-masse-bals
-          (closeEvent)="closeEventHandler($event)"
-          [etatBal]="balFilter.etatBal"
-          [filtreAdresse]="adresseHighlight"
-          [identifiantFrontal]="balFilter.identifiantFrontal"
-          (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)"
-          [balNumber]="
+      <app-template-formulaire *ngIf="isModMassbalsSidBarCanvasOpen"
+        [titleFormulaire]="'MOD_MASS_NOTIF_TITLE' | translate" [isFormulaireopen]="isModMassbalsSidBarCanvasOpen"
+        (closeFormulaire)="CloseCreateBALForm()">
+        <app-modifier-masse-bals (closeEvent)="closeEventHandler($event)" [etatBal]="balFilter.etatBal"
+          [filtreAdresse]="adresseHighlight" [identifiantFrontal]="balFilter.identifiantFrontal"
+          (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)" [balNumber]="
             selectedBal.length === 0 ? totalResult : selectedBal.length
-          "
-          [selectedBal]="selectedBal"
-        >
+          " [selectedBal]="selectedBal">
         </app-modifier-masse-bals>
       </app-template-formulaire>
     </div>
   </div>
   <!-- ======= START .Bloc MAIN TABLE ======= -->
-  <app-letter-box-list
-    #balList
-    [highlighRowEnable]="highlighRowEnable"
-    [frontalRefs]="inputFilterData.frontal"
-    [listBAL]="balDataList"
-    [highlight]="highlight"
-    [adresseHighlight]="adresseHighlight"
-    [selectedBALList]="selectedBal"
-    (selectedBALEvent)="saveSelectedBAL($event)"
-    (orderingFilter)="updateOrder($event)"
-    (updateBALEvent)="editBal($event)"
-  ></app-letter-box-list>
+  <app-letter-box-list #balList [highlighRowEnable]="highlighRowEnable" [frontalRefs]="inputFilterData.frontal"
+    [listBAL]="balDataList" [highlight]="highlight" [adresseHighlight]="adresseHighlight"
+    [selectedBALList]="selectedBal" (selectedBALEvent)="saveSelectedBAL($event)" (orderingFilter)="updateOrder($event)"
+    (updateBALEvent)="editBal($event)"></app-letter-box-list>
 
-  <app-template-formulaire
-    *ngIf="isFormulaireopen"
-    [titleFormulaire]="TitleFormulaire"
-    [isFormulaireopen]="isFormulaireopen"
-    (closeFormulaire)="CloseCreateBALForm()"
-  >
-    <app-formulaire
-      (closeEvent)="CloseCreateBALForm()"
-      (valideCreateBal)="createNewBAL($event)"
-    ></app-formulaire>
+  <app-template-formulaire *ngIf="isFormulaireopen" [titleFormulaire]="TitleFormulaire"
+    [isFormulaireopen]="isFormulaireopen" (closeFormulaire)="CloseCreateBALForm()">
+    <app-formulaire (closeEvent)="CloseCreateBALForm()" (valideCreateBal)="createNewBAL($event)"></app-formulaire>
   </app-template-formulaire>
   <!--formulaire de modification de bal -->
-  <app-template-formulaire
-    *ngIf="isUpdateBalFormOpen"
-    [titleFormulaire]="'EDITE_BAL_FORM_TITLE' | translate"
-    [isFormulaireopen]="isUpdateBalFormOpen"
-    (closeFormulaire)="closeUpdateForm()"
-  >
-    <app-update-bal
-      (closeEvent)="closeUpdateForm()"
-      (valideUpdateBal)="updateBal($event)"
-      [bal]="updatedBal"
-    >
+  <app-template-formulaire *ngIf="isUpdateBalFormOpen" [titleFormulaire]="'EDITE_BAL_FORM_TITLE' | translate"
+    [isFormulaireopen]="isUpdateBalFormOpen" (closeFormulaire)="closeUpdateForm()">
+    <app-update-bal (closeEvent)="closeUpdateForm()" (valideUpdateBal)="updateBal($event)" [bal]="updatedBal">
     </app-update-bal>
   </app-template-formulaire>
-  <div
-    class="overley"
-    [ngClass]="
+  <div class="overley" [ngClass]="
       isUpdateBalFormOpen || isFormulaireopen || isModalOpen ? 'show' : ''
-    "
-  ></div>
-
-  <app-template-modal
-    *ngIf="isModalDetampoOpen"
-    [TitleModal]="'DETAMPO_MODAL_TITLE' | translate"
-    [isModalOpen]="isModalDetampoOpen"
-    (isModalClose)="closeModalDetampo($event)"
-    (valide)="valideDeTempo($event)"
-  >
-    <app-detamponnage
-      [balFilter]="balFilter"
-      [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
-      [tooltipBALs]="tooltipBALs"
-    ></app-detamponnage>
+    "></div>
+  <app-template-modal *ngIf="isModalDetampoOpen" [TitleModal]="'DETAMPO_MODAL_TITLE' | translate"
+    [isModalOpen]="isModalDetampoOpen" (isModalClose)="closeModalDetampo($event)" (valide)="valideDeTempo($event)">
+    <app-detamponnage [balFilter]="balFilter" [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
+      [tooltipBALs]="tooltipBALs"></app-detamponnage>
   </app-template-modal>
 
   <!-- remise a disposition -->
   <!-- author yassine -->
-  <app-template-modal
-    *ngIf="showRemiseDispositionModal"
-    [TitleModal]="'REMETTRE_DISPO_MODAL_TITLE' | translate"
-    [isModalOpen]="showRemiseDispositionModal"
-    [isValid]="isFormValid"
-    (isModalClose)="closeRemiseDispositionModal($event)"
-    (valide)="remise_dispo_submit($event)"
-  >
-    <app-remise-disposition
-      [selectedBal]="selectedBal"
+  <app-template-modal *ngIf="showRemiseDispositionModal" [TitleModal]="'REMETTRE_DISPO_MODAL_TITLE' | translate"
+    [isModalOpen]="showRemiseDispositionModal" [isValid]="isFormValid"
+    (isModalClose)="closeRemiseDispositionModal($event)" (valide)="remise_dispo_submit($event)">
+    <app-remise-disposition [selectedBal]="selectedBal"
       [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
-      (REMISE_DISPO_EVENT)="REMISE_DISPO_EVENT_HANDLER($event)"
-    ></app-remise-disposition>
+      (REMISE_DISPO_EVENT)="REMISE_DISPO_EVENT_HANDLER($event)"></app-remise-disposition>
   </app-template-modal>
 
   <!-- desactiver en masse -->
   <!-- author yassine  -->
-  <app-template-modal
-    *ngIf="openDescativerEnMassModal"
-    [TitleModal]="'DES_MODAL_TITLE' | translate"
-    [isModalOpen]="openDescativerEnMassModal"
-    [isValid]="isDesactiverEnMassFormvalid"
-    (isModalClose)="closeDesactiverEnMassModal($event)"
-    (valide)="desactiver_en_mass_submit($event)"
-  >
-    <app-desactiver-en-mass
-      [selectedBal]="selectedBal"
-      [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
-      [balFilter]="balFilter"
-      [balDataList]="balDataList"
-      (DESACTIVER_EN_MASS_EVENT)="DESACTIVER_EN_MASS_EVENT_HANDLER($event)"
-    ></app-desactiver-en-mass>
+  <app-template-modal *ngIf="openDescativerEnMassModal" [TitleModal]="'DES_MODAL_TITLE' | translate"
+    [isModalOpen]="openDescativerEnMassModal" [isValid]="isDesactiverEnMassFormvalid"
+    (isModalClose)="closeDesactiverEnMassModal($event)" (valide)="desactiver_en_mass_submit($event)">
+    <app-desactiver-en-mass [selectedBal]="selectedBal"
+      [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length" [balFilter]="balFilter"
+      [balDataList]="balDataList" (DESACTIVER_EN_MASS_EVENT)="DESACTIVER_EN_MASS_EVENT_HANDLER($event)">
+    </app-desactiver-en-mass>
   </app-template-modal>
 
   <div class="flex space-between mgb40">
-    <app-pagination
-      *ngIf="isShowPagiantion"
-      [titlePagination]="'MAIL_BOXS' | translate"
-      [totalResult]="totalResult"
-      [pageNumber]="balFilter.numeroPage"
-      [pageSiz]="balFilter.nbResultatsParPage"
-      (paginationChangeEvent)="getPagination($event)"
-    ></app-pagination>
+    <app-pagination *ngIf="isShowPagiantion" [titlePagination]="'MAIL_BOXS' | translate" [totalResult]="totalResult"
+      [pageNumber]="balFilter.numeroPage" [pageSiz]="balFilter.nbResultatsParPage"
+      (paginationChangeEvent)="getPagination($event)"></app-pagination>
   </div>
 </div>
 <app-footer></app-footer>

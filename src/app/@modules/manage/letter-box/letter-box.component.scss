@@ -15,3 +15,9 @@
   }
   
 }
+.date-label{
+text-transform: capitalize;
+&.fin{
+  margin-left:1rem ;
+}
+}

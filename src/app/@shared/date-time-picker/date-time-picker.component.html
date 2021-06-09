@@ -1,3 +1,4 @@
+<div class="sesam-vital-date-picker">
 <div class="inputField icon-field">
   <input
     class="icon-field date"
@@ -21,6 +22,7 @@
         name="datepicker"
         [ngModel]="datetime"
         (ngModelChange)="onDateChange($event, dp)"
+        [markDisabled]="isPeriod && isDisabled" 
       ></ngb-datepicker>
     </div>
     <div *ngIf="!showTimePickerToggle">
@@ -66,9 +68,4 @@
     </div>
   </div>
 </ng-template>
-<link
-  rel="stylesheet"
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-  crossorigin="anonymous"
-/>
+</div>
