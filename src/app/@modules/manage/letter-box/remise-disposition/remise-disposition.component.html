@@ -1,11 +1,15 @@
+
 <div [formGroup]="miseDispoForm" class="app-remise-dispo pd20">
   <div class="flex">
     <div class="totalInbox mgb30">
       <span class="val">{{ balNumber }}</span>
       {{ 'BOITES_AUX_LETTRES' | translate }}
     </div>
+
     <div class="info-bulle">
-      <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
+      <app-info-bulle 
+      [balDataList]="balDataList"
+      [selectedBal]="selectedBal"></app-info-bulle>
     </div>
   </div>
   <h4 class="title_modal mgb10">{{ 'REMETTRE_DISPO_CRITERE_TITLE' | translate }}</h4>

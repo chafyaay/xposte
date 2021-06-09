@@ -38,6 +38,8 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
   @Input()
   balNumber: any;
   @Input()
+  balDataList: any[]=[];
+  @Input()
   etatBal: any;
   @Input()
   filtreAdresse: any;

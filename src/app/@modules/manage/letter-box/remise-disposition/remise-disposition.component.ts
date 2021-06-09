@@ -40,6 +40,9 @@ export class RemiseDispositionComponent implements OnInit {
   @Input()
   balSelected: number;
 
+  @Input()
+  balDataList: any[]=[];
+  
   @Output() REMISE_DISPO_EVENT: EventEmitter<any> = new EventEmitter();
 
   miseDispoForm: FormGroup;
