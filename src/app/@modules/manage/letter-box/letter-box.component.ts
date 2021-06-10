@@ -148,6 +148,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   // remise à disposition
 
   REMISE_DISPO_EVENT_HANDLER(event: any) {
+    console.log("event\n\n")
+    console.log(event)
     this.isFormValid = event.isFormValid;
     this.REMISE_DISPO_OBJ = {
       etatBal: this.balFilter.etatBal,
@@ -159,6 +161,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   openRemiseDispositionModal() {
+    this.resetNotificationDataAndClose()
     this.showRemiseDispositionModal = true;
     document.getElementsByTagName('body')[0].style.overflow="hidden";
   }

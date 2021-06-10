@@ -58,6 +58,8 @@ export class DateTimePickerComponent
   seconds = true;
   @Input()
   label: string;
+  @Output()
+  keyupEvent: EventEmitter<any>=new EventEmitter();
 
   @Input()
   disabled = false;
@@ -103,6 +105,11 @@ export class DateTimePickerComponent
     this.popover.hidden.subscribe(($event) => {
       this.showTimePickerToggle = false;
     });
+  }
+
+  onKeyUp(event:any){
+
+    this.keyupEvent.emit(event.target.value)
   }
 
   isDisabled(date: NgbDateStruct) {
@@ -234,7 +241,8 @@ export class DateTimePickerComponent
     }
 
     this.setDateStringModel();
-    console.log(this.datetime);
+    console.log("this.datetime #################");
+    console.log("this.datetime");
     this.datetimevalueEvent.emit(this.setDateStringModel());
   }
 

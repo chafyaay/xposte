@@ -21,3 +21,9 @@ text-transform: capitalize;
   margin-left:1rem ;
 }
 }
+.notif-message{
+  flex-wrap: wrap;
+  .notif-items{
+    margin-top: 1rem;
+  }
+}

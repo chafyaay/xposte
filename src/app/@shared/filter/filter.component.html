@@ -79,7 +79,7 @@
   <button class="reset" (click)="resetData()">
     {{ 'RESET_FILTER' | translate }}
   </button>
-  <button class="main-btn" (click)="clickFilter()" [disabled]="canFilter()">
+  <button class="main-btn" (click)="clickFilter()" [disabled]="!canFilter()">
     {{ 'FILTER_BUTTON' | translate }}
   </button>
 </div>

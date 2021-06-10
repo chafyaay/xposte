@@ -3,6 +3,7 @@
   <input
     class="icon-field date"
     (blur)="inputBlur($event)"
+    (keyup)="onKeyUp($event)"
     [ngModel]="dateString | date: inputDatetimeFormat"
     (change)="onInputChange($event)"
     [disabled]="disabled"

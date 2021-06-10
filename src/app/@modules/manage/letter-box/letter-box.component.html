@@ -181,7 +181,8 @@
         : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
         }}
       </h3>
-      <ul class="flex">
+
+      <ul class="flex notif-message">
         <li class="notif-items">
           {{ 'REMISE-DISPO_BAL' | translate }} :{{ selectedBal.length === 0 ? totalResult : selectedBal.length }}
         </li>
@@ -200,13 +201,68 @@
           " class="notif-items">
           <div class="date-label">{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }} :
             {{
-            REMISE_DISPO_OBJ.dateHeureDebut | date: 'EEEE, MMMM d, h:mm'
+            REMISE_DISPO_OBJ.dateHeureDebut | date: 'EEEE d MMMM, h:mm'
             }}</div>
           <div class="date-label fin">{{ 'REMETTRE_DISPO_DATE_FIN' | translate }} :
             {{
-            REMISE_DISPO_OBJ.dateHeureFin | date: 'EEEE, MMMM d, h:mm'
+            REMISE_DISPO_OBJ.dateHeureFin | date: 'EEEE d MMMM, h:mm'
             }}</div>
         </li>
+        <li *ngIf="REMISE_DISPO_OBJ.emetteur">
+          {{
+            'criters.EMMETTEUR' | translate
+            }}:{{REMISE_DISPO_OBJ.emetteur}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.destinataire">
+          {{
+            'criters.DESITINATAIRE'| translate
+            }}:{{REMISE_DISPO_OBJ.destinataire}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.contentDescription">
+          {{
+            'criters.CONTENT_DESC'| translate
+            }}:{{REMISE_DISPO_OBJ.contentDescription}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.fichiersCompresses!=='null' || (REMISE_DISPO_OBJ.fichiersCompresses || !REMISE_DISPO_OBJ.fichiersCompresses)">
+          {{
+            'criters.FICHIER_COMPRESSEE'| translate
+            }}:{{REMISE_DISPO_OBJ.fichiersCompresses?'Oui':'Non'}}
+          </li>
+        <li *ngIf="
+        REMISE_DISPO_OBJ.fichiersChiffres===null||
+        REMISE_DISPO_OBJ.fichiersChiffres===true||
+        REMISE_DISPO_OBJ.fichiersChiffres===false
+        ">
+          {{
+            'criters.FICHIER_CHIFFREE'| translate
+            }}:
+            {{REMISE_DISPO_OBJ.fichiersChiffres?'Oui':'Non'}}
+            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===true">{{'criters.OUI' | translate}}</span>
+            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===false">{{'criters.NON' | translate}}</span>
+            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===null">{{'criters.INDIFFERENT' | translate}}</span>
+          
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.type">
+          {{ 'criters.TYPE'| translate }}:{{REMISE_DISPO_OBJ.type}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.version">
+          {{ 'criters.VERSION'| translate }}:{{REMISE_DISPO_OBJ.version}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.codeEmetteur">
+          {{ 'criters.CODE_EMETTEUR'| translate }}:{{REMISE_DISPO_OBJ.codeEmetteur}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.dateHeureSujet">
+          {{ 'criters.DATE_HEURE_SUJET'| translate }}:{{REMISE_DISPO_OBJ.dateHeureSujet | date: 'EEEE d MMMM, h:mm'}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.codeCompostage">
+          {{ 'criters.CODE_COMPOSTAGE'| translate }}:{{REMISE_DISPO_OBJ.codeCompostage}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.nbFSE">
+          {{ 'criters.NBFSE'| translate }}:{{REMISE_DISPO_OBJ.nbFSE}}
+          </li>
+        <li *ngIf="REMISE_DISPO_OBJ.sujetOuReplyInTo">
+          {{ 'criters.SUJET_OUT_REPLY_INFO'| translate }}:{{REMISE_DISPO_OBJ.sujetOuReplyInTo}}
+          </li>
       </ul>
     </ng-container>
 
@@ -373,7 +429,8 @@
         (closeFormulaire)="CloseCreateBALForm()">
         <app-modifier-masse-bals [balDataList]="balDataList" (closeEvent)="closeEventHandler($event)" [etatBal]="balFilter.etatBal"
           [filtreAdresse]="adresseHighlight" [identifiantFrontal]="balFilter.identifiantFrontal"
-          (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)" [balNumber]="
+          (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)" 
+          [balNumber]="
             selectedBal.length === 0 ? totalResult : selectedBal.length
           " [selectedBal]="selectedBal">
         </app-modifier-masse-bals>

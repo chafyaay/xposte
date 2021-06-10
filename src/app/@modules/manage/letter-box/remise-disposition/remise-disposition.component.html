@@ -8,7 +8,7 @@
 
     <div class="info-bulle">
       <app-info-bulle 
-      [balDataList]="balDataList"
+      [balDataList]="selectedBal.length>0?selectedBal:balDataList"
       [selectedBal]="selectedBal"></app-info-bulle>
     </div>
   </div>
@@ -17,37 +17,40 @@
   <h3 class="title_modal mgt40">{{ 'REMETTRE_DISPO_PERIODE' | translate }}</h3>
   <div class="period-container flex mgt20">
     <app-date-time-picker
+    (keyupEvent)="periodeKeyUphandler($event,'dd')"
     [isPeriod]="true"
       label="{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }}"
       (datetimevalueEvent)="onPeriodeSelect($event, 'dd')"
       formControlName="dateHeureDebut"
-      name="activeEndDate"
+      name="dateHeureDebut"
     ></app-date-time-picker>
     <app-date-time-picker
+    (keyupEvent)="periodeKeyUphandler($event,'df')"
     [isPeriod]="true"
       class="mgl20"
       label="{{ 'REMETTRE_DISPO_DATE_FIN' | translate }}"
       (datetimevalueEvent)="onPeriodeSelect($event, 'df')"
       formControlName="dateHeureFin"
-      name="activeEndDate"
+      name="dateHeureFin"
     ></app-date-time-picker>
+    <input type="hidden" formControleName="periode" name="">
   </div>
   <span
-    *ngIf="form.get('dateHeureDebut').touched && !this.isPeriodValid"
+    *ngIf="(form.get('dateHeureDebut').touched || form.get('dateHeureFin').touched) && !this.isPeriodValid"
     class="helptext text-red"
-    >{{ 'INVALID_INPUT' | translate }}</span
+    >{{ 'DATE_ERR_INV' | translate }}</span
   >
   <!-- list des messages  lus  -->
   <div class="select-field field-lists flex mgt40">
     <div class="inputField" style="flex-grow: 1">
       <ng-select
-        [items]="MESSAGE_LUS_LIST"
+        [items]="TEMP_FIELD_LISTS.message_lus_list"
         bindLabel="label"
         bindValue="id"
         placeholder="Etat"
         name="filterField"
         class="ngselectCustom"
-        (change)="selectFieldHandler($event, 'message_lus_list')"
+        (change)="selectFieldHandler($event, 'message_lus')"
         (focus)="isMessageLusListSelected = true"
       >
       </ng-select>
@@ -60,32 +63,36 @@
     </div>
     <button
       class="main-btn icon mgl20"
-      [disabled]="isMessageListEmpty"
-      (click)="insertField('message_lus_list')"
+      [disabled]="!isMessageLuAddItem"
+      (click)="INSERT_FIELD()"
     >
       {{ 'AJOUTER_CRITERE' | translate }}
     </button>
   </div>
 
-  <div *ngFor="let field of FIELD_LISTS.message_lus_list">
-    <div *ngIf="field.visible" class="sub-field">
+  <div *ngFor="let field of TEMP_FIELD_LISTS.message_lus_list">
+    <div *ngIf="field.disabled" class="sub-field">
       <div class="inputField">
         <ng-container [ngSwitch]="field.type">
           <ng-template [ngSwitchCase]="'text'">
             <input
+            #messageLuField
+            formControlName="{{field.fcn}}"
               type="text"
               [name]="field.fcn"
-              (keyup)="onKeyUp($event, field)"
+              (keyup)="onKeyUp($event, field.fcn)"
+              (change)="onChange($event, field.fcn)"
               placeholder=" "
             />
           </ng-template>
           <ng-template [ngSwitchCase]="'list'">
             <ng-select
+            formControlName="{{field.fcn}}"
               [items]="field.data"
               bindLabel="label"
               bindValue="id"
               class="ngselectCustom"
-              (change)="onSelectChange($event, field)"
+              (change)="onsSelectField($event, field.fcn)"
               (focus)="onFieldFocus($event, field.id)"
             >
             </ng-select>
@@ -109,13 +116,13 @@
           {{ field.label }}
         </label>
       </div>
-      <button class="remove" (click)="removeField(field, 'message_lus_list')">
+      <button class="remove" (click)="REMOVE_FIELD(field)">
         <i class="zmdi zmdi-delete"></i>
       </button>
     </div>
     <span
       class="helptext text-red"
-      *ngIf="field.visible && form.get(field.fcn).invalid"
+      *ngIf="form.get(field.fcn).touched && field.disabled && form.get(field.fcn).invalid"
       >Champ Invalid</span
     >
   </div>
@@ -125,7 +132,7 @@
   <div class="select-field field-lists flex mgt40">
     <div class="inputField" style="flex-grow: 1">
       <ng-select
-        [items]="SUJET_LIST"
+        [items]="TEMP_FIELD_LISTS.sujet_list"
         bindLabel="label"
         bindValue="id"
         placeholder="Etat"
@@ -144,35 +151,40 @@
     </div>
     <button
       class="main-btn icon mgl20"
-      [disabled]="isSujetListEmpty"
-      (click)="insertField('sujet_list')"
+      [disabled]="!isSujetAddItem"
+      (click)="INSERT_FIELD()"
     >
       {{ 'AJOUTER_CRITERE' | translate }}
     </button>
   </div>
 
-  <div *ngFor="let field of FIELD_LISTS.sujet_list">
-    <div *ngIf="field.visible" class="sub-field">
+  <div *ngFor="let field of TEMP_FIELD_LISTS.sujet_list">
+    <div *ngIf="field.disabled" class="sub-field">
       <div class="inputField">
         <ng-container [ngSwitch]="field.type">
           <ng-template [ngSwitchCase]="'text'">
             <input
-            #inputText
+            id="{{field.fcn}}"
+            formControlName="{{field.fcn}}"
               type="text"
               [name]="field.fcn"
               value="{{ form.get(field.fcn).value }}"
-              (keyup)="onKeyUp($event, field)"
+              (keyup)="onKeyUp($event, field.fcn)"
+              (change)="onChange($event, field.fcn)"
               (focus)="onFocus($event, field.fcn)"
+             (keypress)="onKeyPress($event, field.fcn)"
               (blur)="onBlur($event, field.fcn)"
               placeholder=" "
+
             />
           </ng-template>
           <ng-template [ngSwitchCase]="'date'">
             <app-date-time-picker
+            formControlName="{{field.fcn}}"
             [isPeriod]="false"
               [label]="field.label"
               [label]="field.label"
-              (datetimevalueEvent)="onDateTimeChange($event, field)"
+              (datetimevalueEvent)="onsSelectDateTime($event,'dateHeureSujet')"
               formControlName="dateHeureSujet"
               name="activeEndDate"
             >
@@ -183,31 +195,17 @@
           {{ field.label }}
         </label>
       </div>
-      <button class="remove" (click)="removeField(field, 'sujet_list')">
+      <button class="remove" (click)="REMOVE_FIELD(field)">
         <i class="zmdi zmdi-delete"></i>
       </button>
     </div>
 
     <span
       class="helptext text-red"
-      *ngIf="field.visible && form.get(field.fcn).invalid"
+      *ngIf="field.touched && field.disabled && form.get(field.fcn).invalid"
       >Champ Invalid</span
     >
   </div>
 
-  <!-- hidden fields -->
-  <input type="hidden" formControlname="periode" />
-  <input type="hidden" formControlname="emetteur" />
-  <input type="hidden" formControlname="destinataire" />
-  <input type="hidden" formControlname="destinataire" />
-  <input type="hidden" formControlname="contentDescription" />
-  <input type="hidden" formControlname="fichiersCompresses" />
-  <input type="hidden" formControlname="fichiersChiffres" />
-  <input type="hidden" formControlname="type" />
-  <input type="hidden" formControlname="version" />
-  <input type="hidden" formControlname="code" />
-  <input type="hidden" formControlname="codeCompostage" />
-  <input type="hidden" formControlname="dateHeureSujet" />
-  <input type="hidden" formControlname="nbFSE" />
-  <input type="hidden" formControlname="sujetOuReplyInTo" />
+
 </div>
