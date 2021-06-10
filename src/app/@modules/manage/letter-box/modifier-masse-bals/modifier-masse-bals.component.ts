@@ -184,7 +184,7 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
           validators: [Validators.required, customIPListValidator()],
         })
       );
-    } else if (this.selectedFCN === 'adresseMailAlerte') {
+    } else if (this.selectedFCN === 'adresseMailAlerte' || this.selectedFCN ==='balRelais') {
       this.form.setControl(
         this.selectedFCN,
         new FormControl('', {

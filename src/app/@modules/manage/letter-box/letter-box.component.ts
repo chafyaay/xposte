@@ -159,7 +159,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       ...event.DATA,
     };
   }
-
+  
   openRemiseDispositionModal() {
     this.resetNotificationDataAndClose()
     this.showRemiseDispositionModal = true;
@@ -499,6 +499,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   openSidebarCanvas(event: any) {
+    this.resetNotificationDataAndClose();
     setTimeout(() => {
       if (event) {
         const id = event.id;

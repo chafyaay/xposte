@@ -210,22 +210,22 @@
         </li>
         <li *ngIf="REMISE_DISPO_OBJ.emetteur">
           {{
-            'criters.EMMETTEUR' | translate
+            'SUBFIELDS.EMMETTEUR' | translate
             }}:{{REMISE_DISPO_OBJ.emetteur}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.destinataire">
           {{
-            'criters.DESITINATAIRE'| translate
+            'SUBFIELDS.DESITINATAIRE'| translate
             }}:{{REMISE_DISPO_OBJ.destinataire}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.contentDescription">
           {{
-            'criters.CONTENT_DESC'| translate
+            'SUBFIELDS.CONTENT_DESC'| translate
             }}:{{REMISE_DISPO_OBJ.contentDescription}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.fichiersCompresses!=='null' || (REMISE_DISPO_OBJ.fichiersCompresses || !REMISE_DISPO_OBJ.fichiersCompresses)">
           {{
-            'criters.FICHIER_COMPRESSEE'| translate
+            'SUBFIELDS.FICHIER_COMPRESSEE'| translate
             }}:{{REMISE_DISPO_OBJ.fichiersCompresses?'Oui':'Non'}}
           </li>
         <li *ngIf="
@@ -234,34 +234,34 @@
         REMISE_DISPO_OBJ.fichiersChiffres===false
         ">
           {{
-            'criters.FICHIER_CHIFFREE'| translate
+            'SUBFIELDS.FICHIER_CHIFFREE'| translate
             }}:
             {{REMISE_DISPO_OBJ.fichiersChiffres?'Oui':'Non'}}
-            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===true">{{'criters.OUI' | translate}}</span>
-            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===false">{{'criters.NON' | translate}}</span>
-            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===null">{{'criters.INDIFFERENT' | translate}}</span>
+            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===true">{{'SUBFIELDS.OUI' | translate}}</span>
+            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===false">{{'SUBFIELDS.NON' | translate}}</span>
+            <span *ngIf="REMISE_DISPO_OBJ.fichiersChiffres===null">{{'SUBFIELDS.INDIFFERENT' | translate}}</span>
           
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.type">
-          {{ 'criters.TYPE'| translate }}:{{REMISE_DISPO_OBJ.type}}
+          {{ 'SUBFIELDS.TYPE'| translate }}:{{REMISE_DISPO_OBJ.type}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.version">
-          {{ 'criters.VERSION'| translate }}:{{REMISE_DISPO_OBJ.version}}
+          {{ 'SUBFIELDS.VERSION'| translate }}:{{REMISE_DISPO_OBJ.version}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.codeEmetteur">
-          {{ 'criters.CODE_EMETTEUR'| translate }}:{{REMISE_DISPO_OBJ.codeEmetteur}}
+          {{ 'SUBFIELDS.CODE_EMETTEUR'| translate }}:{{REMISE_DISPO_OBJ.codeEmetteur}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.dateHeureSujet">
-          {{ 'criters.DATE_HEURE_SUJET'| translate }}:{{REMISE_DISPO_OBJ.dateHeureSujet | date: 'EEEE d MMMM, h:mm'}}
+          {{ 'SUBFIELDS.DATE_HEURE_SUJET'| translate }}:{{REMISE_DISPO_OBJ.dateHeureSujet | date: 'EEEE d MMMM, h:mm'}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.codeCompostage">
-          {{ 'criters.CODE_COMPOSTAGE'| translate }}:{{REMISE_DISPO_OBJ.codeCompostage}}
+          {{ 'SUBFIELDS.CODE_COMPOSTAGE'| translate }}:{{REMISE_DISPO_OBJ.codeCompostage}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.nbFSE">
-          {{ 'criters.NBFSE'| translate }}:{{REMISE_DISPO_OBJ.nbFSE}}
+          {{ 'SUBFIELDS.NBFSE'| translate }}:{{REMISE_DISPO_OBJ.nbFSE}}
           </li>
         <li *ngIf="REMISE_DISPO_OBJ.sujetOuReplyInTo">
-          {{ 'criters.SUJET_OUT_REPLY_INFO'| translate }}:{{REMISE_DISPO_OBJ.sujetOuReplyInTo}}
+          {{ 'SUBFIELDS.SUJET_OUT_REPLY_INFO'| translate }}:{{REMISE_DISPO_OBJ.sujetOuReplyInTo}}
           </li>
       </ul>
     </ng-container>

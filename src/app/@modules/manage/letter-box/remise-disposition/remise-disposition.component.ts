@@ -84,7 +84,7 @@ export class RemiseDispositionComponent implements OnInit {
   ) {
     const FIELD: SUBFIELDSI = this.translate.translations[
       this.translate.currentLang
-    ].criters;
+    ].SUBFIELDS;
 
     this.FIELD_LISTS = {
       message_lus_list: [
