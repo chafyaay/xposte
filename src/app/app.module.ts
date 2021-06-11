@@ -35,6 +35,7 @@ export function apiUrl(windowRef: WindowRefService) {
 import { registerLocaleData } from '@angular/common';
 
 import localeFr from '@angular/common/locales/fr';
+import { AddFieldComponent } from './@shared/add-field/add-field.component';
 
 registerLocaleData(localeFr);
 

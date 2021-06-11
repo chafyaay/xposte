@@ -19,6 +19,7 @@ import { DateTimePickerComponent } from './date-time-picker/date-time-picker.com
 import { InfoBulleComponent } from './info-bulle/info-bulle.component';
 import { TemplateFormulaireComponent } from './template-formulaire/template-formulaire.component';
 import { NotificationComponent } from './notification/notification.component';
+import { AddFieldComponent } from './add-field/add-field.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { NotificationComponent } from './notification/notification.component';
     InfoBulleComponent,
     TemplateFormulaireComponent,
     NotificationComponent,
+    AddFieldComponent
   ],
   imports: [
     CommonModule,
@@ -55,6 +57,7 @@ import { NotificationComponent } from './notification/notification.component';
     DateTimePickerComponent,
     TemplateFormulaireComponent,
     NotificationComponent,
+    AddFieldComponent
   ],
   entryComponents: [],
 })
