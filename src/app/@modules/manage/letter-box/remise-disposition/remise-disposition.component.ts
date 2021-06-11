@@ -47,12 +47,13 @@ export class RemiseDispositionComponent implements OnInit {
   @Input()
   balDataList: any[] = [];
 
-  @Output() REMISE_DISPO_EVENT: EventEmitter<any> = new EventEmitter();
+  @Output() remiseDispoEvent: EventEmitter<any> = new EventEmitter();
 
   periodeForm:FormGroup;
   public message_lus_fields:any[];
   message_subject_fields:any[];
-  isFormvalid=false;
+  isPeriodeValid=false;
+  isFormValid=false;
 
   constructor(public translate: TranslateService) {}
 
@@ -166,24 +167,68 @@ export class RemiseDispositionComponent implements OnInit {
 
   initPeriodForm(){
     this.periodeForm=new FormGroup({
-      'periode':new FormControl('',{validators:[Validators.required]}),
+      'periode':new FormControl('',{validators:[Validators.required,PeriodValidator]}),
       'dateHeureDebut':new FormControl('',{validators:[Validators.required,DateValidator()]}),
       'dateHeureFin':new FormControl('',{validators:[Validators.required,DateValidator()]}),
     })
   }
+
   get form(){
     return this.periodeForm;
   }
 
-  onPeriodeSelect(event:any) {
+  onChange(event:any,fcn?:any){
+    if(fcn)
+    this.periodeValidator()
+  
+    if(this.form.valid){
+      this.getFomData();
+    }
+    
+  }
+
+  periodeValidator() {
     let now = new Date();
     let n = now.getTime();
     let py = now.setFullYear(now.getFullYear() - 1);
     let dd = new Date(this.form.get('dateHeureDebut').value).getTime();
     let df = new Date(this.form.get('dateHeureFin').value).getTime();
-    this.isFormvalid = dd < df && dd < n && df <= n && dd >= py && df > py;
+    this.isPeriodeValid = dd < df && dd < n && df <= n && dd >= py && df > py;
+    this.form.get('periode').patchValue(this.isPeriodeValid);
+  }
+  OBJ:RemiseDispoI;
+  formValidHandler(form:any){
+   
+    this.getFomData(form);
+    
+  }
+
+  getFomData(form?:any){
+    const obj={
+      dateHeureDebut:this.form.get('dateHeureDebut').value,
+      dateHeureFin:this.form.get('dateHeureFin').value,
+      ...form
+    }
+    console.log(form)
+    if(form)
+    this.isFormValid=form.isvalid&&this.form.valid;
+
+    else this.isFormValid=this.form.valid;
+
+    console.log('is VALID',this.isFormValid)
+      
+    this.remiseDispoEvent.emit({isvalid:this.isFormValid,...obj})
   }
 }
 
 
-
+export const PeriodValidator = (fc: FormControl) => {
+  const isValid = fc.value;
+  return isValid
+    ? null
+    : {
+      isValid: {
+        valid: false,
+      },
+    };
+};

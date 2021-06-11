@@ -469,7 +469,7 @@
     (isModalClose)="closeRemiseDispositionModal($event)" (valide)="remise_dispo_submit($event)">
     <app-remise-disposition [balDataList]="balDataList" [selectedBal]="selectedBal"
       [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
-      (REMISE_DISPO_EVENT)="REMISE_DISPO_EVENT_HANDLER($event)"></app-remise-disposition>
+      (remiseDispoEvent)="remiseDispoHandler($event)"></app-remise-disposition>
   </app-template-modal>
 
   <!-- desactiver en masse -->

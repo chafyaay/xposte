@@ -147,7 +147,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
   // remise à disposition
 
-  REMISE_DISPO_EVENT_HANDLER(event: any) {
+  remiseDispoHandler(event: any) {
     console.log("event\n\n")
     console.log(event)
     this.isFormValid = event.isFormValid;

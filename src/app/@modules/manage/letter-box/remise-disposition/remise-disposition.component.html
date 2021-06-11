@@ -16,29 +16,33 @@
   <!-- periode -->
   <h3 class="title_modal mgt40">{{ 'REMETTRE_DISPO_PERIODE' | translate }}</h3>
 
-  <div [formGroup]="periodeForm" class="period-container flex mgt20">
-    <app-date-time-picker
-    (keyupEvent)="periodeKeyUphandler($event,'dd')"
-    [isPeriod]="true"
+  <div [formGroup]="periodeForm" class="period-container mgt20">
+    <div class="flex">
+      <app-date-time-picker
+      [isPeriod]="true"
       label="{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }}"
-      (datetimevalueEvent)="onPeriodeSelect($event)"
+      (keyupEvent)="onChange($event)"
+      (datetimevalueEvent)="onChange($event,'dateHeureDebut')"
       formControlName="dateHeureDebut"
       name="dateHeureDebut"
     ></app-date-time-picker>
     <!-- ----------------------------- -->
     <app-date-time-picker
-    (keyupEvent)="periodeKeyUphandler($event,'df')"
-    [isPeriod]="true"
+      [isPeriod]="true"
       class="mgl20"
       label="{{ 'REMETTRE_DISPO_DATE_FIN' | translate }}"
-      (datetimevalueEvent)="onPeriodeSelect($event)"
+      (keyupEvent)="onChange($event)"
+      (datetimevalueEvent)="onChange($event,'dateHeureFin')"
       formControlName="dateHeureFin"
       name="dateHeureFin"
     ></app-date-time-picker>
+    
     <input type="hidden" formControleName="periode" name="">
+    </div>
+    <p *ngIf="(form.get('dateHeureDebut').touched && form.get('dateHeureFin').touched) && form.get('periode').invalid" class="">{{'SUBFIELDS.DATE_ERR_INV' | translate}}</p>
   </div>
-  <app-add-field [tempItems]="message_lus_fields"></app-add-field>
-  <app-add-field [tempItems]="message_subject_fields"></app-add-field>
+  <app-add-field (formEvent)="formValidHandler($event)" [tempItems]="message_lus_fields"></app-add-field>
+  <app-add-field (formEvent)="formValidHandler($event)" [tempItems]="message_subject_fields"></app-add-field>
 </div>
 
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { customEmailValidator } from '@shared/utils';
 import * as moment from 'moment';
@@ -10,21 +10,24 @@ import * as moment from 'moment';
 })
 export class AddFieldComponent implements OnInit {
   @Input() tempItems: any[] = [];
+  @Output() formEvent: EventEmitter<any> = new EventEmitter();
+
   addFieldForm: FormGroup;
   FIELDS: any[] = [];
   selectedValue = "";
   isMessageLuAddItem = false;
-  isMessageLusListSelected:any;
+  isMessageLusListSelected: any;
   selectedField = "";
-  isAddFieldBtnValid=false
+  isAddFieldBtnValid = false
+  isOpened = false;
 
-  constructor() { 
+  constructor() {
   }
 
   ngOnInit() {
     this.FIELDS = this.tempItems;
     this.createRemiseDispoForm();
-   this.checkIfListIsNotEmpty();
+    this.checkIfListIsNotEmpty();
   }
 
   get form() {
@@ -79,24 +82,40 @@ export class AddFieldComponent implements OnInit {
 
   insertField() {
     this.updateList(this.selectedField);
-    this.isAddFieldBtnValid=false;
+    this.isAddFieldBtnValid = false;
+    this.emitData();
   }
 
   removeField(fcn: string) {
     this.updateList(fcn);
     this.form.setControl(fcn, new FormControl('', { validators: [] }));
     this.checkIfListIsNotEmpty();
+    this.emitData();
   }
 
   onSelectField(field: any) {
     this.selectedField = field.fcn;
-    this.isAddFieldBtnValid=true;
+    this.isAddFieldBtnValid = true;
   }
 
   onchange(event: any, field?: any) {
     this.checkIfListIsNotEmpty();
     if (field.fcn)
       this.inputControl(field.fcn);
+    this.emitData();
+  }
+
+  emitData() {
+    const form = this.form.value;
+    let obj = {}
+    if (this.form.value) {
+      for (let key in form) {
+        if (form[key]) obj[key] = form[key]
+      }
+    }
+    console.log("obj")
+    console.log(obj)
+    this.formEvent.emit({ isvalid: this.form.valid, ...obj });
   }
 
   getInputElemt(id: string): HTMLInputElement {
