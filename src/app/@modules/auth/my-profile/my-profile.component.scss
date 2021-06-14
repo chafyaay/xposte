@@ -1,0 +1,82 @@
+
+
+.my-profile
+{
+    .edit-conatiner{
+        margin: 0 0 3rem 0;
+        padding: 0 1rem 0 0;
+
+    .title{
+        flex-grow: 1;
+
+    }
+    }
+    width: 50%;
+    padding: 0 0 0 3rem;
+    .edit-profile{
+        background: white;
+    color: #fff;
+    padding: 0 1.25rem;
+   
+    border: 3px solid #5092c4;
+    color: #5092c4;
+    }
+    
+    .profile-details{
+        padding: 3rem;
+        width: 43vw;
+        box-shadow: -1px 0px 6px 1px #c2bebe;
+        border-radius: 5px;
+        .items{
+            margin: 0;
+            padding: 2rem 0;
+            border-bottom: 1px solid #dedddd;
+            justify-content: space-between;
+            .item{
+                &.label{
+                    font-weight: 600;
+                }
+                text-align: left;
+                width: 50%;
+                .more{
+                 
+        
+                        color: gray;
+          font-size: 1.25rem;
+          cursor: pointer;
+          position: relative;
+          .more-icone{
+            position: absolute;
+            top: -17px;
+            right: -35px;
+            z-index: 9;
+          }
+        
+          .frontal-items{
+              height: auto;
+              background: white;
+              position: absolute;
+              right: -35px;
+              top: 0;
+              border: 1px solid #dedddd;
+              border-radius: 3px;
+           font-size: 14px;
+           padding: 1rem;
+           li{
+               text-align: center;
+               padding: .31rem 0;
+               .more-fr{
+                   font-size: 18px;
+                   text-align: center;
+               }
+           }
+        
+          }
+        
+                }
+            }
+        }
+    }
+    
+}
+

@@ -5,9 +5,11 @@ import { RouteReuseStrategy, RouterModule } from '@angular/router';
 import { ErrorHandlerInterceptor } from './http/error-handler.interceptor';
 import { AuthNotAuthorizedInterceptor } from './http/auth-not-auhtorized.interceptor';
 import { AutofocusDirective } from 'src/app/@core/directive/autofocus.directive';
+import { PasswordFormatterPipe } from './pipe/password-formatter.pipe';
+import { ReplacePipe } from './pipe/replace.pipe';
 
 @NgModule({
-  declarations: [AutofocusDirective],
+  declarations: [AutofocusDirective, PasswordFormatterPipe],
   imports: [CommonModule, HttpClientModule, RouterModule],
   providers: [
     {

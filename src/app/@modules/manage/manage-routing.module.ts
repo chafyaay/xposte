@@ -48,6 +48,16 @@ const routes: Routes = [
         (m) => m.UsersModule
       ),
   },
+  {
+    path: 'auth',
+    component: ManageComponent,
+    canActivate: [RoleGuardService],
+    data: { roles: [Role.SuperAdmin] },
+    loadChildren: () =>
+      import('src/app/@modules/auth/auth.module').then(
+        (m) => m.AuthModule
+      ),
+  },
 ];
 
 @NgModule({

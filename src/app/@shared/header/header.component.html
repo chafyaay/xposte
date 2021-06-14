@@ -1,4 +1,4 @@
-<header class="header" [ngClass]="getPathMenu() === 'step 4' ? 'pdb60' : ''">
+<header class="header {{isAuth=='auth'?'show':''}}" [ngClass]="getPathMenu() === 'step 4' ? 'pdb60' : ''">
   <div class="header_content">
     <div class="header__logo">
       <a><img src="assets/img/logo.jpg" alt="Sesam vitale" /></a>
@@ -47,7 +47,8 @@
             >
               {{ 'CONFIGURATION' | translate }}
             </a>
-            <ul>
+            {{isAuth}}
+            <ul class="" *ngIf="activated.snapshot.url!=='profile'">
               <li>
                 <a
                   [ngClass]="getSubMenuItem() === 'step 2' ? 'current' : ''"
@@ -66,11 +67,12 @@
           </li>
         </ul>
       </nav>
-      <div class="header__right-profile">
+      <div class="header__right-profile" (click)="showProfileOption($event)">
         <h3 class="user">{{ 'DOMINIQUE_SANCHEZ' | translate }}</h3>
         <h4 class="profession">{{ 'ADMINISTRATEUR_GIE' | translate }}</h4>
-        <i class="zmdi zmdi-chevron-up arrow-profile"></i>
-        <div class="logout">
+        <i class="zmdi zmdi-chevron-{{_showProfileOption?'up':'down'}} arrow-profile"></i>
+        <div *ngIf="_showProfileOption" class="myprofile-options">
+          <a routerLink="/manage/auth/profile" class="sign-out">{{ 'MON_PROFILE' | translate }}</a>
           <a href="#" class="sign-out">{{ 'DECONNEXION' | translate }}</a>
         </div>
       </div>

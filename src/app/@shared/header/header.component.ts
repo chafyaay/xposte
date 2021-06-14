@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/@store';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { selectAccountState } from 'src/app/@store/selectors';
 import { Observable } from 'rxjs';
 import { Role, UserAccount } from 'src/app/@shared';
@@ -23,8 +23,12 @@ export class HeaderComponent implements OnInit {
     lastName: 'bouzaini',
     roles: [Role.SuperAdmin],
   };
-
-  constructor(private store: Store<AppState>, private router: Router) {
+  isAuth="";
+  _showProfileOption=false;
+  constructor(
+    private store: Store<AppState>, private router: Router,
+    private activated:ActivatedRoute
+    ) {
     this.getState = this.store.select(selectAccountState);
   }
   ngOnInit() {
@@ -39,6 +43,26 @@ export class HeaderComponent implements OnInit {
         this.isRoleAdmin = false;
       }
     });
+
+      this.activated.url.subscribe((data:any)=>{
+        this.isAuth=data;
+      })
+  document.body.onclick=(event)=>{
+    
+  }
+
+  
+  }
+  showProfileOption($event){
+    this._showProfileOption=!this._showProfileOption;
+    let isLeft=false;
+    const elem:HTMLElement=$event.target;
+   elem.onmouseleave=()=>{
+    elem.onclick=()=>{
+     this._showProfileOption=false;
+    }
+   }
+   
   }
   openSubMenu() {
     this.showSubMenu = !this.showSubMenu;
