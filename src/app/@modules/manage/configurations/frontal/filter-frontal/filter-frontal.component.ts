@@ -17,8 +17,10 @@ export class FilterFrontalComponent implements OnInit {
   @Output()
   frontalAutocompletEvent = new EventEmitter<string>();
 
+  @Input()
+  filter: FrontalFilter;
+
   inputFilterData: { identifiant: string; name: string }[] = [];
-  filter: FrontalFilter = new FrontalFilter();
   changedFilter: boolean;
   lastFilter: string;
   readonly TOUS_ID = 'TOUS';

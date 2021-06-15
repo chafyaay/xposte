@@ -14,6 +14,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule } from '@ngx-translate/core';
 import { LetterBoxModule } from '@modules/manage/letter-box/letter-box.module';
 import { WhitelistSuppresionComponent } from '@modules/manage/configurations/white-list/whitelist-suppresion/whitelist-suppresion.component';
+import { WhitelistHostFormComponent } from '@modules/manage/configurations/white-list/whitelist-host-form/whitelist-host-form.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { WhitelistSuppresionComponent } from '@modules/manage/configurations/whi
     WhiteListTableComponent,
     WhiteListItemComponent,
     WhitelistSuppresionComponent,
+    WhitelistHostFormComponent,
   ],
   imports: [
     CommonModule,

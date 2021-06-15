@@ -1,9 +1,7 @@
-<div class="sesam-vital-date-picker">
 <div class="inputField icon-field">
   <input
     class="icon-field date"
     (blur)="inputBlur($event)"
-    (keyup)="onKeyUp($event)"
     [ngModel]="dateString | date: inputDatetimeFormat"
     (change)="onInputChange($event)"
     [disabled]="disabled"
@@ -23,7 +21,6 @@
         name="datepicker"
         [ngModel]="datetime"
         (ngModelChange)="onDateChange($event, dp)"
-        [markDisabled]="isPeriod && isDisabled" 
       ></ngb-datepicker>
     </div>
     <div *ngIf="!showTimePickerToggle">
@@ -69,4 +66,9 @@
     </div>
   </div>
 </ng-template>
-</div>
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+/>

@@ -100,10 +100,10 @@ export class FilterComponent implements OnInit, AfterViewInit {
   }
 
   clickFilter() {
-    // if we are in the whitelist scope we don't need this.filter.filterData.etat value
+    /* if we are in the whitelist scope we don't need this.filter.filterData.etat value
     if (this.filtreType === FiltreType.WHITELIST) {
       delete this.filter.filterData.etat;
-    }
+    }*/
     this.filterEvent.emit(this.filter);
   }
 

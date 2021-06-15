@@ -23,15 +23,21 @@ export class HeaderComponent implements OnInit {
     lastName: 'bouzaini',
     roles: [Role.SuperAdmin],
   };
-  isAuth="";
-  _showProfileOption=false;
+  _showProfileOption = false;
+  isAuth = '';
   constructor(
-    private store: Store<AppState>, private router: Router,
-    private activated:ActivatedRoute
-    ) {
+    private store: Store<AppState>,
+    private router: Router,
+    public activated: ActivatedRoute
+  ) {
     this.getState = this.store.select(selectAccountState);
   }
   ngOnInit() {
+    this.activated.url.subscribe((data: any) => {
+      this.isAuth = data[0].path;
+      console.clear();
+      console.log(data[0].path);
+    });
     // we save user in store with resolver manage in /services/manageResolver
     // this.store.dispatch(new authAction.SetUserAccountSuccess(this.User));
     this.getState.subscribe((state) => {
@@ -43,26 +49,6 @@ export class HeaderComponent implements OnInit {
         this.isRoleAdmin = false;
       }
     });
-
-      this.activated.url.subscribe((data:any)=>{
-        this.isAuth=data;
-      })
-  document.body.onclick=(event)=>{
-    
-  }
-
-  
-  }
-  showProfileOption($event){
-    this._showProfileOption=!this._showProfileOption;
-    let isLeft=false;
-    const elem:HTMLElement=$event.target;
-   elem.onmouseleave=()=>{
-    elem.onclick=()=>{
-     this._showProfileOption=false;
-    }
-   }
-   
   }
   openSubMenu() {
     this.showSubMenu = !this.showSubMenu;
@@ -78,6 +64,8 @@ export class HeaderComponent implements OnInit {
       return 'step 3';
     } else if (this.router.url.includes('/config')) {
       return 'step 4';
+    } else if (this.router.url.includes('/my-profile')) {
+      return 'step 5';
     }
   }
   getSubMenuItem(): string {
@@ -90,5 +78,9 @@ export class HeaderComponent implements OnInit {
     } else if (this.router.url.includes('/manage/config/roles')) {
       return 'step 4';
     }
+  }
+  openUserOption() {}
+  goTo() {
+    this.router.navigate(['/my-profile']);
   }
 }

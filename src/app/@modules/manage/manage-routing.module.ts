@@ -4,8 +4,6 @@ import { RoleGuardService } from 'src/app/@core/guards/role-guard.service';
 import { Role } from 'src/app/@shared';
 import { LetterBoxComponent } from 'src/app/@modules/manage/letter-box/letter-box.component';
 import { ManageComponent } from 'src/app/@modules/manage/manage.component';
-import { UsersComponent } from 'src/app/@modules/manage/users/users.component';
-import { ConfigurationsComponent } from 'src/app/@modules/manage/configurations/configurations.component';
 const routes: Routes = [
   { path: '', redirectTo: 'mailBox' },
   {
@@ -54,9 +52,7 @@ const routes: Routes = [
     canActivate: [RoleGuardService],
     data: { roles: [Role.SuperAdmin] },
     loadChildren: () =>
-      import('src/app/@modules/auth/auth.module').then(
-        (m) => m.AuthModule
-      ),
+      import('src/app/@modules/auth/auth.module').then((m) => m.AuthModule),
   },
 ];
 

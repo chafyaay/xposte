@@ -3,13 +3,44 @@
   <div class="wrapper-title flex">
     <h1 class="main-title">{{ 'WHITELIST_TITLE' | translate }}</h1>
 
-    <button class="main-btn icon" (click)="(false)">
+    <button class="main-btn icon" (click)="openAddHostForm()">
       {{ 'ADD_TO_WHITELIST_BUTTON' | translate }}
     </button>
   </div>
 
   <!-- ======= START .Bloc NOTIFICATION  ======= -->
-
+  <!--notification de Creation de BAL -->
+  <app-notification
+    *ngIf="openNotifHostCreationSucces || openNotifHostCreationFail"
+    [notificationColor]="
+      openNotifHostCreationFail ? 'alerteMessage' : 'message'
+    "
+    (closeNotfification)="resetNotificationDataAndClose()"
+  >
+    <h3 class="message_title">
+      {{
+        openNotifHostCreationSucces
+          ? ('WHITELIST_HOST_CREATION_NOTIFICATION_SUCCES' | translate)
+          : ('WHITELIST_HOST_CREATION_NOTIFICATION_FAIL' | translate)
+      }}
+    </h3>
+    <ng-container *ngIf="openNotifHostCreationSucces">
+      <ul>
+        <li>
+          {{ 'WHITELIST_TYPE' | translate }} :
+          {{ newHost?.typeListe?.toUpperCase() | translate }}
+        </li>
+        |
+        <li>
+          &nbsp; {{ 'DOMAINE_IP_LABEL' | translate }} :
+          {{ newHost?.domainIp }}
+        </li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="openNotifHostCreationFail">
+      {{ notificationErrorMessage }}
+    </ng-container>
+  </app-notification>
   <!--notification de suppression de Whitelist -->
   <app-notification
     *ngIf="openNotifHostDeleteSucces || openNotifHostDeleteFail"
@@ -62,6 +93,15 @@
 
     <div>
       <!-- button -->
+      <button class="main-btn btn-second" (click)="exportToExcel()">
+        {{ 'EXPORT_LIST_PART1_BUTTON' | translate }}
+        {{
+          this.selectedHosts.length === 0
+            ? whiteListHostsAll.length
+            : selectedHosts.length
+        }}
+        {{ 'EXPORT_LIST_PART2_BUTTON' | translate }}
+      </button>
     </div>
   </div>
   <!-- ======= END .Bloc PAGINATION ======= -->
@@ -88,11 +128,25 @@
     ></app-pagination>
   </div>
 
+  <!-- creation Form -->
+  <app-template-formulaire
+    *ngIf="isFormAddHostOpen"
+    [titleFormulaire]="'ADD_TO_WHITELIST_FORM_TITLE' | translate"
+    [isFormulaireopen]="isFormAddHostOpen"
+    (closeFormulaire)="closeWhitelistHostForm()"
+  >
+    <app-whitelist-host-form
+      (closeEvent)="closeWhitelistHostForm()"
+      (valideCreateHost)="addHost($event)"
+    ></app-whitelist-host-form>
+  </app-template-formulaire>
+
   <!--modal Suppression Whitelist -->
   <app-template-modal
     *ngIf="isModalOpen"
     [TitleModal]="'WHITELIST_SUPP_MODAL_TITLE' | translate"
     [isModalOpen]="isModalOpen"
+    [isValid]="true"
     (isModalClose)="closeModalSup($event)"
     (valide)="valideSupp($event)"
   >

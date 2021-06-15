@@ -1,29 +1,10 @@
-.buttons-container{
-  button{
-    margin: 0 5px;
-  }
-  .modifier-mass-bals {
-    margin-left: 5px;
-    margin-top: 0.6rem;
-    position: relative;
-    .zmdi-edit {
-      position: absolute;
-      z-index: 9;
-      color: #5092c4;
-      right: 50%;
-    }
-  }
-  
-}
-.date-label{
-text-transform: capitalize;
-&.fin{
-  margin-left:1rem ;
-}
-}
-.notif-message{
-  flex-wrap: wrap;
-  .notif-items{
-    margin-top: 1rem;
+.modifier-mass-bals {
+  margin-top: 0.5rem;
+  position: relative;
+  .zmdi-edit {
+    position: absolute;
+    z-index: 9;
+    color: #5092c4;
+    right: 50%;
   }
 }

@@ -5,11 +5,11 @@ import { AuthRoutingModule } from './auth.routing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/@shared';
 import { TranslateModule } from '@ngx-translate/core';
-import { MyProfileComponent } from './my-profile/my-profile.component';
-import { ReplacePipe } from '@core/pipe/replace.pipe';
+import { MyProfileComponent } from '@modules/manage/users/my-profile/my-profile.component';
+import { PasswordPipePipe } from '@core/pipe/password-pipe.pipe';
 
 @NgModule({
-  declarations: [LoginComponent, MyProfileComponent,ReplacePipe],
+  declarations: [LoginComponent, MyProfileComponent, PasswordPipePipe],
   imports: [
     CommonModule,
     AuthRoutingModule,

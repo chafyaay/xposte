@@ -9,11 +9,11 @@ import { RoleGuardService } from '@core/guards/role-guard.service';
 import { Role } from '@shared';
 
 const routes: Routes = [
-/*   {
+  {
     path: 'auth',
     loadChildren: () =>
       import('src/app/@modules/auth/auth.module').then((m) => m.AuthModule),
-  }, */
+  },
   {
     path: 'manage',
     canActivate: [AuthGuard],

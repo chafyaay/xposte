@@ -12,6 +12,8 @@ export class TemponnageComponent implements OnInit {
   @Input() temponnageSelecte;
   @Input()
   balTemponne: string[] = [];
+  @Input()
+  selectedBal: any[] = [];
   @Input() BalTamponner: BalTampoCriteria = new BalTampoCriteria();
   constructor() {}
 

@@ -99,6 +99,7 @@
 
   <app-filter-frontal
     #frontalFilterComp
+    [(filter)]="frontalFilter"
     (filterEvent)="getFiltredData($event)"
     (filterDefaultEvent)="getFiltredDataDefault()"
   ></app-filter-frontal>
@@ -127,6 +128,12 @@
       [pageSiz]="frontalFilter.nbResultatsParPage"
       (paginationChangeEvent)="getPagination($event)"
     ></app-pagination>
+    <button class="main-btn btn-second" (click)="exporteBalToExcel()">
+      {{ 'EXPORTER' | translate }}
+      {{
+        selectedFrontal.length === 0 ? totalResult : selectedFrontal.length
+      }}&nbsp;{{ 'FRONTAUX' | translate }}
+    </button>
   </div>
   <!-- ======= START .Bloc MAIN TABLE ======= -->
   <app-frontal-list
@@ -141,7 +148,6 @@
 
   <div class="flex space-between mgb40">
     <app-pagination
-      *ngIf="isShowPagiantion"
       [titlePagination]="'FRONTALS' | translate"
       [totalResult]="totalResult"
       [pageNumber]="frontalFilter.numeroPage"

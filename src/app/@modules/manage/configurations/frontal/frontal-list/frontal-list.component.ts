@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FrontalFilter } from '@shared';
 import { Frontal } from '@shared/models/Frontal';
 import { Pagination } from '@shared/models/pagination';
@@ -24,7 +32,6 @@ export class FrontalListComponent implements OnInit {
   orderingFilter: EventEmitter<FrontalFilter> = new EventEmitter<FrontalFilter>();
   @Output()
   frontalToUpdateEvent: EventEmitter<Frontal> = new EventEmitter<Frontal>();
-
   pagination: Pagination = new Pagination();
   sortBy: string = 'nom';
   sortDirection: string = 'asc';

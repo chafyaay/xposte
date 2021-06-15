@@ -1,0 +1,41 @@
+<div class="my-profile">
+  <div class="flex edit-conatiner">
+    <h1 class="title">Mon profile</h1>
+    <button class="main-btn btn-second edit-profile">
+      <i class="zmdi zmdi-edit"></i>
+      Modifier mon profile
+    </button>
+  </div>
+  <div class="profile-details">
+    <ul>
+      <li *ngFor="let item of account_details" class="flex items">
+        <div class="item label">
+          <span> {{ item.label }}</span>
+        </div>
+        <div class="item flex">
+          <div *ngIf="item.value">
+            <span *ngIf="item.id !== 5">{{ item.value }}</span>
+            <span *ngIf="item.id == 5">{{ item.value | passwordPipe }}</span>
+          </div>
+          <div *ngIf="item.values">
+            <div>{{ item.values[0] }}</div>
+            <div class="more">
+              <i
+                class="more-icone zmdi zmdi-more"
+                (mousemove)="showFronatals = true"
+                (click)="showFronatals = false"
+              ></i>
+              <ul *ngIf="showFronatals" class="frontal-items">
+                <li *ngFor="let f of item.values; let i = index">
+                  <span *ngIf="i <= 9">{{ f }}</span>
+                  <span *ngIf="i === 10" class="more-fr zmdi zmdi-more"></span>
+                </li>
+                <li></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

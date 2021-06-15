@@ -68,7 +68,8 @@
     <input
       type="number"
       onkeypress="return event.charCode >= 48"
-      min="0"
+      min="1"
+      step="1"
       id="seuil"
       name="seuil"
       formControlName="seuil"
@@ -187,7 +188,7 @@
     <input
       type="text"
       maxlength="320"
-      formControlName="balRelais"
+      formControlName="relaisMessagerie"
       id="relais-messagerie"
       placeholder=" "
     />
@@ -196,8 +197,8 @@
     <span
       class="helptext text-red"
       *ngIf="
-        createBALForm.get('balRelais').value &&
-        !this.createBALForm.get('balRelais').valid
+        createBALForm.get('relaisMessagerie').value &&
+        !this.createBALForm.get('relaisMessagerie').valid
       "
       >{{ 'INVALID_INPUT' | translate }}</span
     >

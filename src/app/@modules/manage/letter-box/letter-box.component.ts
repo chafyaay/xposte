@@ -8,6 +8,7 @@ import {
   selectAccountState,
   selectBALStateState,
 } from 'src/app/@store';
+import { BalDataExpoted } from '@shared/models/BalDataExpoted';
 import { Filter } from 'src/app/@shared/models/Filter';
 import { BALFilter } from 'src/app/@shared/models/BALFilter';
 import { Pagination } from 'src/app/@shared/models/pagination';
@@ -24,8 +25,9 @@ import { LetterBoxListComponent } from 'src/app/@modules/manage/letter-box/lette
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
 import { RemiseDispoI } from 'src/app/@shared/models/remise-dispo';
-import { RemiseDispoService } from '@core/services/remise-dispo.service';
-import { DesactiverEnMassService } from '@core/services/desactiver-en-mass.service';
+import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service';
+
+const ExportJsonExcel = require('js-export-excel');
 
 @Component({
   selector: 'app-letter-box',
@@ -85,6 +87,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   // message Error
   notificationErrorMessage = '';
   isRoleAdmin: boolean;
+  data: BalDataExpoted[] = [];
   showPaginationTamonnage = false;
   // to store the  the BALaddresses that will be shown to the  user in the tooltip
   tooltipBALs: string[] = [];
@@ -108,25 +111,9 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   showRemiseDispositionBtn = false;
   showRemiseDispositionModal = false;
 
-  REMISE_DISPO_OBJ: RemiseDispoI = {};
-  isFormValid = false;
-  openNotifRemiseDispoSuccess = false;
-  openNotifRemiseDispoError = false;
-  openNotifDescativerMassSuccess = false;
-  openNotifDescativerMassFail = false;
-  openDescativerEnMassModal = false;
-  isDesactiverEnMassFormvalid = false;
-  identifiantFrontal: string;
-  isModMassbalsSuccess = false;
-  isModMassbalsFail = false;
-  isModMassbalsSidBarCanvasOpen = false;
-  modifMassObj: ModifEnMassI;
-  modMassErrMessage = '';
-
   constructor(
     private store: Store<AppState>,
     private remise_dispo_service: RemiseDispoService,
-    private desactiver_en_mass_service: DesactiverEnMassService,
     private rechercheBalService: RechercheBalService
   ) {
     this.getState = this.store.select(selectAccountState);
@@ -135,7 +122,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.BalTamponner.identifiantFrontal = this.balFilter.identifiantFrontal;
   }
 
-  ngOnChanges() { }
+  ngOnChanges() {}
 
   ngOnInit() {
     this.ShowDetamponnage();
@@ -146,10 +133,12 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   // remise à disposition
+  REMISE_DISPO_OBJ: RemiseDispoI = {};
+  isFormValid = false;
+  openNotifRemiseDispoSuccess = false;
+  openNotifRemiseDispoError = false;
 
-  remiseDispoHandler(event: any) {
-    console.log("event\n\n")
-    console.log(event)
+  REMISE_DISPO_EVENT_HANDLER(event: any) {
     this.isFormValid = event.isFormValid;
     this.REMISE_DISPO_OBJ = {
       etatBal: this.balFilter.etatBal,
@@ -159,41 +148,23 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       ...event.DATA,
     };
   }
-  
+
   openRemiseDispositionModal() {
-    this.resetNotificationDataAndClose()
+    this.resetNotificationDataAndClose();
     this.showRemiseDispositionModal = true;
-    document.getElementsByTagName('body')[0].style.overflow="hidden";
   }
+
   closeRemiseDispositionModal(event) {
+    this.resetNotificationDataAndClose();
     this.showRemiseDispositionModal = false;
-    document.getElementsByTagName('body')[0].style.overflow="auto";
-  }
-
-  desactiver_en_mass_submit($event: any) {
-    this.openDescativerEnMassModal = false;
-    const obj = {}
-    this.desactiver_en_mass_service.desactiver(obj).subscribe(
-      data => {
-        this.openNotifDescativerMassSuccess = true;
-        this.openDescativerEnMassModal = false;
-      },
-      err => {
-        this.openNotifDescativerMassSuccess = false;
-        this.openDescativerEnMassModal = false;
-        this.openNotifBalCreationSucces = false;
-        this.openNotifDescativerMassFail = true;
-      }
-    )
-
   }
 
   remise_dispo_submit(event: any) {
+    this.resetNotificationDataAndClose();
     this.remise_dispo_service.miseDisposition(this.REMISE_DISPO_OBJ).subscribe(
       (res) => {
         this.openNotifRemiseDispoSuccess = true;
         this.showRemiseDispositionModal = false;
-        this.isFormValid =false
       },
       (err) => {
         this.openNotifRemiseDispoSuccess = false;
@@ -201,12 +172,11 @@ export class LetterBoxComponent implements OnInit, OnChanges {
         this.openNotifRemiseDispoError = true;
         this.showRemiseDispositionModal = false;
         this.notificationErrorMessage = 'Erreur lors de remise à disposition';
-        this.isFormValid =false
-
       }
     );
     console.log(this.REMISE_DISPO_OBJ);
   }
+
   //-----------------
   //-----------------+
   //-----------------
@@ -218,8 +188,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     }
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
-        console.clear()
-        console.log(bal)
         this.balDataList = bal.body;
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
         this.pagination.pageNumber = bal.headers.get('X-NUMERO-PAGE');
@@ -251,17 +219,14 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       if (state.roles.indexOf('SuperAdmin') !== -1) {
         this.isShowTemponnage = true;
         this.showModifEnMassDispositionBtn = true;
-        this.showRemiseDispositionBtn = true;
         this.isRoleAdmin = true;
       } else if (state.roles.indexOf('Admin') !== -1) {
         this.isShowTemponnage = false;
         this.showModifEnMassDispositionBtn = false;
-        this.showRemiseDispositionBtn = false;
         this.isRoleAdmin = false;
       } else if (state.roles.indexOf('Admin') !== -1) {
         this.isShowTemponnage = false;
         this.showRemiseDispositionBtn = false;
-        this.showModifEnMassDispositionBtn = false;
         this.isRoleAdmin = false;
       } else {
         this.isShowTemponnage = false;
@@ -285,18 +250,12 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     });
 
     this.store.select(selectFrontalState).subscribe((stat) => {
-      this.inputFilterData.frontal = stat.frontal.map((ele) => ({
-        id: ele.nom, // bug backend  he doesn't send  Id
-        name: ele.nom,
-      }));
+      this.inputFilterData.frontal = stat.frontal;
+      this.inputFilterDataNew.frontal = [...this.inputFilterData.frontal]; // this is for clonning
 
-      this.inputFilterDataNew.frontal = this.inputFilterData.frontal.slice(
-        0,
-        10
-      ); // extract the first 10 elements
       this.inputFilterDataNew.frontal.push({
-        id: 'X1',
-        name: 'Tous',
+        identifiant: '',
+        nom: 'Tous',
       });
     });
   }
@@ -340,6 +299,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     return FiltreType;
   }
 
+  // identifiantFrontal: string;
+
   getFiltredData(filterEvent: Filter) {
     this.hideNotificationMessage();
     this.resetNotificationDataAndClose();
@@ -352,18 +313,16 @@ export class LetterBoxComponent implements OnInit, OnChanges {
         this.showPaginationTamonnage = true;
         this.isShowTemponnage = true;
         this.showModifEnMassDispositionBtn = true;
-        this.showRemiseDispositionBtn = true;
       } else {
         this.showPaginationTamonnage = false;
         this.isShowTemponnage = false;
         this.showModifEnMassDispositionBtn = false;
-        this.showRemiseDispositionBtn = false;
       }
     }
     this.balFilter.etatBal = filterEvent.filterData.etat;
     this.balFilter.adresseBal = filterEvent.filterData.adresse;
     this.balFilter.identifiantFrontal = filterEvent.filterData.frontal;
-
+    console.log(filterEvent.filterData.frontal);
     this.balFilterState.etatBal = this.balFilter.etatBal;
     this.balFilterState.adresseBal = this.balFilter.adresseBal;
     this.balFilterState.identifiantFrontal = this.balFilter.identifiantFrontal;
@@ -372,8 +331,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.adresseHighlight = filterEvent.filterData.adresse;
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
-        console.clear()
-        console.log(bal)
         this.balDataList = bal.body;
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
         this.balFilter.numeroPage = parseInt(bal.headers.get('X-NUMERO-PAGE'));
@@ -393,6 +350,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   getFiltredDataDefault() {
+    this.resetNotificationDataAndClose();
     if (this.balFilter.etatBal === 'Active') {
       this.isShowTemponnage = true;
       this.showModifEnMassDispositionBtn = true;
@@ -417,8 +375,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
     this.rechercheBalService.getBal(this.balFilter).subscribe(
       (bal) => {
-        console.clear()
-        console.log(bal)
         this.balDataList = bal.body;
         this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
         this.balFilter.numeroPage = parseInt(bal.headers.get('X-NUMERO-PAGE'));
@@ -431,6 +387,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   getFrontalData(FrontalInputText: string) {
+    this.resetNotificationDataAndClose();
     this.inputFilterDataNew.frontal = [];
 
     this.inputFilterDataNew.frontal = this.inputFilterData.frontal
@@ -448,10 +405,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
   openModalTempo(): void {
     this.isFormulaireopen = false;
-    this.openNotifTemponnage = false;
-    this.openNotifTemponnageError = false;
-    this.openNotifDetemponnageFail = false;
-    this.openNotifDetemponnageSucces = false;
+    this.resetNotificationDataAndClose();
     this.isModalOpen = true;
     this.balTamponNbr =
       this.selectedBal.length === 0
@@ -464,12 +418,18 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   openFormulaire(): void {
-    this.hideNotificationMessage();
+    this.resetNotificationDataAndClose();
     this.isFormulaireopen = !this.isFormulaireopen;
   }
 
   // yassine chafyaay
   // modifier masse bals
+  isModMassbalsSuccess = false;
+  isModMassbalsFail = false;
+  isModMassbalsSidBarCanvasOpen = false;
+  modifMassObj: ModifEnMassI;
+  modMassErrMessage = '';
+
   MODIF_EN_MASS_EVENT_HANDLER(data: any) {
     this.isModMassbalsSidBarCanvasOpen = false;
 
@@ -487,34 +447,25 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     }
   }
 
-  closeDesactiverEnMassModal(event) {
-    console.log(this.selectAllBAL)
-    this.openDescativerEnMassModal = false;
-  }
-
-  DESACTIVER_EN_MASS_EVENT_HANDLER(event) {
-    console.log(event)
-    this.isDesactiverEnMassFormvalid = event;
-
-  }
-
   openSidebarCanvas(event: any) {
-    this.resetNotificationDataAndClose();
     setTimeout(() => {
       if (event) {
         const id = event.id;
+        if (id === 0) {
+          this.hideNotificationMessage();
+          this.exportBals();
+        }
         if (id === 1) {
           this.hideNotificationMessage();
           this.isModMassbalsSidBarCanvasOpen = !this
             .isModMassbalsSidBarCanvasOpen;
-        } else if (id === 2) {
-          this.openDescativerEnMassModal = true;
         }
         this.ngSelectComponent.handleClearClick();
         this.ngSelectComponent.close();
       }
     }, 100);
   }
+
   /* ----------- */
 
   CloseCreateBALForm(): void {
@@ -534,8 +485,132 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.openNotifDetemponnageSucces = false;
   }
 
+  exportBals() {
+    const balToExport: BALData[] = [];
+    if (this.selectedBal.length === 0) {
+      this.rechercheBalService
+        .getBal({
+          nbResultatsParPage: this.totalResult,
+          numeroPage: 1,
+          etatBal: '',
+          adresseBal: '',
+          identifiantFrontal: '',
+          sensTri: 'asc',
+          champTri: '',
+        })
+        .subscribe((bal) => {
+          bal.body.forEach((data) => {
+            const dataNew: BalDataExpoted = new BalDataExpoted();
+            dataNew.Adresse = data.adresseBal;
+            dataNew.Etat = data.etatBal;
+            if (data.balRejeu) {
+              dataNew.Rejouable = 'Oui';
+            } else {
+              dataNew.Rejouable = 'Non';
+            }
+            dataNew.Type = data.typeBal;
+            dataNew.relaisMessagerie = data.relaisMessagerie;
+            dataNew.Frontal = data.frontal.nom;
+            dataNew.seuil = data.seuil;
+            dataNew.adresseMailAlerte = data.adresseMailAlerte;
+            dataNew.IPs = data.listeAdressesIPAutorises;
+            dataNew.Messages_Tamponnés = data.dossierTampon.nbMessagesTamponnes;
+            dataNew.volumeDossier = data.dossierTampon.volumeDossier;
+            dataNew.dateMiseEnTamponI = data.dossierInbox.dateMiseEnTampon;
+            dataNew.MessagesNonLus = data.dossierInbox.nbMessagesNonLus;
+            dataNew.volumeDossierI = data.dossierInbox.volumeDossier;
+            dataNew.dateDernierReleve = data.dossierTampon.dateDernierReleve;
+            this.data.push(dataNew);
+          });
+          this.exportToExel();
+        });
+    } else {
+      this.selectedBal.forEach((balSelected) => {
+        balToExport.push(
+          this.balDataList.find((bal) => bal.adresseBal === balSelected)
+        );
+      });
+      balToExport.forEach((data) => {
+        const dataNew: BalDataExpoted = new BalDataExpoted();
+        dataNew.Adresse = data.adresseBal;
+        dataNew.Etat = data.etatBal;
+        if (data.balRejeu) {
+          dataNew.Rejouable = 'Oui';
+        } else {
+          dataNew.Rejouable = 'Non';
+        }
+        dataNew.Type = data.typeBal;
+        dataNew.relaisMessagerie = data.relaisMessagerie;
+        dataNew.Frontal = data.frontal.nom;
+        dataNew.seuil = data.seuil;
+        dataNew.adresseMailAlerte = data.adresseMailAlerte;
+        dataNew.IPs = data.listeAdressesIPAutorises;
+        dataNew.Messages_Tamponnés = data.dossierTampon.nbMessagesTamponnes;
+        dataNew.volumeDossier = data.dossierTampon.volumeDossier;
+        dataNew.dateMiseEnTamponI = data.dossierInbox.dateMiseEnTampon;
+        dataNew.MessagesNonLus = data.dossierInbox.nbMessagesNonLus;
+        dataNew.volumeDossierI = data.dossierInbox.volumeDossier;
+        dataNew.dateDernierReleve = data.dossierTampon.dateDernierReleve;
+        this.data.push(dataNew);
+      });
+      this.exportToExel();
+    }
+  }
+
+  exportToExel() {
+    var option: any = {};
+    option.fileName = 'ExportCsvBALs';
+    let dataRow: any = {};
+    let listDataRow = [];
+    this.data.forEach((data) => {
+      dataRow[1] = data.Adresse;
+      dataRow[2] = data.Etat;
+      dataRow[3] = data.Rejouable;
+      dataRow[4] = data.Type;
+      dataRow[5] = data.relaisMessagerie;
+      dataRow[6] = data.Frontal;
+      dataRow[7] = data.seuil;
+      dataRow[8] = data.adresseMailAlerte;
+      dataRow[9] = data.IPs;
+      dataRow[10] = data.Messages_Tamponnés;
+      dataRow[11] = data.volumeDossier;
+      dataRow[12] = data.dateMiseEnTampon;
+      dataRow[13] = data.MessagesNonLus;
+      dataRow[14] = data.volumeDossierI;
+      dataRow[15] = data.dateDernierReleve;
+      listDataRow.push(dataRow);
+      dataRow = {};
+    });
+    option.datas = [
+      {
+        sheetData: listDataRow,
+        sheetName: 'sheet',
+        sheetHeader: [
+          'Adresse',
+          'Etat',
+          'Rejouable',
+          'Type',
+          'Relai de Messagerie',
+          'Frontal',
+          'Seuil (Ko)',
+          "Email d'alerte",
+          'IPs',
+          'Messages tamponnés',
+          'Volume du dossier (Ko)',
+          'Date de mise en tampon',
+          'Messages non lus',
+          'Volume du dossier (Ko)',
+          'Date du dernier relevé',
+        ],
+        columnWidths: [10, 5, 5, 7, 7, 10, 5, 10, 10, 8, 8, 8, 8, 8, 8],
+      },
+    ];
+    const toExcel = new ExportJsonExcel(option); //new
+    toExcel.saveExcel();
+  }
+
   createNewBAL(newBAL): void {
-    this.hideNotificationMessage();
+    this.resetNotificationDataAndClose();
     this.rechercheBalService.createBal(newBAL).subscribe(
       (resp) => {
         this.openNotifBalCreationSucces = true;
@@ -586,6 +661,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   // tamponnage
+
   ShowDetamponnage() {
     this.store.select(selectAccountState).subscribe((state) => {
       if (
@@ -605,6 +681,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.openNotifTemponnageError = false;
     this.openNotifDetemponnageFail = false;
     this.openNotifDetemponnageSucces = false;
+    this.resetNotificationDataAndClose();
     this.tooltipBALs =
       this.selectedBal.length === 0
         ? this.balDataList.slice(0, 10).map((elt) => elt.adresseBal)
@@ -631,8 +708,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.isModMassbalsFail = false;
     this.openNotifRemiseDispoSuccess = false;
     this.openNotifRemiseDispoError = false;
-    this.openNotifDescativerMassSuccess = false;
-    this.openNotifDescativerMassFail = false;
     this.notificationErrorMessage = '';
     this.balTampoCriteria = new BalTampoCriteria();
     this.letterBoxListComponent.toggelSelectAllcheckbox(false);
@@ -708,6 +783,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   editBal(bal: BALData) {
+    this.resetNotificationDataAndClose();
     this.highlighRowEnable = true;
     this.updatedBal = bal;
     this.isUpdateBalFormOpen = true;
@@ -719,6 +795,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   }
 
   updateBal(bal) {
+    this.resetNotificationDataAndClose();
     this.rechercheBalService.updateBal(bal).subscribe(
       (resp) => {
         this.openNotifBalUpdateSucces = true;

@@ -8,7 +8,6 @@ import { SpinnerService } from '@core/services/spinner.service';
 
 const httpOptions = {
   observe: 'response' as 'body',
-  // TESTHEADER
 };
 
 @Injectable({

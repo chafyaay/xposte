@@ -64,6 +64,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
   changePageSize() {
     this.buildPageNumbers();
+    this.pagination.pageNumber = 1 + '/' + this.totalPageNumber;
     this.paginationChangeEvent.emit(this.pagination);
   }
   buildPageNumbers() {

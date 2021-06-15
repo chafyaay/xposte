@@ -64,5 +64,16 @@
       class="zmdi zmdi-edit"
       (click)="goToUpdate()"
     ></i>
+    <i
+      class="zmdi zmdi-delete"
+      *ngIf="showDeleteIcon && isRoleAdmin"
+      (click)="DeleteFrontalCoonfirm(frontalData.identifiant)"
+    ></i>
   </td>
 </tr>
+<app-template-modal
+  (isModalClose)="closeModalConfirmation($event)"
+  (valide)="DeleteFrontal($event)"
+>
+  <div>{{ 'DELET_FRONTAL' }}&nbsp;?</div>
+</app-template-modal>

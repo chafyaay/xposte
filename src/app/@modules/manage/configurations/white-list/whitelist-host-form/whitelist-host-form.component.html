@@ -1,0 +1,48 @@
+<form action="#" [formGroup]="createHostForm">
+  <h4 class="title_modal mgb20">Liste</h4>
+  <div class="flex mgb30">
+    <div class="inputRadio mgr40">
+      <input
+        type="radio"
+        name="typeListe"
+        value="liste_avant"
+        id="apres"
+        formControlName="typeListe"
+      />
+      <label for="apres">{{ 'LISTE_AVANT' | translate }}</label>
+    </div>
+    <div class="inputRadio">
+      <input
+        type="radio"
+        value="liste_apres"
+        id="avant"
+        name="typeListe"
+        formControlName="typeListe"
+      />
+      <label for="avant">{{ 'LISTE_APRES' | translate }}</label>
+    </div>
+  </div>
+  <div class="inputField">
+    <input
+      type="text"
+      id="host-name"
+      name="domainIp"
+      placeholder=" "
+      formControlName="domainIp"
+    />
+    <label for="host-name"> {{ 'HOSTNAME_LABEL' | translate }} </label>
+  </div>
+</form>
+
+<div class="wrapper-btn move-bottom-righ">
+  <button class="main-btn btn-reset" (click)="closeFormulaire()">
+    {{ 'CANCEL' | translate }}
+  </button>
+  <button
+    class="main-btn btn-second"
+    [disabled]="!createHostForm.valid"
+    (click)="createHost()"
+  >
+    {{ 'VALID' | translate }}
+  </button>
+</div>

@@ -1,85 +1,139 @@
 <div id="filter">
-  <h2 class="title">{{ 'FILTERS_LABEL' | translate }}</h2>
+  <div class="flex align-items">
+    <h2 class="title mgr30">{{ 'FILTERS_LABEL' | translate }}</h2>
 
-  <div class="inputField state" *ngIf="filtreType == FiltreType.BAL">
-    <ng-select
-      [items]="inputFilterData.etat"
-      bindLabel="name"
-      bindValue="id"
-      placeholder="Etat"
-      id="state"
-      name="state"
-      class="ngselectCustom"
-      [(ngModel)]="selectedEtat"
-      (change)="changeSelectedEtat()"
-    >
-    </ng-select>
-    <label
-      for="state"
-      [ngClass]="selectedEtat || isEtatSelected ? 'ng-select-label' : ''"
-    >
-      {{ 'STATE' | translate }}
-    </label>
-  </div>
-  <div class="inputField address" *ngIf="filtreType == FiltreType.BAL">
-    <input
-      #inputAddress
-      type="text"
-      [(ngModel)]="filter.filterData.adresse"
-      id="address"
-      [maxLength]="320"
-      name="address"
-      placeholder=" "
-      autofocus
-    />
-    <label
-      for="address"
-      [ngClass]="filter.filterData.adresse ? 'ng-select-label' : ''"
-    >
-      {{ 'ADDRESS' | translate }}
-    </label>
-  </div>
-  <div class="inputCheck" *ngIf="filtreType == FiltreType.BAL">
-    <input
-      type="checkbox"
-      [(ngModel)]="filter.highlight"
-      name="check1"
-      id="check1"
-      [disabled]="canDisableHighlight()"
-    />
-    <label for="check1">{{ 'ADDRESS_HIGHLIGHT' | translate }}</label>
-  </div>
+    <div class="inputField state mgr30" *ngIf="filtreType == FiltreType.BAL">
+      <ng-select
+        [items]="inputFilterData.etat"
+        bindLabel="name"
+        bindValue="id"
+        placeholder="Etat"
+        id="state"
+        name="state"
+        class="ngselectCustom global-select"
+        [(ngModel)]="selectedEtat"
+        (change)="changeSelectedEtat()"
+      >
+      </ng-select>
+      <label
+        for="state"
+        [ngClass]="selectedEtat || isEtatSelected ? 'ng-select-label' : ''"
+      >
+        {{ 'STATE' | translate }}
+      </label>
+    </div>
+    <div class="inputField address mgr30" *ngIf="filtreType == FiltreType.BAL">
+      <input
+        #inputAddress
+        type="text"
+        [(ngModel)]="filter.filterData.adresse"
+        id="address"
+        [maxLength]="320"
+        name="address"
+        placeholder=" "
+        autofocus
+      />
+      <label
+        for="address"
+        [ngClass]="filter.filterData.adresse ? 'ng-select-label' : ''"
+      >
+        {{ 'ADDRESS' | translate }}
+      </label>
+    </div>
+    <div class="inputCheck mgr30" *ngIf="filtreType == FiltreType.BAL">
+      <input
+        type="checkbox"
+        [(ngModel)]="filter.highlight"
+        name="check1"
+        id="check1"
+        [disabled]="canDisableHighlight()"
+      />
+      <label for="check1">{{ 'ADDRESS_HIGHLIGHT' | translate }}</label>
+    </div>
 
-  <!--Using items input-->
-  <div class="inputField frontal" *ngIf="filtreType == FiltreType.BAL">
-    <ng-select
-      [items]="inputFilterData.frontal"
-      bindLabel="name"
-      bindValue="id"
-      placeholder=" "
-      class="ngselectCustom"
-      id="frontal"
-      [(ngModel)]="filter.filterData.frontal"
-      (keyup)="getFrontal($event)"
-      (change)="changeSelectedFrontal()"
-      (focus)="animateFrontalLabel()"
-      (blur)="animateFrontalLabel()"
-    >
-    </ng-select>
-    <label
-      for="Frontal"
-      [ngClass]="
-        filter.filterData.frontal || isFielled ? 'ng-select-label' : ''
-      "
-    >
-      {{ 'FRONTAL' | translate }}
-    </label>
-  </div>
+    <div class="inputField frontal mgr30" *ngIf="filtreType == FiltreType.BAL">
+      <ng-select
+        [items]="inputFilterData.frontal"
+        bindLabel="nom"
+        bindValue="nom"
+        placeholder=" "
+        class="ngselectCustom global-select"
+        id="frontal"
+        [(ngModel)]="filter.filterData.frontal"
+        (keyup)="getFrontal($event)"
+        (change)="changeSelectedFrontal()"
+        (focus)="animateFrontalLabel()"
+        (blur)="animateFrontalLabel()"
+      >
+      </ng-select>
+      <label
+        for="Frontal"
+        [ngClass]="
+          filter.filterData.frontal || isFielled ? 'ng-select-label' : ''
+        "
+      >
+        {{ 'FRONTAL' | translate }}
+      </label>
+    </div>
 
-  <button class="reset" (click)="resetData()">
-    {{ 'RESET_FILTER' | translate }}
-  </button>
-  <button class="main-btn" (click)="clickFilter()" [disabled]="!canFilter()">
-    {{ 'FILTER_BUTTON' | translate }}
-  </button>
+    <!--whitelist filter-->
+    <div
+      class="inputField whitelistType mgr30"
+      *ngIf="filtreType == FiltreType.WHITELIST"
+    >
+      <ng-select
+        [items]="inputFilterData.whiteListType"
+        bindLabel="name"
+        bindValue="id"
+        placeholder=" "
+        id="WhiteListType"
+        name="whiteListType"
+        class="ngselectCustom global-select"
+        [(ngModel)]="filter.filterData.typeListe"
+        (change)="changeWhitelistType()"
+        (focus)="focusOnWhiteList()"
+        (blur)="focusOutWhiteList()"
+      >
+      </ng-select>
+      <label
+        for="WhiteListType"
+        [ngClass]="
+          filter.filterData.typeListe || isFielled || isWhiteListTypeFocused
+            ? 'ng-select-label'
+            : ''
+        "
+      >
+        {{ 'WHITELIST_TYPE' | translate }}
+      </label>
+    </div>
+
+    <div
+      class="inputField hostName mgr30"
+      *ngIf="filtreType == FiltreType.WHITELIST"
+    >
+      <input
+        #inputWhitelistHost
+        type="text"
+        [(ngModel)]="filter.filterData.adresse"
+        id="whitelist-host"
+        name="address"
+        placeholder=" "
+        autofocus
+      />
+      <label
+        for="whitelist-host"
+        [ngClass]="filter.filterData.domainIp ? 'ng-select-label' : ''"
+      >
+        {{ 'DOMAINES_IP_LABEL' | translate }}
+      </label>
+    </div>
+  </div>
+  <div class="flex align-items">
+    <button class="reset mgr20" (click)="resetData()">
+      {{ 'RESET_FILTER' | translate }}
+    </button>
+    <button class="main-btn" (click)="clickFilter()" [disabled]="!canFilter()">
+      {{ 'FILTER_BUTTON' | translate }}
+    </button>
+  </div>
 </div>

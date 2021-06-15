@@ -74,7 +74,7 @@ export class FormCreateBalComponent implements OnInit {
       seuil: [
         '',
         [Validators.required, Validators.min(1), Validators.pattern('^\\d+$')],
-      ], // POUR IPS Réél 255 ^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ // hadi khdama ip valid ^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9][0-9]?)$
+      ],
       listeAdressesIPAutorises: [
         '',
         [Validators.required, customIPListValidator()],
@@ -86,7 +86,10 @@ export class FormCreateBalComponent implements OnInit {
       ],
       balRejeu: [false, []],
       mdpRejeu: ['', []],
-      balRelais: ['', [customEmailValidator(), Validators.maxLength(320)]],
+      relaisMessagerie: [
+        '',
+        [this.customEmailValidator(), Validators.maxLength(320)],
+      ],
     });
   }
   balRejeuPwd: string;
@@ -158,6 +161,19 @@ export class FormCreateBalComponent implements OnInit {
       this.valideCreateBal.emit(newBAL);
     }
   }
+  customEmailValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      const regex = new RegExp(
+        '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
+      );
+      let isEmailValid = true;
+      if (control.value && !regex.test(control.value)) {
+        isEmailValid = false;
+      }
+
+      return isEmailValid ? null : { emailError: true };
+    };
+  }
 
   closeFormulaire() {
     window.scrollTo(0, 0); //  to scroll to the top of the page
@@ -168,39 +184,14 @@ export class FormCreateBalComponent implements OnInit {
     this.store.select(selectFrontalState).subscribe((stat) => {
       this.selectListData.frontal = stat.frontal;
     });
-
-    /*this.store.select(selectBALStateState).subscribe((stat) => {
-      this.selectListData.etat = stat.balState.map((ele) => ({
-        id: ele.identifiant,
-        name: ele.libelle,
-      }));
-
-      // this.selectListDataNew.etat = this.selectListData.etat;
-    });*/
   }
 
-  /*getFrontalData(event?) {
-    let FrontalInputText: string = '';
-    if (event) {
-      FrontalInputText = event.target.value;
-    }
-    this.selectListDataNew.frontal = [];
-
-    this.selectListDataNew.frontal = this.selectListData.frontal
-      .filter(
-        (ele) =>
-          ele.nom.toLowerCase().startsWith(FrontalInputText.toLowerCase()) ||
-          FrontalInputText === ''
-      )
-      .slice(0, 10); // extract only the  first 10 elements
-  }
-*/
   checkBALUnicity() {
     let balFilter: BALFilter = new BALFilter();
     if (this.createBALForm.get('adresseBal').valid) {
       balFilter.adresseBal = this.createBALForm.get('adresseBal').value;
       this.checkBALUnicityState = 'validate';
-      this.rechercheBalService.getBal(balFilter).subscribe(
+      this.rechercheBalService.getBal(balFilter, true).subscribe(
         (bal) => {
           if (Array.isArray(bal.body) && bal.body.length > 0) {
             this.checkBALUnicityState = 'error';

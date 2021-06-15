@@ -7,9 +7,9 @@ export interface SUBFIELDSI {
   TYPE: string;
   VERSION: string;
   CODE_EMETTEUR: string;
-  CODE_COMPOSTAGE: number;
+  CODE_COMPOSTAGE: string;
   DATE_HEURE_SUJET: string;
-  NBFSE: number;
+  NBFSE: string;
   SUJET_OUT_REPLY_INFO: string;
   INDIFFERENT: string;
   OUI: string;

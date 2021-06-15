@@ -14,7 +14,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { BALFilter } from 'src/app/@shared/models/BALFilter';
 import { RechercheBalService } from 'src/app/@core/services/recherche-bal.service';
 import { Frontal } from 'src/app/@shared/models/Frontal';
 import { BALData } from 'src/app/@shared/models/BALData';

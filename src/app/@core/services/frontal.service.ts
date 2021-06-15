@@ -27,7 +27,12 @@ export class FrontalService {
   createfrontal(frontal: Frontal): Observable<any> {
     return this.http.post<any>(this.api_url + `frontal/creation`, frontal);
   }
-
+  deleteFrontal(id: string): Observable<HttpResponse<any>> {
+    return this.http.post<HttpResponse<any>>(
+      `${this.api_url}frontal/suppression`,
+      httpOptions
+    );
+  }
   updatefrontal(frontal: Frontal): Observable<any> {
     return this.http.post<any>(this.api_url + `frontal/modification`, frontal);
   }

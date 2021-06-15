@@ -15,6 +15,8 @@ export class DetamponnageComponent implements OnInit {
   balNumber;
   @Input()
   tooltipBALs: string[] = [];
+  @Input()
+  balTemponne: string[] = [];
   constructor() {}
 
   ngOnInit() {

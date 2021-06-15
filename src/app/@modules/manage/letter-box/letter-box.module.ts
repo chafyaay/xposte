@@ -8,7 +8,6 @@ import { LetterBoxComponent } from './letter-box.component';
 import { SharedModule } from 'src/app/@shared';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormCreateBalComponent } from './formCreateBal/formCreateBal.component';
-import { NotificationComponent } from 'src/app/@shared/notification/notification.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HighlightSearchPipe } from 'src/app/@core/pipe/highlight-search.pipe';
@@ -21,7 +20,7 @@ import { TamponnageNotificationComponent } from './tamponnage-notification/tampo
 import { ModifierMasseBalsComponent } from './modifier-masse-bals/modifier-masse-bals.component';
 import { RemiseDispositionComponent } from './remise-disposition/remise-disposition.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DesactiverEnMassComponent } from './desactiver-en-mass/desactiver-en-mass.component';
+import { TemplateFormulaireComponent } from '@shared/template-formulaire/template-formulaire.component';
 @NgModule({
   declarations: [
     LetterBoxListComponent,
@@ -35,7 +34,6 @@ import { DesactiverEnMassComponent } from './desactiver-en-mass/desactiver-en-ma
     UpdateBalComponent,
     ModifierMasseBalsComponent,
     RemiseDispositionComponent,
-    DesactiverEnMassComponent,
   ],
   imports: [
     LetterBoxRoutingModule,
@@ -50,6 +48,7 @@ import { DesactiverEnMassComponent } from './desactiver-en-mass/desactiver-en-ma
   exports: [
     ModifierMasseBalsComponent,
     RemiseDispositionComponent,
+    TemplateFormulaireComponent,
     LetterBoxListComponent,
   ],
 })

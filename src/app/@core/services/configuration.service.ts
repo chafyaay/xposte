@@ -37,4 +37,14 @@ export class ConfigurationService {
       httpOptions
     );
   }
+
+  createWhitelistHost(
+    whiteListHost: WhiteListHost
+  ): Observable<HttpResponse<any>> {
+    return this.http.post<HttpResponse<any>>(
+      this.api_url + 'whitelist/ajout',
+      whiteListHost,
+      httpOptions
+    );
+  }
 }

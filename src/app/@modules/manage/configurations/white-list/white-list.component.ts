@@ -11,6 +11,8 @@ import { Filter } from '@shared/models/Filter';
 import { AppState, selectAccountState } from '@app/@store';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+const ExportJsonExcel = require('js-export-excel');
 
 @Component({
   selector: 'app-white-list',
@@ -36,6 +38,12 @@ export class WhiteListComponent implements OnInit {
   getState: Observable<any>;
   isPermited: boolean = false;
 
+  whiteListHostsAll: WhiteListHost[] = [];
+
+  //add host  Form
+  isFormAddHostOpen: boolean = false;
+  openNotifHostCreationSucces: boolean = false;
+  openNotifHostCreationFail: boolean = false;
   notificationErrorMessage: string = '';
   newHost: WhiteListHost = new WhiteListHost();
 
@@ -58,11 +66,28 @@ export class WhiteListComponent implements OnInit {
     this.getUserRole();
     this.initWhitelistTypeData();
     this.initWhiteListFilter();
+    this.loadWhiteListAll();
     this.loadWhiteListTable();
   }
 
-  loadWhiteListTable() {
+  loadWhiteListAll() {
+    let whiteListFilterCopy = { ...this.whiteListFilter };
+    whiteListFilterCopy.nbResultatsParPage = 0;
+    whiteListFilterCopy.numeroPage = 0;
+
     // API NOT yet Operational
+    this.configurationService.getWhiteListHosts(whiteListFilterCopy).subscribe(
+      (bal) => {
+        this.whiteListHostsAll = bal.body;
+        this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
+        this.pagination.pageNumber = bal.headers.get('X-NUMERO-PAGE');
+        this.pagination.pageSize = bal.headers.get('X-NB-RESULTATS-PAR-PAGE');
+      },
+      (error) => (this.isShowPagiantion = false)
+    );
+  }
+
+  loadWhiteListTable() {
     this.configurationService.getWhiteListHosts(this.whiteListFilter).subscribe(
       (bal) => {
         this.whiteListHosts = bal.body;
@@ -119,10 +144,11 @@ export class WhiteListComponent implements OnInit {
 
     // better put the  call GETWhite in one place  as long as they all call it  with  whitelistfilter object
     this.getWhiteListHosts();
+    this.loadWhiteListAll();
   }
 
   getFiltredDataDefault() {
-    this.resetNotificationDataAndClose();
+    //this.resetNotificationDataAndClose();
     this.whiteListTableComponent.toggelSelectAllcheckbox(false);
     this.filterComponent.initFilterData();
 
@@ -159,8 +185,8 @@ export class WhiteListComponent implements OnInit {
   }
 
   resetNotificationDataAndClose() {
-    /*this.openNotifHostCreationFail = false;
-    this.openNotifHostCreationSucces = false;*/
+    this.openNotifHostCreationFail = false;
+    this.openNotifHostCreationSucces = false;
 
     this.openNotifHostDeleteFail = false;
     this.openNotifHostDeleteSucces = false;
@@ -179,6 +205,35 @@ export class WhiteListComponent implements OnInit {
       }
     });
   }
+
+  // add whitelist host
+
+  openAddHostForm(): void {
+    this.resetNotificationDataAndClose();
+    this.isFormAddHostOpen = true;
+  }
+  closeWhitelistHostForm() {
+    this.isFormAddHostOpen = false;
+  }
+
+  addHost(whiteListhost): void {
+    this.configurationService.createWhitelistHost(whiteListhost).subscribe(
+      (resp) => {
+        this.openNotifHostCreationSucces = true;
+        this.openNotifHostCreationFail = false;
+        this.newHost = whiteListhost;
+        this.getFiltredDataDefault();
+      },
+      (error) => {
+        this.openNotifHostCreationSucces = false;
+        this.openNotifHostCreationFail = true;
+        this.notificationErrorMessage = error.message;
+        console.error(error);
+      }
+    );
+    this.closeWhitelistHostForm();
+  }
+
   // whitelist host suppresion
 
   openModalSup(whitelistHost: WhiteListHost): void {
@@ -212,5 +267,45 @@ export class WhiteListComponent implements OnInit {
         }
       );
     this.closeModalSup();
+  }
+
+  // export XSL
+
+  exportToExcel() {
+    let whiteListHostsToExport;
+    this.whiteListHosts;
+    var option: any = {};
+    if (this.whiteListHosts[0].typeListe === 'liste_avant') {
+      option.fileName = 'ExportCsvListeAvant';
+    } else {
+      option.fileName = 'ExportCsvListeAprés';
+    }
+    let dataRow: any = {};
+    let listDataRow = [];
+    if (this.selectedHosts.length == 0) {
+      this.whiteListHostsAll.forEach((data) => {
+        dataRow[1] = data.domainIp;
+
+        listDataRow.push(dataRow);
+        dataRow = {};
+      });
+    } else {
+      this.selectedHosts.forEach((data) => {
+        dataRow[1] = data;
+
+        listDataRow.push(dataRow);
+        dataRow = {};
+      });
+    }
+    option.datas = [
+      {
+        sheetData: listDataRow,
+        sheetName: 'sheet',
+        sheetHeader: ['Domaine,IP'],
+        columnWidths: [10],
+      },
+    ];
+    const toExcel = new ExportJsonExcel(option); //new
+    toExcel.saveExcel();
   }
 }

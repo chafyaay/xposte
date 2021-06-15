@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FrontalService } from '@core/services/frontal.service';
 import { FrontalFilter } from '@shared';
 import { Frontal } from '@shared/models/Frontal';
@@ -10,7 +10,7 @@ import { ReferentielService } from '@core/services/referentiel.service';
 import { SetFrontal } from '@app/@store/actions/frontal.action';
 import { AppState } from '@app/@store';
 import { Store } from '@ngrx/store';
-
+const ExportJsonExcel = require('js-export-excel');
 @Component({
   selector: 'app-frontal',
   templateUrl: './frontal.component.html',
@@ -18,14 +18,11 @@ import { Store } from '@ngrx/store';
 })
 export class FrontalComponent implements OnInit {
   titlePagination = 'Frontal';
-  isShowPagiantion = true;
   selectedFrontal: string[] = [];
   totalResult: number;
   pagination: Pagination = new Pagination();
   frontalFilter: FrontalFilter;
   selectAllFrontal: boolean = false;
-  champTri: string;
-  sensTri: string;
   RechecheFiltre: FrontalFilter;
   frontalDataList: Frontal[] = [];
   inputFilterData: { id: string; name: string }[];
@@ -54,22 +51,21 @@ export class FrontalComponent implements OnInit {
   }
 
   loadFrontalTable() {
-    this.frontalService.searchFrontals(this.frontalFilter).subscribe(
-      (frontal) => {
+    this.frontalService
+      .searchFrontals(this.frontalFilter)
+      .subscribe((frontal) => {
         this.frontalDataList = frontal.body;
         this.totalResult = parseInt(
           frontal.headers.get('X-NB-RESULTATS-TOTAL')
         );
-      },
-      (error) => (this.isShowPagiantion = false)
-    );
+      });
   }
 
   initFrontalFilter() {
     this.frontalFilter = {
       champTri: 'nom',
       sensTri: 'asc',
-      identifiantFrontal: '',
+      identifiantFrontal: 'TOUS',
       numeroPage: 1,
       nbResultatsParPage: 10,
     };
@@ -78,20 +74,20 @@ export class FrontalComponent implements OnInit {
   }
 
   getPagination(pagination) {
+    this.resetNotificationDataAndClose();
     this.pagination.pageNumber = +pagination.pageNumber.split('/')[0];
     this.pagination.pageSize = pagination.pageSize;
     this.frontalFilter.nbResultatsParPage = pagination.pageSize;
     this.frontalFilter.numeroPage = this.pagination.pageNumber;
-    this.frontalService.searchFrontals(this.frontalFilter).subscribe(
-      (frontal: HttpResponse<any>) => {
+    this.frontalService
+      .searchFrontals(this.frontalFilter)
+      .subscribe((frontal: HttpResponse<any>) => {
         this.frontalDataList = frontal.body;
         const NB_RESULTATS_TOTAL = parseInt(
           frontal.headers.get('X-NB-RESULTATS-TOTAL')
         );
         this.totalResult = NB_RESULTATS_TOTAL;
-      },
-      (error) => (this.isShowPagiantion = false)
-    );
+      });
   }
 
   public get FiltreType(): typeof FiltreType {
@@ -99,35 +95,34 @@ export class FrontalComponent implements OnInit {
   }
 
   getFiltredData(appliedFilter: FrontalFilter) {
-    // this.initFrontalFilter();
+    this.resetNotificationDataAndClose();
     this.frontalFilter.identifiantFrontal = appliedFilter.identifiantFrontal;
 
-    this.frontalService.searchFrontals(this.frontalFilter).subscribe(
-      (frontal) => {
+    this.frontalService
+      .searchFrontals(this.frontalFilter)
+      .subscribe((frontal) => {
         this.frontalDataList = frontal.body;
         this.totalResult = parseInt(
           frontal.headers.get('X-NB-RESULTATS-TOTAL')
         );
-      },
-      (error) => (this.isShowPagiantion = false)
-    );
+      });
   }
 
   getFiltredDataDefault() {
+    this.resetNotificationDataAndClose();
     this.frontalListComponent.toggelSelectAllcheckbox(false);
     this.selectAllFrontal = false;
     this.initFrontalFilter();
 
-    this.frontalService.searchFrontals(this.frontalFilter).subscribe(
-      (frontal) => {
+    this.frontalService
+      .searchFrontals(this.frontalFilter)
+      .subscribe((frontal) => {
         this.frontalDataList = frontal.body;
 
         this.totalResult = parseInt(
           frontal.headers.get('X-NB-RESULTATS-TOTAL')
         );
-      },
-      (error) => (this.isShowPagiantion = false)
-    );
+      });
   }
 
   saveSelectedFrontal(selectedFrontal: string[]) {
@@ -135,6 +130,7 @@ export class FrontalComponent implements OnInit {
   }
 
   updateOrder(event: FrontalFilter) {
+    this.resetNotificationDataAndClose();
     this.frontalFilter.sensTri = event.sensTri;
     this.frontalFilter.champTri = event.champTri;
 
@@ -145,9 +141,91 @@ export class FrontalComponent implements OnInit {
       (error) => console.error(error)
     );
   }
-
+  exporteBalToExcel() {
+    const balToExport: Frontal[] = [];
+    if (this.selectedFrontal.length === 0) {
+      this.frontalFilter = {
+        champTri: 'nom',
+        sensTri: 'asc',
+        identifiantFrontal: '',
+        numeroPage: 1,
+        nbResultatsParPage: 25,
+      };
+      this.frontalService
+        .searchFrontals(this.frontalFilter)
+        .subscribe((frontal) => {
+          console.log(frontal.body);
+          var option: any = {};
+          option.fileName = 'ExportCsvFrontaux';
+          let dataRow: any = {};
+          let listDataRow = [];
+          frontal.body.forEach((data) => {
+            dataRow[1] = data.nom;
+            dataRow[2] = data.seuil;
+            dataRow[3] = data.adresseMailAlerte;
+            dataRow[4] = data.listeAdressesIPs;
+            dataRow[5] = data.listeIdentifiantsUtilisateurs;
+            listDataRow.push(dataRow);
+            dataRow = {};
+          });
+          option.datas = [
+            {
+              sheetData: listDataRow,
+              sheetName: 'sheet',
+              sheetHeader: [
+                'Frontal',
+                'Seuil(ko)',
+                "Email d'alerte",
+                'IPs',
+                'Utilisateurs',
+              ],
+              columnWidths: [10, 10, 5, 15, 15],
+            },
+          ];
+          const toExcel = new ExportJsonExcel(option); //new
+          toExcel.saveExcel();
+        });
+    } else {
+      this.selectedFrontal.forEach((frontalSelected) => {
+        balToExport.push(
+          this.frontalDataList.find(
+            (bal) => bal.identifiant === frontalSelected
+          )
+        );
+      });
+      var option: any = {};
+      option.fileName = 'ExportCsvFrontaux';
+      let dataRow: any = {};
+      let listDataRow = [];
+      balToExport.forEach((data) => {
+        dataRow[1] = data.nom;
+        dataRow[2] = data.seuil;
+        dataRow[3] = data.adresseMailAlerte;
+        dataRow[4] = data.listeAdressesIPs;
+        dataRow[5] = data.listeIdentifiantsUtilisateurs;
+        listDataRow.push(dataRow);
+        dataRow = {};
+      });
+      option.datas = [
+        {
+          sheetData: listDataRow,
+          sheetName: 'sheet',
+          sheetHeader: [
+            'Frontal',
+            'Seuil(ko)',
+            "Email d'alerte",
+            'IPs',
+            'Utilisateurs',
+          ],
+          columnWidths: [10, 10, 5, 15, 15],
+        },
+      ];
+      const toExcel = new ExportJsonExcel(option); //new
+      toExcel.saveExcel();
+    }
+  }
   openFormulaire(): void {
-    // this.hideNotificationMessage();
+    this.resetNotificationDataAndClose();
     this.isFormulaireopen = true;
   }
   closeFormulaire(): void {
@@ -221,6 +299,7 @@ export class FrontalComponent implements OnInit {
   }
 
   updateFrontal(frontalToUpdate: Frontal) {
+    this.resetNotificationDataAndClose();
     this.frontalToUpdate = frontalToUpdate;
     this.isFormulaireopen = true;
   }

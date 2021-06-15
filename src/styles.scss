@@ -1,5 +1,5 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
-@import url('./date-picker-style.scss');
+
 @font-face {
   font-family: Montserrat;
   src: url(/assets/fonts/montserrat/Montserrat-Regular.eot);
@@ -4699,6 +4699,7 @@ hr {
 .main-table {
   display: table;
   width: 100%;
+  margin-bottom: 40px;
 }
 
 .main-table thead tr {
@@ -4812,7 +4813,6 @@ hr {
   border-radius: 0.3125rem;
   margin-bottom: 0.625rem;
   width: 100%;
-  cursor: pointer;
 }
 
 .main-table tbody tr td {
@@ -4821,11 +4821,14 @@ hr {
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  padding-top: 0.9375rem;
-  padding-bottom: 0.9375rem;
+  padding-top: 0.5375rem;
+  padding-bottom: 0.5375rem;
   font-family: Barlow;
   font-weight: 400;
   font-size: 0.875rem;
+}
+.flex space-between mgb40 {
+  margin-top: 40px;
 }
 
 .main-table tbody tr td.ips {
@@ -4910,7 +4913,8 @@ hr {
   width: 8%;
 }
 
-.main-table tbody tr.current {
+.main-table tbody tr.current,
+.main-table tbody tr.selectedRow {
   background: #ecf4ff;
 }
 
@@ -4952,13 +4956,14 @@ hr {
 }
 
 .main-table tbody tr.subLine td table tr td {
-  padding-top: 0.9375rem;
-  padding-bottom: 0.9375rem;
+  padding-top: 0.6375rem;
+  padding-bottom: 0.6375rem;
 }
 
 .main-table tbody tr.subLine td table tr td:first-child {
   width: 30%;
   padding-left: 15%;
+  padding-bottom: 0.6375rem;
 }
 
 .main-table tbody tr.subLine td table tr td:nth-child(2) {
@@ -5266,7 +5271,6 @@ hr {
   font-family: Barlow;
   font-weight: 400;
   font-size: 0.875rem;
-  color: #0063a9;
   padding-top: 0.1875rem;
 }
 
@@ -5281,10 +5285,6 @@ hr {
   color: #000;
   background: transparent;
   font-size: 1rem;
-}
-
-.inputField input:focus {
-  border-color: #0063a9;
 }
 
 .inputField label {
@@ -5315,7 +5315,6 @@ hr {
   top: 0;
   font-family: Material-Design-Iconic-Font;
   font-size: 1rem;
-  color: #0063a9;
   cursor: pointer;
   z-index: 1;
 }
@@ -5515,7 +5514,7 @@ hr {
 }
 
 .header {
-  overflow: hidden;
+  // overflow: hidden;
   padding-bottom: 1.875rem;
   position: relative;
 }
@@ -5537,7 +5536,7 @@ hr {
   -moz-box-shadow: 0 0.0625rem 0.75rem rgba(0, 0, 0, 0.2);
   box-shadow: 0 0.0625rem 0.75rem rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 2;
+  // z-index: 2;
 }
 
 .header__logo {
@@ -5862,6 +5861,10 @@ hr {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  -o-transition: all 0.8s ease;
+  -moz-transition: all 0.8s ease;
+  transition: all 0.8s ease;
+  overflow: scroll;
 }
 
 .main-btn.icon {
@@ -5925,7 +5928,6 @@ hr {
 }
 
 .reset {
-  margin-left: 100px;
   background: transparent;
   border: none;
   font-family: Montserrat-medium;
@@ -5945,7 +5947,7 @@ input:-webkit-autofill {
 }
 
 .wrapperNewBox {
-  position: absolute;
+  position: fixed;
   right: -100%;
   top: 0;
   width: 50vw;
@@ -5959,10 +5961,23 @@ input:-webkit-autofill {
   -o-transition: all 0.8s ease;
   -moz-transition: all 0.8s ease;
   transition: all 0.8s ease;
+  overflow: scroll;
+}
+.disableScroll {
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .wrapperNewBox.open {
   right: 0;
+  overflow-y: auto;
+  padding-bottom: 0.8rem;
+  scrollbar-width: none;
+}
+
+//only for  chrome and  safarie
+.wrapperNewBox.open::-webkit-scrollbar {
+  display: none;
 }
 
 .wrapperNewBox .inputCheck {
@@ -6251,21 +6266,23 @@ ngb-popover-window {
       text-align: left;
     }
   }
-  .highlight-table-row {
-    background: #ecf4ff !important;
-  }
+}
 
-  .move-bottom-righ {
-    position: fixed;
-    bottom: 20px;
-    right: 0px;
-  }
-  .disableScroll {
-    overflow-y: hidden;
-    overflow-x: hidden;
-  }
+/*whitelist css class*/
+#filter .inputField.whitelistType {
+  width: 10rem;
+}
 
-  .highlight-table-row {
-    background: #ecf4ff !important;
-  }
+#filter .inputField.hostName {
+  width: 18rem;
+}
+
+.highlight-table-row {
+  background: #ecf4ff !important;
+}
+
+.move-bottom-righ {
+  position: fixed;
+  bottom: 20px;
+  right: 0px;
 }
