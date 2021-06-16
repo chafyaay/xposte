@@ -35,6 +35,7 @@ export function apiUrl(windowRef: WindowRefService) {
 import { registerLocaleData } from '@angular/common';
 
 import localeFr from '@angular/common/locales/fr';
+import { UsersModule } from '@modules/manage/users/users.module';
 
 registerLocaleData(localeFr);
 
@@ -67,6 +68,7 @@ export const Providers = [
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     OverlayModule,
+    UsersModule
   ],
   providers: [
     HighlightSearchPipe,

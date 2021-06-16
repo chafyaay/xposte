@@ -16,10 +16,15 @@
   }
 }
 .header {
-  &.show {
-    overflow: inherit !important;
-    .header__right-nav ul li.subMenu ul {
-      display: none !important;
-    }
+  .header__right-profile {
+    position: absolute;
+    right: 12px;
+    top: 7px;
+
+
+  }
+    .header_content {
+      overflow: hidden !important;
+      padding-right: 200px;
   }
 }

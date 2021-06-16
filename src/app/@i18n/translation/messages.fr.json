@@ -144,5 +144,12 @@
   "UPDATE": "Modifier",
   "FRONTAUX": "Frontaux",
   "END Abdessamad": "END",
-  "MON_PROFILE": "Mon profile"
+  "MON_PROFILE": "Mon profile",
+  "MODIFICATION_NOUVEL_UTILISATEUR":"Modification d'un nouvel utilisateur",
+  "adresseMail": "Adresse mail",
+"identifiant": "Identification",
+"listeFrontaux": "Frontaux",
+"nom": "Nom ",
+"prenom": "Prénom",
+"role":"Rôle"
 }

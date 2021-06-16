@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ProfileService } from '@core/services/profile.service';
+import { ProfileI } from '@shared/models/profile';
 
 @Component({
   selector: 'app-my-profile',
@@ -6,48 +8,61 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./my-profile.component.scss'],
 })
 export class MyProfileComponent implements OnInit {
-  account_details: any = [
-    { id: 0, label: 'Identification', value: 'dpeterson' },
-    { id: 1, label: 'Prénom', value: 'Dale' },
-    { id: 2, label: 'Nom', value: 'peterson' },
-    { id: 3, label: 'Téléphone', value: '06 09 3412 45' },
-    { id: 4, label: 'Adresse mail', value: 'amaibru@wo.edu' },
-    { id: 5, label: 'Mot de passe', value: 'XF123@@EEçà)' },
-    { id: 6, label: 'Rôle', value: 'Gestionnaire' },
-    {
-      id: 7,
-      label: 'Frontaux',
-      values: [
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-        '122.222.222.333',
-      ],
-    },
-  ];
+  profileInfo: any[] = []
+  notifMessages: any;
+  notificationStatus = false;
+  openOfcanvas = false;
   showFronatals = false;
-  constructor() {}
+  notifMsg = [];
 
-  ngOnInit() {}
+  constructor(
+    private profileservice: ProfileService
+  ) { }
+
+  ngOnInit() {
+    this.getProfileInfo();
+  }
+  items = []
+  id = 0;
+  activeEdit = false;
+  getProfileInfo() {
+    this.profileservice.getProfileDetails().subscribe(
+      data => {
+        for (let key in data) {
+          this.id++;
+          this.profileInfo.push(
+            {
+              id: this.id,
+              'label': key,
+              value: data[key],
+            })
+        }
+        if (data) {
+          this.activeEdit = true;
+          this.openOfcanvas = false;
+        }
+
+      },
+      err => err
+    )
+  }
+  openEditProfileOffcanvas() {
+    this.openOfcanvas = true;
+  }
+  closeNotification() {
+    this.notificationStatus = false;
+  }
+
+  profileEventhandler($event) {
+
+    this.notificationStatus = $event.isvalid;
+    if (this.notificationStatus) {
+      for (let key in $event) {
+        this.notifMsg.push({ label: key, value: $event[key] })
+      }
+    }
+    this.openOfcanvas = false;
+  }
+
+
 }

@@ -43,7 +43,7 @@ const routes: Routes = [
     data: { roles: [Role.SuperAdmin] },
     loadChildren: () =>
       import('src/app/@modules/manage/users/users.module').then(
-        (m) => m.UsersModule
+        //(m) => m.UsersModule
       ),
   },
   {

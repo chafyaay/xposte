@@ -1,24 +1,59 @@
+
+
+  <div class="notificator">
+    <app-notification 
+    *ngIf="notificationStatus"
+    [notificationColor]="!notificationStatus ? 'alerteMessage' : 'message'"
+    (closeNotfification)="closeNotification()"
+  >
+    <ng-container *ngIf="notificationStatus">
+      <h3 class="message_title">Profile modifié avec succès </h3>
+      <ul class="flex">
+        <li class="item" *ngFor="let msg of notifMsg">
+          <span *ngIf="!msg .isvalid && msg.label!=='role' && msg.label!=='listeFrontaux' ">{{msg.label | translate}} : {{msg.value}}</span>
+
+        </li>
+      </ul>
+    </ng-container> 
+    <ng-container *ngIf="!notificationStatus">
+      ERR
+    </ng-container>
+  </app-notification>
+  </div>
+  
+
+
 <div class="my-profile">
+
+
+
+
   <div class="flex edit-conatiner">
     <h1 class="title">Mon profile</h1>
-    <button class="main-btn btn-second edit-profile">
+    <button class="main-btn btn-second edit-profile" (click)="openEditProfileOffcanvas()" [disabled]="!activeEdit">
       <i class="zmdi zmdi-edit"></i>
       Modifier mon profile
     </button>
   </div>
   <div class="profile-details">
     <ul>
-      <li *ngFor="let item of account_details" class="flex items">
+      <li *ngFor="let item of profileInfo" class="flex items">
         <div class="item label">
-          <span> {{ item.label }}</span>
+          <span> {{ item.label | translate }}</span>
         </div>
         <div class="item flex">
-          <div *ngIf="item.value">
+
+          <div *ngIf="item.label!=='role' && item.label!=='listeFrontaux' ">
             <span *ngIf="item.id !== 5">{{ item.value }}</span>
             <span *ngIf="item.id == 5">{{ item.value | passwordPipe }}</span>
           </div>
-          <div *ngIf="item.values">
-            <div>{{ item.values[0] }}</div>
+
+          <div *ngIf="item.label=='role'">
+           {{ item.value.libelle }}
+          </div>
+
+          <div *ngIf="item.label=='listeFrontaux'">
+            <div>{{ item.value[0].nom  }}</div>
             <div class="more">
               <i
                 class="more-icone zmdi zmdi-more"
@@ -26,16 +61,29 @@
                 (click)="showFronatals = false"
               ></i>
               <ul *ngIf="showFronatals" class="frontal-items">
-                <li *ngFor="let f of item.values; let i = index">
-                  <span *ngIf="i <= 9">{{ f }}</span>
+                <li *ngFor="let f of item.value; let i = index">
+                  <span *ngIf="i <= 9">{{ f.nom }}</span>
                   <span *ngIf="i === 10" class="more-fr zmdi zmdi-more"></span>
                 </li>
                 <li></li>
               </ul>
             </div>
           </div>
+
         </div>
       </li>
     </ul>
-  </div>
+  </div> 
+
 </div>
+
+<app-template-formulaire
+*ngIf="openOfcanvas"
+[titleFormulaire]="'MODIFICATION_NOUVEL_UTILISATEUR' | translate"
+[isFormulaireopen]="openOfcanvas"
+(closeFormulaire)="closeOfCanvas($event)"
+>
+<app-edit-profile [profileInfo]="profileInfo" (profileEvent)="profileEventhandler($event)">
+</app-edit-profile>
+</app-template-formulaire>
+
