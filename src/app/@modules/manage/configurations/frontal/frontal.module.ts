@@ -11,6 +11,7 @@ import { FrontalItemComponent } from './frontal-item/frontal-item.component';
 import { FormCreateFrontalComponent } from './formCreateFrontal/formCreateFrontal.component';
 import { CommonModule } from '@angular/common';
 import { FilterFrontalComponent } from './filter-frontal/filter-frontal.component';
+import { FrontalDeleteComponent } from './frontal-delete/frontal-delete.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { FilterFrontalComponent } from './filter-frontal/filter-frontal.componen
     FrontalItemComponent,
     FormCreateFrontalComponent,
     FilterFrontalComponent,
+    FrontalDeleteComponent,
   ],
   imports: [
     CommonModule,

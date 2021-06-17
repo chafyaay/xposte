@@ -1,0 +1,35 @@
+<div class="pd20">
+  <div class="flex">
+    <div class="totalInbox mgb30">
+      <span class="val">{{ balNumber }}</span>
+      {{ 'BOITES_AUX_LETTRES' | translate }}
+    </div>
+    <div class="info-bulle">
+      <app-info-bulle
+        [balDataList]="selectedBal.length > 0 ? selectedBal : balDataList"
+        [selectedBal]="selectedBal"
+      ></app-info-bulle>
+    </div>
+  </div>
+
+  <h4 class="title_modal mgb10">
+    {{ 'DES_MODAL_CRITERIA_TITLE' | translate }}
+  </h4>
+  <div class="flex">
+    <div *ngIf="balFilter.etatBal" class="totalInbox left mgb30">
+      {{ 'ETAT' | translate }}
+      <span class="val">{{ balFilter.etatBal }}</span>
+    </div>
+    <div *ngIf="balFilter.adresseBal" class="totalInbox left mgb30">
+      {{ 'ADRESS' | translate }}
+      <span class="val">{{ balFilter.adresseBal }}</span>
+    </div>
+    <div *ngIf="balFilter.identifiantFrontal" class="totalInbox left mgb30">
+      {{ 'FRONTAL' | translate }}
+      <span class="val">{{ balFilter.identifiantFrontal }}</span>
+    </div>
+  </div>
+  <div *ngIf="nbMessagesNonLus.length > 0">
+    {{ 'DES_MODAL_MESSAGE' | translate }}
+  </div>
+</div>

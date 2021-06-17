@@ -1,5 +1,5 @@
 <header
-  class="header {{ isAuth === 'auth' ? 'show' : '' }}"
+  class="header {{ path }}"
   [ngClass]="getPathMenu() === 'step 4' ? 'pdb60' : ''"
 >
   <div class="header_content">
@@ -73,19 +73,19 @@
   </div>
 
   <div
-  class="header__right-profile"
-  (click)="_showProfileOption = !_showProfileOption"
->
-  <h3 class="user">{{ 'DOMINIQUE_SANCHEZ' | translate }}</h3>
-  <h4 class="profession">{{ 'ADMINISTRATEUR_GIE' | translate }}</h4>
-  <i
-    class="zmdi zmdi-chevron-{{
-      _showProfileOption ? 'up' : 'down'
-    }} arrow-profile"
-  ></i>
-  <div *ngIf="_showProfileOption" class="myprofile-options">
-    <a routerLink="/manage/auth/profile" class="sign-out">Mon profile</a>
-    <a href="#" class="sign-out">{{ 'DECONNEXION' | translate }}</a>
+    class="header__right-profile"
+    (click)="_showProfileOption = !_showProfileOption"
+  >
+    <h3 class="user">{{ 'DOMINIQUE_SANCHEZ' | translate }}</h3>
+    <h4 class="profession">{{ 'ADMINISTRATEUR_GIE' | translate }}</h4>
+    <i
+      class="zmdi zmdi-chevron-{{
+        _showProfileOption ? 'up' : 'down'
+      }} arrow-profile"
+    ></i>
+    <div *ngIf="_showProfileOption" class="myprofile-options">
+      <a routerLink="/manage/profile" class="sign-out">Mon profile</a>
+      <a href="#" class="sign-out">{{ 'DECONNEXION' | translate }}</a>
+    </div>
   </div>
-</div>
 </header>

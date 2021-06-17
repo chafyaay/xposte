@@ -38,6 +38,8 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
   @Input()
   balNumber: any;
   @Input()
+  balDataList: any[] = [];
+  @Input()
   etatBal: any;
   @Input()
   filtreAdresse: any;
@@ -168,8 +170,7 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
     if (
       this.selectedFCN === 'frontal' ||
       this.selectedFCN === 'typeBALList' ||
-      this.selectedFCN === 'seuil' ||
-      this.selectedFCN === 'balRelais'
+      this.selectedFCN === 'seuil'
     ) {
       this.form.setControl(
         this.selectedFCN,
@@ -182,7 +183,10 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
           validators: [Validators.required, customIPListValidator()],
         })
       );
-    } else if (this.selectedFCN === 'adresseMailAlerte') {
+    } else if (
+      this.selectedFCN === 'adresseMailAlerte' ||
+      this.selectedFCN === 'balRelais'
+    ) {
       this.form.setControl(
         this.selectedFCN,
         new FormControl('', {

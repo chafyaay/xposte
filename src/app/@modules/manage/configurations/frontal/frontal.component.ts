@@ -1,5 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FrontalService } from '@core/services/frontal.service';
 import { FrontalFilter } from '@shared';
 import { Frontal } from '@shared/models/Frontal';
@@ -32,16 +39,23 @@ export class FrontalComponent implements OnInit {
   openNotifFrontalUpdateFail = false;
   openNotifFrontalUpdateSucces = false;
   notificationErrorMessage = '';
-
+  openNotifFrontalDeleteSucces = false;
+  openNotifFrontalDeleteFail = false;
+  isModalOpenSupp = false;
+  isModalOpenDelete = false;
+  FrontalDelete: Frontal;
   savedFrontal = new Frontal();
   frontalToUpdate = new Frontal();
-
+  fronntallistToDelete: Frontal = new Frontal();
+  newHost: Frontal = new Frontal();
+  @Output()
+  frontalDeleteEvent: EventEmitter<Frontal> = new EventEmitter<Frontal>();
   @ViewChild('frontalList', { static: false })
   frontalListComponent: FrontalListComponent;
 
   constructor(
     private frontalService: FrontalService,
-    private ReferentielService: ReferentielService,
+    private referentielService: ReferentielService,
     private store: Store<AppState>
   ) {}
 
@@ -140,6 +154,44 @@ export class FrontalComponent implements OnInit {
       },
       (error) => console.error(error)
     );
+  }
+  closeModalSup(event?) {
+    this.isModalOpenDelete = false;
+  }
+  getFrontals() {
+    this.frontalService.searchFrontals(this.frontalFilter).subscribe(
+      (bal) => {
+        this.fronntallistToDelete = bal.body;
+        this.totalResult = parseInt(bal.headers.get('X-NB-RESULTATS-TOTAL'));
+        this.frontalFilter.numeroPage = parseInt(
+          bal.headers.get('X-NUMERO-PAGE')
+        );
+        this.frontalFilter.nbResultatsParPage = parseInt(
+          bal.headers.get('X-NB-RESULTATS-PAR-PAGE')
+        );
+      },
+      (error) => console.log(error)
+    );
+  }
+  valideSupp(whitelistHost) {
+    delete this.fronntallistToDelete.isChecked;
+    this.frontalService
+      .deleteFrontal(this.fronntallistToDelete.identifiant)
+      .subscribe(
+        (resp) => {
+          this.openNotifFrontalDeleteSucces = true;
+          this.openNotifFrontalDeleteFail = false;
+          this.newHost = this.fronntallistToDelete;
+          this.getFrontals();
+        },
+        (error) => {
+          this.openNotifFrontalDeleteSucces = false;
+          this.openNotifFrontalDeleteFail = true;
+          this.notificationErrorMessage = error.message;
+          console.error(error);
+        }
+      );
+    this.closeModalSup();
   }
   exporteBalToExcel() {
     const balToExport: Frontal[] = [];
@@ -272,8 +324,8 @@ export class FrontalComponent implements OnInit {
     this.CloseCreateFrontalForm();
   }
 
-  private updateFrontalStore(): void {
-    this.ReferentielService.getFrontal().subscribe(
+  updateFrontalStore(): void {
+    this.referentielService.getFrontal().subscribe(
       (resp) => {
         this.store.dispatch(new SetFrontal(resp));
       },
@@ -289,6 +341,8 @@ export class FrontalComponent implements OnInit {
   }
 
   resetNotificationDataAndClose() {
+    this.openNotifFrontalDeleteSucces = false;
+    this.openNotifFrontalDeleteFail = false;
     this.openNotifFrontalCreationFail = false;
     this.openNotifFrontalCreationSucces = false;
     this.openNotifFrontalUpdateFail = false;
@@ -302,5 +356,10 @@ export class FrontalComponent implements OnInit {
     this.resetNotificationDataAndClose();
     this.frontalToUpdate = frontalToUpdate;
     this.isFormulaireopen = true;
+  }
+  openModalSup(Frontal: Frontal): void {
+    this.resetNotificationDataAndClose();
+    this.FrontalDelete = Frontal;
+    this.isModalOpenDelete = true;
   }
 }

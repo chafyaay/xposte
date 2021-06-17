@@ -32,6 +32,8 @@ export class FrontalListComponent implements OnInit {
   orderingFilter: EventEmitter<FrontalFilter> = new EventEmitter<FrontalFilter>();
   @Output()
   frontalToUpdateEvent: EventEmitter<Frontal> = new EventEmitter<Frontal>();
+  @Output()
+  frontalDeleteEvent: EventEmitter<Frontal> = new EventEmitter<Frontal>();
   pagination: Pagination = new Pagination();
   sortBy: string = 'nom';
   sortDirection: string = 'asc';
@@ -59,6 +61,9 @@ export class FrontalListComponent implements OnInit {
 
   frontalToUpdate(frontal: Frontal) {
     this.frontalToUpdateEvent.emit(frontal);
+  }
+  frontalDelete(frontal: Frontal) {
+    this.frontalDeleteEvent.emit(frontal);
   }
 
   selectAllFrontal(event) {

@@ -51,6 +51,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   clickLabel = false;
   selectedEtat = 'ACTIVE';
   isEtatSelected = false;
+  selectListData: InputFilterData = new InputFilterData();
   @ViewChild('inputAddress', { static: false })
   inputAddress: ElementRef;
   filterEnabled = false;
@@ -61,10 +62,11 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   isWhiteListTypeFocused: boolean = false;
 
-  constructor() {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
     this.initFilterData();
+    this.loadFromStoredRef();
   }
 
   ngAfterViewInit() {
@@ -149,6 +151,15 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.filterEnabled = true;
   }
 
+  loadFromStoredRef() {
+    this.store.select(selectFrontalState).subscribe((stat) => {
+      this.selectListData.frontal = stat.frontal;
+      this.selectListData.frontal.unshift({
+        identifiant: 'x',
+        nom: 'Tous',
+      });
+    });
+  }
   changeSelectedFrontal() {
     this.isFielled = true;
     this.filterEnable();

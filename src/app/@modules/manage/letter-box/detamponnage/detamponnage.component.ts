@@ -10,13 +10,14 @@ export class DetamponnageComponent implements OnInit {
   @Input()
   balFilter: BALFilter = null;
   balFilterNotificationData: BALFilter = new BALFilter();
-
+  @Input() balDataList;
   @Input()
   balNumber;
   @Input()
   tooltipBALs: string[] = [];
   @Input()
   balTemponne: string[] = [];
+
   constructor() {}
 
   ngOnInit() {

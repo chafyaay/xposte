@@ -21,6 +21,7 @@ import { ModifierMasseBalsComponent } from './modifier-masse-bals/modifier-masse
 import { RemiseDispositionComponent } from './remise-disposition/remise-disposition.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TemplateFormulaireComponent } from '@shared/template-formulaire/template-formulaire.component';
+import { DesactiverEnMassComponent } from './desactiver-en-mass/desactiver-en-mass.component';
 @NgModule({
   declarations: [
     LetterBoxListComponent,
@@ -34,6 +35,7 @@ import { TemplateFormulaireComponent } from '@shared/template-formulaire/templat
     UpdateBalComponent,
     ModifierMasseBalsComponent,
     RemiseDispositionComponent,
+    DesactiverEnMassComponent,
   ],
   imports: [
     LetterBoxRoutingModule,
@@ -50,6 +52,7 @@ import { TemplateFormulaireComponent } from '@shared/template-formulaire/templat
     RemiseDispositionComponent,
     TemplateFormulaireComponent,
     LetterBoxListComponent,
+    DesactiverEnMassComponent,
   ],
 })
 export class LetterBoxModule {}

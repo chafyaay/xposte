@@ -8,43 +8,45 @@ import { ProfileI } from '@shared/models/profile';
   styleUrls: ['./my-profile.component.scss'],
 })
 export class MyProfileComponent implements OnInit {
-  profileInfo: any[] = []
+  profileInfo: any[] = [];
   notifMessages: any;
   notificationStatus = false;
   openOfcanvas = false;
   showFronatals = false;
   notifMsg = [];
 
-  constructor(
-    private profileservice: ProfileService
-  ) { }
+  constructor(private profileservice: ProfileService) {}
 
   ngOnInit() {
     this.getProfileInfo();
   }
-  items = []
+  items = [];
   id = 0;
   activeEdit = false;
   getProfileInfo() {
     this.profileservice.getProfileDetails().subscribe(
-      data => {
+      (data) => {
         for (let key in data) {
           this.id++;
-          this.profileInfo.push(
-            {
-              id: this.id,
-              'label': key,
-              value: data[key],
-            })
+          this.profileInfo.push({
+            id: this.id,
+            label: key,
+            value: data[key],
+          });
         }
         if (data) {
+          // add password temporrary
+          this.profileInfo[4] = {
+            id: 'password',
+            label: 'password',
+            value: 'HHXc&&&12454',
+          };
           this.activeEdit = true;
           this.openOfcanvas = false;
         }
-
       },
-      err => err
-    )
+      (err) => err
+    );
   }
   openEditProfileOffcanvas() {
     this.openOfcanvas = true;
@@ -54,15 +56,16 @@ export class MyProfileComponent implements OnInit {
   }
 
   profileEventhandler($event) {
-
     this.notificationStatus = $event.isvalid;
     if (this.notificationStatus) {
       for (let key in $event) {
-        this.notifMsg.push({ label: key, value: $event[key] })
+        this.notifMsg.push({ label: key, value: $event[key] });
       }
     }
     this.openOfcanvas = false;
   }
 
-
+  closeOffcanvas($event) {
+    this.openOfcanvas = $event;
+  }
 }

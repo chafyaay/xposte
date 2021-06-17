@@ -42,9 +42,10 @@ const routes: Routes = [
     canActivate: [RoleGuardService],
     data: { roles: [Role.SuperAdmin] },
     loadChildren: () =>
-      import('src/app/@modules/manage/users/users.module').then(
+      import('src/app/@modules/manage/users/users.module')
+        .then
         //(m) => m.UsersModule
-      ),
+        (),
   },
   {
     path: 'auth',
@@ -53,6 +54,16 @@ const routes: Routes = [
     data: { roles: [Role.SuperAdmin] },
     loadChildren: () =>
       import('src/app/@modules/auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: 'profile',
+    component: ManageComponent,
+    canActivate: [RoleGuardService],
+    data: { roles: [Role.SuperAdmin] },
+    loadChildren: () =>
+      import('src/app/@modules/manage/profile/profile.module').then(
+        (m) => m.ProfileModule
+      ),
   },
 ];
 

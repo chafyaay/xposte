@@ -1,10 +1,11 @@
 <!-- ======= START .Bloc NEWBOX ======= -->
-
-<div class="wrapperNewBox" [ngClass]="isFormulaireopen ? 'open ' : ''">
-  <h3 class="wrapperNewBox_title">{{ titleFormulaire | translate }}</h3>
-  <i class="zmdi zmdi-close" (click)="closeForm()"></i>
-  <ng-content></ng-content>
+<div class="formul">
+  <div class="wrapperNewBox" [ngClass]="isFormulaireopen ? 'open ' : ''">
+    <h3 class="wrapperNewBox_title">{{ titleFormulaire | translate }}</h3>
+    <i class="zmdi zmdi-close" (click)="closeForm()"></i>
+    <ng-content></ng-content>
+  </div>
+  <div class="overley show"></div>
+  <div [ngClass]="spinner ? 'show' : ''" id="cover-spin"></div>
+  <!-- ======= END .Bloc NEWBOX ======= -->
 </div>
-<div class="overley show"></div>
-<div [ngClass]="spinner ? 'show' : ''" id="cover-spin"></div>
-<!-- ======= END .Bloc NEWBOX ======= -->

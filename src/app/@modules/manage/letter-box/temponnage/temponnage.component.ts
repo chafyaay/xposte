@@ -15,6 +15,8 @@ export class TemponnageComponent implements OnInit {
   @Input()
   selectedBal: any[] = [];
   @Input() BalTamponner: BalTampoCriteria = new BalTampoCriteria();
+  @Input() balDataList;
+
   constructor() {}
 
   ngOnInit() {}

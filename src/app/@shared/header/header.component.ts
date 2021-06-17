@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
     roles: [Role.SuperAdmin],
   };
   _showProfileOption = false;
-  isAuth = '';
+  path = '';
   constructor(
     private store: Store<AppState>,
     private router: Router,
@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
   }
   ngOnInit() {
     this.activated.url.subscribe((data: any) => {
-      this.isAuth = data[0].path;
+      this.path = data[0].path;
       console.clear();
       console.log(data[0].path);
     });
@@ -48,6 +48,25 @@ export class HeaderComponent implements OnInit {
       } else {
         this.isRoleAdmin = false;
       }
+    });
+
+    document.addEventListener('click', (evt) => {
+      const flyoutElement = document.getElementsByClassName(
+        'header__right-profile'
+      )[0];
+      let targetElement: any = evt.target;
+
+      do {
+        if (targetElement == flyoutElement) {
+          console.log('click in ');
+          this._showProfileOption = true;
+          return;
+        }
+        targetElement = targetElement.parentNode;
+      } while (targetElement);
+      console.log('click out ');
+
+      this._showProfileOption = false;
     });
   }
   openSubMenu() {

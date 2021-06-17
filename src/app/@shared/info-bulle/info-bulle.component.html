@@ -6,12 +6,12 @@
   ></div>
   <span class="icone help"></span>
   <ul
-    *ngIf="selectedBal && selectedBal.length > 0"
+    *ngIf="ballist && ballist.length > 0"
     class="tooltip-text"
     [ngClass]="{ active: showInfoBulle }"
   >
-    <li *ngFor="let adress of selectedBal; let i = index">
-      <div *ngIf="i < 10">{{ adress }}</div>
+    <li *ngFor="let bal of ballist; let i = index">
+      <div *ngIf="i < 10">{{ bal }}</div>
     </li>
   </ul>
 </div>

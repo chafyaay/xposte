@@ -44,46 +44,7 @@ export class FormCreateFrontalComponent implements OnInit {
     this.utilisateurService.getListUsers().subscribe((result) => {
       this.listUsers =
         // TODO: remove static users when liste-users api returns result
-        result.length > 0
-          ? result
-          : [
-              {
-                identifiant: 'identifiantUtilisateur1',
-              },
-              {
-                identifiant: 'identifiantUtilisateur2',
-              },
-              {
-                identifiant: 'identifiantUtilisateur3',
-              },
-              {
-                identifiant: 'identifiantUtilisateur4',
-              },
-              {
-                identifiant: 'identifiantUtilisateur5',
-              },
-              {
-                identifiant: 'userId1',
-              },
-              {
-                identifiant: 'userId2',
-              },
-              {
-                identifiant: 'userId3',
-              },
-              {
-                identifiant: 'userId4',
-              },
-              {
-                identifiant: 'userId5',
-              },
-              {
-                identifiant: 'idUtilisateur1',
-              },
-              {
-                identifiant: 'idUtilisateur2',
-              },
-            ];
+        result.length > 0 ? result : [];
     });
 
     this.frontalFomGroup = this.formBuilder.group({
@@ -128,7 +89,7 @@ export class FormCreateFrontalComponent implements OnInit {
           // If different from selected frontal
           if (frontals[0].identifiant !== this.frontalToUpdate.identifiant) {
             this.frontalUnicity = this.ERROR;
-          } 
+          }
           else {
             this.frontalUnicity = this.OK;
           }

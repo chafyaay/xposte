@@ -68,7 +68,7 @@ export const Providers = [
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     OverlayModule,
-    UsersModule
+    UsersModule,
   ],
   providers: [
     HighlightSearchPipe,

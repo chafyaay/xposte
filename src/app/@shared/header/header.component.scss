@@ -20,11 +20,21 @@
     position: absolute;
     right: 12px;
     top: 7px;
-
-
   }
+  .header_content {
+    overflow: hidden;
+    padding-right: 200px;
+  }
+}
+
+.header {
+  &.config {
     .header_content {
-      overflow: hidden !important;
-      padding-right: 200px;
+      overflow: inherit !important;
+    }
   }
+}
+
+body {
+  position: relative;
 }

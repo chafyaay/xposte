@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { AppState, selectAccountState, selectFrontalState } from '@app/@store';
 import { Observable } from 'rxjs';
 import { InputFilterData } from '@shared/models/InputFilterData';
-
 @Component({
   selector: 'app-frontal-item',
   templateUrl: './frontal-item.component.html',
@@ -28,6 +27,8 @@ export class FrontalItemComponent implements OnInit {
   selectedFrontalEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   frontalToUpdateEvent: EventEmitter<Frontal> = new EventEmitter<Frontal>();
+  @Output()
+  frontalDeleteEvent: EventEmitter<Frontal> = new EventEmitter<Frontal>();
 
   usersToShow: string;
   idFrontal: string;
@@ -48,9 +49,6 @@ export class FrontalItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.frontal = this.inputFilterData.frontal.find(
-      (id) => id === this.idFrontal
-    );
     if (
       this.frontalData.listeIdentifiantsUtilisateurs &&
       this.frontalData.listeIdentifiantsUtilisateurs.length > 0
@@ -81,15 +79,8 @@ export class FrontalItemComponent implements OnInit {
     });
   }
 
-  DeleteFrontalCoonfirm(identifiant: string) {
-    this.resetNotificationDataAndClose();
-    this.showModalDelet = true;
-    this.idFrontal = identifiant;
-    this.valideDelete(this.idFrontal);
-  }
-
-  closeModalConfirmation($event) {
-    this.showModalDelet = false;
+  deleteFrontalConfirm(frontal: Frontal) {
+    this.frontalDeleteEvent.emit(frontal);
   }
 
   ReinitialiserFrontalStore() {
@@ -114,27 +105,6 @@ export class FrontalItemComponent implements OnInit {
         this.isRoleAdmin = false;
       }
     });
-  }
-
-  resetNotificationDataAndClose() {
-    this.showNotifDelete = false;
-  }
-
-  valideDelete(rr) {
-    this.showNotifDelete = true;
-    this.showModalDelet = false;
-  }
-
-  DeleteFrontal(id) {
-    console.log('frontal ' + this.idFrontal + 'is deleted');
-    this.frontalService.deleteFrontal(this.idFrontal).subscribe(
-      (frontal) => {
-        console.log('frontal ' + this.idFrontal + 'is deleted');
-      },
-      (error) => console.log(error)
-    );
-    this.ReinitialiserFrontalStore();
-    this.showNotifDelete = true;
   }
 
   goToUpdate() {

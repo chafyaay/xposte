@@ -147,6 +147,9 @@ body {
   font-size: 1rem;
   background: #fafafa;
   color: #404040;
+  &[data-disable-scroll] {
+    overflow: hidden;
+  }
 }
 
 li {
@@ -4962,17 +4965,20 @@ hr {
 
 .main-table tbody tr.subLine td table tr td:first-child {
   width: 30%;
-  padding-left: 15%;
+  padding-left: 10%;
   padding-bottom: 0.6375rem;
 }
 
 .main-table tbody tr.subLine td table tr td:nth-child(2) {
-  width: 15%;
+  width: 17%;
 }
 
-.main-table tbody tr.subLine td table tr td:nth-child(3),
+.main-table tbody tr.subLine td table tr td:nth-child(3) {
+  padding-left: 7%;
+  width: 34%;
+}
 .main-table tbody tr.subLine td table tr td:nth-child(4) {
-  width: 24%;
+  width: 34%;
 }
 
 .main-table.table-rejeu thead th:nth-child(2) {
@@ -5864,7 +5870,6 @@ hr {
   -o-transition: all 0.8s ease;
   -moz-transition: all 0.8s ease;
   transition: all 0.8s ease;
-  overflow: scroll;
 }
 
 .main-btn.icon {
@@ -5903,6 +5908,7 @@ hr {
   background: #5093c4;
   color: #fff;
   padding: 0 1.25rem;
+  margin-left: 1.2rem;
 }
 
 .main-btn.btn-second:hover {
@@ -5961,7 +5967,7 @@ input:-webkit-autofill {
   -o-transition: all 0.8s ease;
   -moz-transition: all 0.8s ease;
   transition: all 0.8s ease;
-  overflow: scroll;
+  overflow: hidden;
 }
 .disableScroll {
   overflow-y: hidden;
@@ -5972,12 +5978,10 @@ input:-webkit-autofill {
   right: 0;
   overflow-y: auto;
   padding-bottom: 0.8rem;
-  scrollbar-width: none;
 }
 
 //only for  chrome and  safarie
 .wrapperNewBox.open::-webkit-scrollbar {
-  display: none;
 }
 
 .wrapperNewBox .inputCheck {
@@ -6229,6 +6233,7 @@ ngb-popover-window {
 .modifier-mass-bals {
   min-width: 3rem;
   width: 5rem;
+  margin-right: 1rem;
   .main-btn.btn-second {
     background: #ffffff;
     color: #fff;

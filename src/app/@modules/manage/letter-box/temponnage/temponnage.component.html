@@ -4,7 +4,10 @@
     {{ 'BOITES_AUX_LETTRES' | translate }}
   </div>
   <div class="info-bulle">
-    <app-info-bulle [selectedBal]="balTemponne"></app-info-bulle>
+    <app-info-bulle
+      [balDataList]="balTemponne.length > 0 ? balTemponne : balDataList"
+      [selectedBal]="balTemponne"
+    ></app-info-bulle>
   </div>
 </div>
 

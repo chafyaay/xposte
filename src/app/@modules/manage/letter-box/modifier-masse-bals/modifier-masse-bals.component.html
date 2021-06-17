@@ -5,7 +5,10 @@
       {{ 'BOITES_AUX_LETTRES' | translate }}
     </div>
     <div class="info-bulle">
-      <app-info-bulle [selectedBal]="selectedBal"></app-info-bulle>
+      <app-info-bulle
+        [balDataList]="selectedBal.length > 0 ? selectedBal : balDataList"
+        [selectedBal]="selectedBal"
+      ></app-info-bulle>
     </div>
   </div>
   <h3>{{ 'MOD_MASS_NOTIF_CRITERIA_TITLE' | translate }}</h3>
@@ -114,9 +117,7 @@
                 form.get('adresseMailAlerte').invalid
               "
               [ngSwitchCase]="'adresseMailAlerte'"
-              >{{ form.get('adresseMailAlerte').invalid }}-{{
-                'INVALID_INPUT' | translate
-              }}</ng-template
+              >{{ 'INVALID_INPUT' | translate }}</ng-template
             >
             <ng-template
               *ngIf="

@@ -95,11 +95,56 @@
       {{ notificationErrorMessage }}
     </ng-container>
   </app-notification>
+  <app-notification
+    *ngIf="openNotifFrontalDeleteSucces || openNotifFrontalDeleteFail"
+    [notificationColor]="openNotifFrontalDeleteFail ? 'message' : 'message'"
+    (closeNotfification)="resetNotificationDataAndClose()"
+  >
+    <h3 class="message_title">
+      {{
+        openNotifFrontalUpdateSucces
+          ? ('FRONTAL_DELETE_NOTIFICATION_SUCCES' | translate)
+          : ('FRONTAL_DELETE_NOTIFICATION_FAIL' | translate)
+      }}
+    </h3>
+    <ng-container *ngIf="openNotifFrontalUpdateSucces">
+      <ul>
+        <li>
+          {{ 'FRONTAL' | translate }} :
+          {{ FrontalDelete?.nom }}
+        </li>
+        <li>
+          &nbsp; {{ 'SEUIL' | translate }} :
+          {{ FrontalDelete?.seuil }}
+        </li>
+        <li>
+          &nbsp; {{ 'MAIL_ALERTE' | translate }} :
+          {{ FrontalDelete?.adresseMailAlerte }}
+        </li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="openNotifFrontalDeleteFail">
+      <ul>
+        <li>
+          {{ 'FRONTAL' | translate }} :
+          {{ FrontalDelete?.nom }}
+        </li>
+        <li>
+          &nbsp; {{ 'SEUIL' | translate }} :
+          {{ FrontalDelete?.seuil }}
+        </li>
+        <li>
+          &nbsp; {{ 'MAIL_ALERTE' | translate }} :
+          {{ FrontalDelete?.adresseMailAlerte }}
+        </li>
+      </ul>
+    </ng-container>
+  </app-notification>
   <!--END notification update frontal -->
 
   <app-filter-frontal
     #frontalFilterComp
-    [(filter)]="frontalFilter"
+    [filter]="frontalFilter"
     (filterEvent)="getFiltredData($event)"
     (filterDefaultEvent)="getFiltredDataDefault()"
   ></app-filter-frontal>
@@ -144,6 +189,7 @@
     (selectedFrontalEvent)="saveSelectedFrontal($event)"
     (orderingFilter)="updateOrder($event)"
     (frontalToUpdateEvent)="updateFrontal($event)"
+    (frontalDeleteEvent)="openModalSup($event)"
   ></app-frontal-list>
 
   <div class="flex space-between mgb40">
@@ -155,4 +201,14 @@
       (paginationChangeEvent)="getPagination($event)"
     ></app-pagination>
   </div>
+  <app-template-modal
+    *ngIf="isModalOpenDelete"
+    [TitleModal]="'WHITELIST_SUPP_MODAL_TITLE' | translate"
+    [isModalOpen]="isModalOpenDelete"
+    [isValid]="true"
+    (isModalClose)="closeModalSup($event)"
+    (valide)="valideSupp($event)"
+  >
+    <app-frontal-delete [fontalData]="FrontalDelete"> </app-frontal-delete>
+  </app-template-modal>
 </div>

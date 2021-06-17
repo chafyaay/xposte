@@ -96,6 +96,7 @@
       [selectedFrontalist]="selectedFrontalList"
       (selectedFrontalEvent)="emitToParent($event)"
       (frontalToUpdateEvent)="frontalToUpdate($event)"
+      (frontalDeleteEvent)="frontalDelete($event)"
     ></app-frontal-item>
   </tbody>
 </table>

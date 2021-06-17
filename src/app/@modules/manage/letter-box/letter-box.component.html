@@ -20,6 +20,7 @@
       [temponnageSelecte]="balTamponNbr"
       [balTemponne]="selectedBal"
       [balFilter]="balFilter"
+      [balDataList]="balDataList"
     >
     </app-temponnage>
   </app-template-modal>
@@ -31,13 +32,15 @@
       openNotifTemponnage ||
       openNotifTemponnageError ||
       isModMassbalsSuccess ||
-      isModMassbalsFail
+      isModMassbalsFail ||
+      openNotifDescativerMassSuccess
     "
     [notificationColor]="
       openNotifTemponnageError ||
       isModMassbalsFail ||
       openNotifRemiseDispoSuccess ||
       openNotifRemiseDispoError ||
+      openNotifDescativerMassFail ||
       openNotifTemponnageError
         ? 'alerteMessage'
         : notificationColor
@@ -125,7 +128,29 @@
     <ng-container *ngIf="isModMassbalsFail">
       {{ modMassErrMessage }}
     </ng-container>
-    <!-- show Modofcation en mass  notification  -->
+    <!-- show Desctiver en mass  notification  -->
+    <ng-container *ngIf="openNotifDescativerMassSuccess">
+      <h3 class="message_title">
+        {{
+          openNotifDescativerMassSuccess
+            ? ('DES_MASS_NOTIF_MSG_SUCCESS' | translate)
+            : ('DES_MASS_NOTIF_MSG_FAIL' | translate)
+        }}
+      </h3>
+      <ul class="flex">
+        <li class="notif-items">
+          {{ 'DES_MASS_NOTIF_BALS_MOD' | translate }} :
+          {{ selectedBal.length === 0 ? totalResult : selectedBal.length }}
+        </li>
+        <li *ngIf="balFilter.etatBal" class="notif-items">
+          {{ 'ETAT' | translate }} : {{ balFilter.etatBal }}
+        </li>
+        <li *ngIf="balFilter.identifiantFrontal" class="notif-items">
+          {{ 'FRONTAL' | translate }} : {{ balFilter.identifiantFrontal }}
+        </li>
+      </ul>
+    </ng-container>
+    <!-- show Modification en mass  notification  -->
     <ng-container *ngIf="isModMassbalsSuccess">
       <h3 class="message_title">
         {{
@@ -149,7 +174,7 @@
         <li *ngIf="modifMassObj.seuil" class="notif-items">
           {{ 'SEUIL' | translate }} : {{ modifMassObj.seuil }}
         </li>
-        <li *ngIf="modifMassObj.adressesIP" class="notif-items">
+        <li *ngIf="modifMassObj.adressesIP.length > 0" class="notif-items">
           {{ 'IPs' | translate }} : {{ modifMassObj.adressesIP.join(',') }}
         </li>
         <li *ngIf="modifMassObj.mailAlerte" class="notif-items">
@@ -162,6 +187,7 @@
       </ul>
     </ng-container>
     <!-- show remise disposition notification  -->
+
     <ng-container *ngIf="openNotifRemiseDispoSuccess">
       <h3 class="message_title">
         {{
@@ -170,38 +196,101 @@
             : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
         }}
       </h3>
-      <ul class="flex">
+
+      <ul class="flex notif-message">
         <li class="notif-items">
-          {{ 'REMISE-DISPO_BAL' | translate }} : {{ this.balTamponNbr }}
+          {{ 'REMISE-DISPO_BAL' | translate }} :{{
+            selectedBal.length === 0 ? totalResult : selectedBal.length
+          }}
         </li>
         <li class="notif-items">
-          {{ 'ETAT' | translate }} : {{ REMISE_DISPO_OBJ.etatBal }}
+          {{ 'ETAT' | translate }} : {{ remiseDispoObj.etatBal }}
         </li>
-        <li *ngIf="REMISE_DISPO_OBJ.adresseBal" class="notif-items">
-          {{ 'ADRESS' | translate }} : {{ REMISE_DISPO_OBJ.adresseBal }}
+        <li *ngIf="remiseDispoObj.adresseBal" class="notif-items">
+          {{ 'ADRESS' | translate }} : {{ remiseDispoObj.adresseBal }}
         </li>
-        <li *ngIf="REMISE_DISPO_OBJ.identifiantFrontal" class="notif-items">
+        <li *ngIf="remiseDispoObj.identifiantFrontal" class="notif-items">
           {{ 'FRONTAL' | translate }} :
-          {{ REMISE_DISPO_OBJ.identifiantFrontal }}
+          {{ remiseDispoObj.identifiantFrontal }}
+        </li>
+        <li
+          *ngIf="remiseDispoObj.dateHeureDebut && remiseDispoObj.dateHeureFin"
+          class="notif-items"
+        >
+          <div class="date-label">
+            {{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }} :
+            {{ remiseDispoObj.dateHeureDebut | date: 'EEEE d MMMM, h:mm' }}
+          </div>
+          <div class="date-label fin">
+            {{ 'REMETTRE_DISPO_DATE_FIN' | translate }} :
+            {{ remiseDispoObj.dateHeureFin | date: 'EEEE d MMMM, h:mm' }}
+          </div>
+        </li>
+        <li *ngIf="remiseDispoObj.emetteur">
+          {{ 'SUBFIELDS.EMMETTEUR' | translate }}:{{ remiseDispoObj.emetteur }}
+        </li>
+        <li *ngIf="remiseDispoObj.destinataire">
+          {{ 'SUBFIELDS.DESITINATAIRE' | translate }}:{{
+            remiseDispoObj.destinataire
+          }}
+        </li>
+        <li *ngIf="remiseDispoObj.contentDescription">
+          {{ 'SUBFIELDS.CONTENT_DESC' | translate }}:{{
+            remiseDispoObj.contentDescription
+          }}
+        </li>
+        <li *ngIf="remiseDispoObj.fichiersCompresses">
+          {{ 'SUBFIELDS.FICHIER_COMPRESSEE' | translate }}:{{
+            remiseDispoObj.fichiersCompresses ? 'Oui' : 'Non'
+          }}
         </li>
         <li
           *ngIf="
-            REMISE_DISPO_OBJ.dateHeureDebut && REMISE_DISPO_OBJ.dateHeureFin
+            remiseDispoObj.fichiersChiffres === null ||
+            remiseDispoObj.fichiersChiffres === true ||
+            remiseDispoObj.fichiersChiffres === false
           "
-          class="notif-items"
         >
-          <span class="mbl20"
-            >{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }} :
-            {{
-              REMISE_DISPO_OBJ.dateHeureDebut | date: 'EEEE, MMMM d, h:mm'
-            }}</span
-          >
-          <span class="mbl20"
-            >{{ 'REMETTRE_DISPO_DATE_FIN' | translate }} :
-            {{
-              REMISE_DISPO_OBJ.dateHeureFin | date: 'EEEE, MMMM d, h:mm'
-            }}</span
-          >
+          {{ 'SUBFIELDS.FICHIER_CHIFFREE' | translate }}:
+          {{ remiseDispoObj.fichiersChiffres ? 'Oui' : 'Non' }}
+          <span *ngIf="remiseDispoObj.fichiersChiffres === true">{{
+            'SUBFIELDS.OUI' | translate
+          }}</span>
+          <span *ngIf="remiseDispoObj.fichiersChiffres === false">{{
+            'SUBFIELDS.NON' | translate
+          }}</span>
+          <span *ngIf="remiseDispoObj.fichiersChiffres === null">{{
+            'SUBFIELDS.INDIFFERENT' | translate
+          }}</span>
+        </li>
+        <li *ngIf="remiseDispoObj.type">
+          {{ 'SUBFIELDS.TYPE' | translate }}:{{ remiseDispoObj.type }}
+        </li>
+        <li *ngIf="remiseDispoObj.version">
+          {{ 'SUBFIELDS.VERSION' | translate }}:{{ remiseDispoObj.version }}
+        </li>
+        <li *ngIf="remiseDispoObj.codeEmetteur">
+          {{ 'SUBFIELDS.CODE_EMETTEUR' | translate }}:{{
+            remiseDispoObj.codeEmetteur
+          }}
+        </li>
+        <li *ngIf="remiseDispoObj.dateHeureSujet">
+          {{ 'SUBFIELDS.DATE_HEURE_SUJET' | translate }}:{{
+            remiseDispoObj.dateHeureSujet | date: 'EEEE d MMMM, h:mm'
+          }}
+        </li>
+        <li *ngIf="remiseDispoObj.codeCompostage">
+          {{ 'SUBFIELDS.CODE_COMPOSTAGE' | translate }}:{{
+            remiseDispoObj.codeCompostage
+          }}
+        </li>
+        <li *ngIf="remiseDispoObj.nbFSE">
+          {{ 'SUBFIELDS.NBFSE' | translate }}:{{ remiseDispoObj.nbFSE }}
+        </li>
+        <li *ngIf="remiseDispoObj.sujetOuReplyInTo">
+          {{ 'SUBFIELDS.SUJET_OUT_REPLY_INFO' | translate }}:{{
+            remiseDispoObj.sujetOuReplyInTo
+          }}
         </li>
       </ul>
     </ng-container>
@@ -210,6 +299,7 @@
       {{ notificationErrorMessage }}
     </ng-container>
   </app-notification>
+
   <!--notification de Creation de BAL -->
   <app-notification
     *ngIf="openNotifBalCreationSucces || openNotifBalCreationFail"
@@ -346,7 +436,15 @@
       (paginationChangeEvent)="getPagination($event)"
     ></app-pagination>
 
-    <div>
+    <div class="flex buttons-container">
+      <button
+        *ngIf="showRemiseDispositionBtn"
+        class="main-btn btn-second"
+        (click)="openRemiseDispositionModal()"
+      >
+        {{ 'MAKE_AVAILABALITY_BTN' | translate }}
+        {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
+      </button>
       <button
         *ngIf="showDetamponnage"
         class="main-btn btn-second"
@@ -372,29 +470,7 @@
         <ng-select
           class="main-btn btn-second"
           selectedLabel=""
-          [items]="[
-            {
-              id: 0,
-              label:
-                'Exporter au forma Excel  ' +
-                (selectedBal.length === 0 ? totalResult : selectedBal.length) +
-                ' BALs'
-            },
-            {
-              id: 1,
-              label:
-                'Modifier en masse ' +
-                (selectedBal.length === 0 ? totalResult : selectedBal.length) +
-                ' BALs'
-            },
-            {
-              id: 2,
-              label:
-                'Désactiver en masse ' +
-                (selectedBal.length === 0 ? totalResult : selectedBal.length) +
-                ' BALs'
-            }
-          ]"
+          [items]="tempSelectedItems"
           bindLabel="label"
           bindValue="id"
           (change)="openSidebarCanvas($event)"
@@ -420,14 +496,6 @@
         >
         </app-modifier-masse-bals>
       </app-template-formulaire>
-      <button
-        *ngIf="showRemiseDispositionBtn"
-        class="main-btn btn-second"
-        (click)="openRemiseDispositionModal()"
-      >
-        {{ 'MAKE_AVAILABALITY_BTN' | translate }}
-        {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
-      </button>
     </div>
   </div>
   <!-- ======= START .Bloc MAIN TABLE ======= -->
@@ -489,6 +557,7 @@
       [balFilter]="balFilter"
       [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
       [tooltipBALs]="tooltipBALs"
+      [balDataList]="balDataList"
     ></app-detamponnage>
   </app-template-modal>
   <!-- remise a disposition -->
@@ -506,6 +575,26 @@
       [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
       (REMISE_DISPO_EVENT)="REMISE_DISPO_EVENT_HANDLER($event)"
     ></app-remise-disposition>
+  </app-template-modal>
+
+  <!-- desactiver en masse -->
+  <!-- author yassine  -->
+  <app-template-modal
+    *ngIf="openDescativerEnMassModal"
+    [TitleModal]="'DES_MODAL_TITLE' | translate"
+    [isModalOpen]="openDescativerEnMassModal"
+    [isValid]="isDesactiverEnMassFormvalid"
+    (isModalClose)="closeDesactiverEnMassModal($event)"
+    (valide)="desactiver_en_mass_submit($event)"
+  >
+    <app-desactiver-en-mass
+      [selectedBal]="selectedBal"
+      [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
+      [balFilter]="balFilter"
+      [balDataList]="balDataList"
+      (DESACTIVER_EN_MASS_EVENT)="DESACTIVER_EN_MASS_EVENT_HANDLER($event)"
+    >
+    </app-desactiver-en-mass>
   </app-template-modal>
 
   <div class="flex space-between mgb40">

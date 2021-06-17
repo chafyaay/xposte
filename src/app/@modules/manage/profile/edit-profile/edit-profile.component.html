@@ -1,0 +1,41 @@
+<div class="edit-profile" [formGroup]="profileForm">
+  <div *ngFor="let input of profileInfo" class="input-group">
+    <div
+      *ngIf="input.label !== 'role' && input.label !== 'listeFrontaux'"
+      class="inputField"
+      style="flex-grow: 1"
+    >
+      <input
+        type="text"
+        formControlName="{{ input.label }}"
+        [readonly]="input.label === 'identifiant'"
+        (focus)="focused = true"
+        (blur)="focused = false"
+      />
+      <label for="{{ input.label }}" class="{{ focused ? 'focused' : '' }}">
+        {{ input.label | translate }}
+      </label>
+    </div>
+    <span
+      class="helptext text-red"
+      *ngIf="
+        profileForm.controls[input.label]?.dirty &&
+        profileForm.get(input.label).invalid
+      "
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+  </div>
+  <div class="wrapper-btn">
+    <button (click)="onCancel()" class="main-btn btn-reset">
+      {{ 'CANCEL' | translate }}
+    </button>
+
+    <button
+      class="main-btn btn-second"
+      [disabled]="!profileForm.valid"
+      (click)="onSubmit()"
+    >
+      {{ 'VALID' | translate }}
+    </button>
+  </div>
+</div>

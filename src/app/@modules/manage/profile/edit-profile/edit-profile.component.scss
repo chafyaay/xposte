@@ -1,0 +1,28 @@
+.inputField {
+  position: relative;
+  margin: 0rem 0 2.4rem 0;
+  input {
+    &:read-only {
+      color: gray;
+    }
+    &:focus {
+      border-bottom: 1px solid #0063a9ed;
+    }
+  }
+}
+
+.edit-profile {
+  padding: 2rem;
+}
+.wrapper-btn {
+  margin-top: 5rem;
+}
+
+.input-group {
+  position: relative;
+  .helptext {
+    position: absolute;
+    top: 25px;
+    font-size: 14px;
+  }
+}
