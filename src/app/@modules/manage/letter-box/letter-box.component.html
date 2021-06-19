@@ -436,67 +436,25 @@
       (paginationChangeEvent)="getPagination($event)"
     ></app-pagination>
 
-    <div class="flex buttons-container">
-      <button
-        *ngIf="showRemiseDispositionBtn"
-        class="main-btn btn-second"
-        (click)="openRemiseDispositionModal()"
-      >
-        {{ 'MAKE_AVAILABALITY_BTN' | translate }}
-        {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
-      </button>
-      <button
-        *ngIf="showDetamponnage"
-        class="main-btn btn-second"
-        (click)="openModalDetampo()"
-      >
-        {{ 'DETAMPON' | translate }}
-        {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
-      </button>
-      <button
-        *ngIf="isShowTemponnage"
-        class="main-btn btn-second"
-        (click)="openModalTempo()"
-      >
-        {{ 'Tamponner' | translate }}
-        {{ selectedBal.length === 0 ? totalResult : selectedBal.length }}
-        {{ 'BALs' | translate }}
-      </button>
+    <button *ngIf="showRemiseDispositionBtn" class="main-btn btn-second" (click)="openRemiseDispositionModal()">
+      {{ 'MAKE_AVAILABALITY_BTN' | translate }}
+      {{ selectedBal.length === 0 ? totalResult : selectedBal.length }} BALs
+    </button>
+   
+    <app-template-modal
+    *ngIf="showRemiseDispositionModal"
+    [TitleModal]="'REMETTRE_DISPO_MODAL_TITLE' | translate"
+    [isModalOpen]="showRemiseDispositionModal"
+    [isValid]="isFormValid"
+    (isModalClose)="closeRemiseDispositionModal($event)" (valide)="remise_dispo_submit($event)">
+    <app-remise-disposition 
+    [balDataList]="balDataList" 
+    [selectedBal]="selectedBal"
+    [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
+      (remiseDispoEvent)="REMISE_DISPO_EVENT_HANDLER($event)"></app-remise-disposition>
+      
+    </app-template-modal>
 
-      <!-- yassine chafyaay -->
-      <!-- modifier masse bals button -->
-      <div class="modifier-mass-bals mbt20">
-        <i class="zmdi zmdi-edit"></i>
-        <ng-select
-          class="main-btn btn-second"
-          selectedLabel=""
-          [items]="tempSelectedItems"
-          bindLabel="label"
-          bindValue="id"
-          (change)="openSidebarCanvas($event)"
-        ></ng-select>
-      </div>
-
-      <app-template-formulaire
-        *ngIf="isModMassbalsSidBarCanvasOpen"
-        [titleFormulaire]="'MOD_MASS_NOTIF_TITLE' | translate"
-        [isFormulaireopen]="isModMassbalsSidBarCanvasOpen"
-        (closeFormulaire)="CloseCreateBALForm()"
-      >
-        <app-modifier-masse-bals
-          (closeEvent)="closeEventHandler($event)"
-          [etatBal]="balFilter.etatBal"
-          [filtreAdresse]="adresseHighlight"
-          [identifiantFrontal]="balFilter.identifiantFrontal"
-          (MODIF_EN_MASS_EVENT_EMITTER)="MODIF_EN_MASS_EVENT_HANDLER($event)"
-          [balNumber]="
-            selectedBal.length === 0 ? totalResult : selectedBal.length
-          "
-          [selectedBal]="selectedBal"
-        >
-        </app-modifier-masse-bals>
-      </app-template-formulaire>
-    </div>
   </div>
   <!-- ======= START .Bloc MAIN TABLE ======= -->
   <app-letter-box-list
@@ -561,21 +519,6 @@
     ></app-detamponnage>
   </app-template-modal>
   <!-- remise a disposition -->
-
-  <app-template-modal
-    *ngIf="showRemiseDispositionModal"
-    [TitleModal]="'REMETTRE_DISPO_MODAL_TITLE' | translate"
-    [isModalOpen]="showRemiseDispositionModal"
-    [isValid]="isFormValid"
-    (isModalClose)="closeRemiseDispositionModal($event)"
-    (valide)="remise_dispo_submit($event)"
-  >
-    <app-remise-disposition
-      [selectedBal]="selectedBal"
-      [balNumber]="selectedBal.length === 0 ? totalResult : selectedBal.length"
-      (REMISE_DISPO_EVENT)="REMISE_DISPO_EVENT_HANDLER($event)"
-    ></app-remise-disposition>
-  </app-template-modal>
 
   <!-- desactiver en masse -->
   <!-- author yassine  -->

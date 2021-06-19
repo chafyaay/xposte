@@ -172,7 +172,6 @@ export class DateTimePickerComponent
   }
 
   writeValue(newModel: string) {
-    console.log(newModel);
     if (newModel) {
       this.datetime = Object.assign(
         this.datetime,
@@ -240,8 +239,6 @@ export class DateTimePickerComponent
     }
 
     this.setDateStringModel();
-    console.log('this.datetime #################');
-    console.log('this.datetime');
     this.datetimevalueEvent.emit(this.setDateStringModel());
   }
 
@@ -252,7 +249,6 @@ export class DateTimePickerComponent
         minute: new Date().getMinutes(),
         second: new Date().getSeconds(),
       };
-    console.log(event);
     if (this.datetime) {
       this.datetime.hour = event.hour;
       this.datetime.minute = event.minute;

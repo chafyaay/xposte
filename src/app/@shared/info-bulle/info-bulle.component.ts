@@ -19,15 +19,11 @@ export class InfoBulleComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('selectedBal');
-    console.log(this.selectedBal);
+
     if (this.selectedBal.length > 0) this.ballist = this.balDataList;
     else
       this.balDataList.map((item) => {
         this.ballist.push(item.adresseBal);
       });
-
-    console.log('selectedBal');
-    console.log(this.ballist);
   }
 }

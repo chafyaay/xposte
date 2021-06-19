@@ -23,8 +23,8 @@
   "MAKE_AVAILABALITY_BTN": "Remettre à disposition les messages lus de",
   "REMETTRE_DISPO_MODAL_TITLE": "Confirmation de remise à disposition des messages lus",
   "REMETTRE_DISPO_CRITERE_TITLE": "Critères de remise à disposition des messages lus",
-  "REMETTRE_DISPO_FILTER_1": "Critères de recherche sur le message",
-  "REMETTRE_DISPO_FILTER_2": "Critères de recherche sur le sujet",
+  "REMETTRE_DISPO_FILTER_MESSAGE_LUS": "Critères de recherche sur le message",
+  "REMETTRE_DISPO_FILTER_SUJET": "Critères de recherche sur le sujet",
   "REMETTRE_DISPO_PERIODE": "Période",
   "SUBFIELDS": {
     "EMMETTEUR": "Emetteur",

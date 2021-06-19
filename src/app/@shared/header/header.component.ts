@@ -58,14 +58,11 @@ export class HeaderComponent implements OnInit {
 
       do {
         if (targetElement == flyoutElement) {
-          console.log('click in ');
           this._showProfileOption = true;
           return;
         }
         targetElement = targetElement.parentNode;
       } while (targetElement);
-      console.log('click out ');
-
       this._showProfileOption = false;
     });
   }

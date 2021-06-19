@@ -186,14 +186,15 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     }
   }
   REMISE_DISPO_EVENT_HANDLER(event: any) {
-    this.isFormValid = event.isFormValid;
+    console.log(event)
+  /*   this.isFormValid = event.isFormValid;
     this.remiseDispoObj = {
       etatBal: this.balFilter.etatBal,
       adresseBal: this.balFilter.adresseBal,
       identifiantFrontal: this.balFilter.identifiantFrontal,
       listeIdentifiantsBALs: this.selectedBal,
       ...event.DATA,
-    };
+    }; */
   }
 
   openRemiseDispositionModal() {
@@ -221,7 +222,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
         this.notificationErrorMessage = 'Erreur lors de remise à disposition';
       }
     );
-    console.log(this.remiseDispoObj);
   }
 
   desactiver_en_mass_submit($event: any) {
@@ -242,11 +242,9 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.filterComponent.resetData();
   }
   closeDesactiverEnMassModal(event) {
-    console.log(this.selectAllBAL);
     this.openDescativerEnMassModal = false;
   }
   DESACTIVER_EN_MASS_EVENT_HANDLER(event) {
-    console.log(event);
     this.isDesactiverEnMassFormvalid = event;
   }
   loadBALTable() {
@@ -392,7 +390,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.balFilter.etatBal = filterEvent.filterData.etat;
     this.balFilter.adresseBal = filterEvent.filterData.adresse;
     this.balFilter.identifiantFrontal = filterEvent.filterData.frontal;
-    console.log(filterEvent.filterData.frontal);
     this.balFilterState.etatBal = this.balFilter.etatBal;
     this.balFilterState.adresseBal = this.balFilter.adresseBal;
     this.balFilterState.identifiantFrontal = this.balFilter.identifiantFrontal;
@@ -737,7 +734,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       (bal) => {
         this.balData = bal.body;
       },
-      (error) => console.log(error)
     );
   }
 
@@ -811,7 +807,6 @@ export class LetterBoxComponent implements OnInit, OnChanges {
         this.openNotifTemponnage = !this.openNotifTemponnage;
       },
       (error) => {
-        console.log(error);
         this.openNotifTemponnageError = true;
       }
     );
