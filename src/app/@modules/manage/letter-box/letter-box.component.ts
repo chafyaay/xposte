@@ -179,7 +179,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.tempSelectedItems = [];
     if (this.balFilter.etatBal === 'Active') {
       this.tempSelectedItems = this.itemsSelected;
-    } else if (this.balFilter.etatBal === 'En transfert') {
+    } else if (this.balFilter.etatBal === 'En Transfert') {
       this.tempSelectedItems.push(this.itemsSelected[0], this.itemsSelected[2]);
     } else {
       this.tempSelectedItems.push(this.itemsSelected[0]);

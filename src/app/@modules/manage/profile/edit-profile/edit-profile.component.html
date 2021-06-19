@@ -11,6 +11,8 @@
         [readonly]="input.label === 'identifiant'"
         (focus)="focused = true"
         (blur)="focused = false"
+        (keyup)="onTextType($event.target.value, input)"
+        [type]="input.label === 'password' && 'password'"
       />
       <label for="{{ input.label }}" class="{{ focused ? 'focused' : '' }}">
         {{ input.label | translate }}
@@ -18,10 +20,7 @@
     </div>
     <span
       class="helptext text-red"
-      *ngIf="
-        profileForm.controls[input.label]?.dirty &&
-        profileForm.get(input.label).invalid
-      "
+      *ngIf="profileForm.get(input.label).invalid"
       >{{ 'INVALID_INPUT' | translate }}</span
     >
   </div>

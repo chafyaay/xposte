@@ -155,12 +155,13 @@
   "FRONTAUX": "Frontaux",
   "END Abdessamad": "END",
   "MON_PROFILE": "Mon profile",
-  "MODIFICATION_NOUVEL_UTILISATEUR": "Modification d'un nouvel utilisateur",
+  "MODIFICATION_NOUVEL_UTILISATEUR": "Modification du profil",
   "adresseMail": "Adresse mail",
   "identifiant": "Identification",
   "listeFrontaux": "Frontaux",
   "nom": "Nom ",
   "prenom": "Prénom",
   "role": "Rôle",
-  "password": "Mot de passe"
+  "password": "Mot de passe",
+  "telephone": "Télephone"
 }

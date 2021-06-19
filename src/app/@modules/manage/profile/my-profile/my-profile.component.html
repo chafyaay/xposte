@@ -1,6 +1,17 @@
-<div class="notificator">
+<div class="wrapper-title flex">
+  <h1 class="main-title">Mon profile</h1>
+  <button
+    class="main-btn"
+    (click)="openEditProfileOffcanvas()"
+    [disabled]="!activeEdit"
+  >
+    <i style="margin: 0 10px 0 0" class="zmdi zmdi-edit"></i>
+    Modifier mon profile
+  </button>
+</div>
+
+<div class="notificator" *ngIf="notificationStatus">
   <app-notification
-    *ngIf="notificationStatus"
     [notificationColor]="!notificationStatus ? 'alerteMessage' : 'message'"
     (closeNotfification)="closeNotification()"
   >
@@ -24,17 +35,6 @@
 </div>
 
 <div class="my-profile">
-  <div class="flex edit-conatiner">
-    <h1 class="title">Mon profile</h1>
-    <button
-      class="main-btn btn-second edit-profile"
-      (click)="openEditProfileOffcanvas()"
-      [disabled]="!activeEdit"
-    >
-      <i class="zmdi zmdi-edit"></i>
-      Modifier mon profile
-    </button>
-  </div>
   <div class="profile-details">
     <ul>
       <li *ngFor="let item of profileInfo" class="flex items">
@@ -59,15 +59,14 @@
               <i
                 class="more-icone zmdi zmdi-more"
                 (mousemove)="showFronatals = true"
-                (click)="showFronatals = false"
+                (mouseleave)="showFronatals = false"
               ></i>
 
               <ul *ngIf="showFronatals" class="frontal-items">
-                <li *ngFor="let f of item.value; let i = index">
-                  <span *ngIf="i <= 9">{{ f.nom }}</span>
+                <li *ngFor="let f of item.value.slice(0, 11); let i = index">
+                  <span class="text" *ngIf="i <= 9">{{ f.nom }}</span>
                   <span *ngIf="i === 10" class="more-fr zmdi zmdi-more"></span>
                 </li>
-                <li></li>
               </ul>
             </div>
           </div>

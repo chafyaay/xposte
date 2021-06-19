@@ -21,7 +21,7 @@
 
   .profile-details {
     padding: 3rem;
-    width: 43vw;
+    width: 46vw;
     box-shadow: -1px 0px 6px 1px #c2bebe;
     border-radius: 5px;
     background: white;
@@ -45,28 +45,42 @@
             top: -17px;
             right: -35px;
             z-index: 9;
+            height: 20px;
+            border-radius: 50%;
+            background: #fafafa;
+            text-align: center;
           }
 
           .frontal-items {
-            height: auto;
             background: white;
+            background-color: white;
             position: absolute;
             right: -35px;
-            top: 0;
-            border: 1px solid #dedddd;
-            border-radius: 3px;
-            font-size: 14px;
+            top: 4px;
             padding: 1rem;
             z-index: 8;
-            height: 200px;
-            overflow: auto;
-            width: 200px;
+            cursor: text;
+            padding: 8px 16px 0px;
+            background-color: #5f5e5e;
+            border-radius: 3px;
+            color: #fff;
+            text-align: center;
+            font-family: Barlow;
+            font-weight: 400;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            text-align: left;
+
             li {
-              text-align: center;
               padding: 0.31rem 0;
+              .text {
+                text-align: left;
+              }
               .more-fr {
+                width: 100%;
                 font-size: 18px;
                 text-align: center;
+                width: 20px;
               }
             }
           }
@@ -77,5 +91,15 @@
 }
 
 .notificator {
-  margin: 3rem;
+  margin: 0 3rem;
+  ul {
+    flex-wrap: wrap;
+    li {
+      flex-wrap: wrap;
+      margin: 0.5rem 1rem;
+    }
+  }
+}
+.wrapper-title {
+  padding-left: 3rem;
 }

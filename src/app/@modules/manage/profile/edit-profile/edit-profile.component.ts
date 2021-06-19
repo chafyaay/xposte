@@ -29,16 +29,54 @@ export class EditProfileComponent implements OnChanges {
     this.initForm();
   }
 
+  formObj = {};
+
   initForm() {
-    let obj = {};
+    this.profileInfo = this.profileInfo.filter(
+      (input) => input.label !== 'role' && input.label !== 'listeFrontaux'
+    );
+
     if (this.profileInfo.length > 1)
       this.profileInfo.map((input) => {
-        if (input.label !== 'role' || input.label !== 'listeFrontaux')
-          obj[input.label] = new FormControl(input.value, {
+        console.log(input.label === 'password');
+        if (input.label === 'password') {
+          this.formObj[input.label] = new FormControl('', {
+            validators: [],
+          });
+        } else if (input.label === 'telephone') {
+          this.formObj[input.label] = new FormControl(input.value, {
+            validators: [],
+          });
+        } else if (input.label === 'adresseMail') {
+          this.formObj[input.label] = new FormControl(input.value, {
+            validators: [],
+          });
+        } else if (input.label == 'nom' || input.label == 'prenom')
+          this.formObj[input.label] = new FormControl(input.value, {
             validators: [Validators.required, this.getValidator(input)],
+          });
+        else
+          this.formObj[input.label] = new FormControl(input.value, {
+            validators: [],
           });
       });
 
+    this.profileForm = new FormGroup(this.formObj);
+  }
+
+  onTextType(value, input) {
+    if (value !== '') {
+      if (input.label === 'adresseMail')
+        this.formObj[input.label] = new FormControl(value, {
+          validators: [this.getValidator(input)],
+        });
+      this.profileForm = new FormGroup(this.formObj);
+    } else {
+      this.profileForm.get(input).clearValidators();
+    }
+  }
+
+  createFormGroup(obj) {
     this.profileForm = new FormGroup(obj);
   }
 

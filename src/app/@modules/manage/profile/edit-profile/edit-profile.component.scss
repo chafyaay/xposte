@@ -12,10 +12,15 @@
 }
 
 .edit-profile {
-  padding: 2rem;
+  padding: 0 2rem;
+  position: relative;
+  height: calc(100% - 119px);
 }
 .wrapper-btn {
   margin-top: 5rem;
+  position: absolute;
+  bottom: 30px;
+  right: 0;
 }
 
 .input-group {

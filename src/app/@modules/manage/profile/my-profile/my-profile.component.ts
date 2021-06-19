@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '@core/services/profile.service';
 import { ProfileI } from '@shared/models/profile';
+import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-my-profile',
@@ -14,6 +15,16 @@ export class MyProfileComponent implements OnInit {
   openOfcanvas = false;
   showFronatals = false;
   notifMsg = [];
+  profileInfoMap = [
+    { id: 'identifiant' },
+    { id: 'prenom' },
+    { id: 'nom' },
+    { id: 'telephone' },
+    { id: 'adresseMail' },
+    { id: 'password' },
+    { id: 'role' },
+    { id: 'listeFrontaux' },
+  ];
 
   constructor(private profileservice: ProfileService) {}
 
@@ -26,21 +37,9 @@ export class MyProfileComponent implements OnInit {
   getProfileInfo() {
     this.profileservice.getProfileDetails().subscribe(
       (data) => {
-        for (let key in data) {
-          this.id++;
-          this.profileInfo.push({
-            id: this.id,
-            label: key,
-            value: data[key],
-          });
-        }
+        this.profileInfo = this.formatData(data);
+
         if (data) {
-          // add password temporrary
-          this.profileInfo[4] = {
-            id: 'password',
-            label: 'password',
-            value: 'HHXc&&&12454',
-          };
           this.activeEdit = true;
           this.openOfcanvas = false;
         }
@@ -48,8 +47,23 @@ export class MyProfileComponent implements OnInit {
       (err) => err
     );
   }
+
+  formatData(data) {
+    let details = [];
+    this.profileInfoMap.map((item) => {
+      const key = Object.keys(data).find((key) => key === item.id);
+      if (key) details.push({ label: item.id, value: data[item.id] });
+      else if (item.id === 'telephone')
+        details.push({ label: item.id, value: '06 22 55 33 88' });
+      else if (item.id === 'password')
+        details.push({ label: item.id, value: 'XCF1254&&^@@' });
+    });
+    return details;
+  }
+
   openEditProfileOffcanvas() {
     this.openOfcanvas = true;
+    this.notificationStatus = false;
   }
   closeNotification() {
     this.notificationStatus = false;
@@ -58,9 +72,16 @@ export class MyProfileComponent implements OnInit {
   profileEventhandler($event) {
     this.notificationStatus = $event.isvalid;
     if (this.notificationStatus) {
-      for (let key in $event) {
-        this.notifMsg.push({ label: key, value: $event[key] });
-      }
+      this.notifMsg = this.formatData($event);
+
+      this.notifMsg = this.notifMsg.filter(
+        (msg) =>
+          msg.label !== 'isvalid' &&
+          msg.label !== 'password' &&
+          msg.label !== 'etat'
+      );
+
+      console.log(this.notifMsg);
     }
     this.openOfcanvas = false;
   }
