@@ -5,10 +5,9 @@
       {{ 'BOITES_AUX_LETTRES' | translate }}
     </div>
     <div class="info-bulle">
-      <app-info-bulle
-        [balDataList]="selectedBal.length > 0 ? selectedBal : balDataList"
-        [selectedBal]="selectedBal"
-      ></app-info-bulle>
+      <app-info-bulle 
+      [balDataList]="selectedBal.length>0?selectedBal:balDataList"
+      [selectedBal]="selectedBal"></app-info-bulle>
     </div>
   </div>
   <h3>{{ 'MOD_MASS_NOTIF_CRITERIA_TITLE' | translate }}</h3>
@@ -32,7 +31,7 @@
         for="Critères de recherche du message"
         [ngClass]="ngSelectOpened ? 'ng-select-label' : ''"
       >
-        {{ 'REMETTRE_DISPO_FILTER_1' | translate }}
+        {{ 'REMETTRE_DISPO_FILTER_MESSAGE_LUS' | translate }}
       </label>
     </div>
     <button

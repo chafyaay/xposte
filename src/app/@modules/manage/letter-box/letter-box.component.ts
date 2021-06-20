@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { FiltreType } from 'src/app/@shared/models/FiltreType';
 import { InputFilterData } from 'src/app/@shared/models/InputFilterData';
 import { selectFrontalState } from 'src/app/@store/selectors/frontal.selector';
@@ -27,6 +27,7 @@ import { ModifEnMassI } from 'src/app/@shared/models/modif-mass-bals.model';
 import { RemiseDispoI } from 'src/app/@shared/models/remise-dispo';
 import { RemiseDispoService } from 'src/app/@core/services/remise-dispo.service';
 import { DesactiverEnMassService } from '@core/services/desactiver-en-mass.service';
+import { formatDate } from '@angular/common';
 
 const ExportJsonExcel = require('js-export-excel');
 
@@ -128,7 +129,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     private store: Store<AppState>,
     private remise_dispo_service: RemiseDispoService,
     private rechercheBalService: RechercheBalService,
-    private desactiver_en_mass_service: DesactiverEnMassService
+    private desactiver_en_mass_service: DesactiverEnMassService,
+    @Inject(LOCALE_ID) private locale: string
   ) {
     this.getState = this.store.select(selectAccountState);
     this.BalTamponner.adresseBal = this.balFilter.adresseBal;
@@ -146,6 +148,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.testRoleUser();
   }
   InitSelectBox() {
+    alert(1)
     this.itemsSelected = [
       {
         id: 0,
@@ -185,15 +188,39 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       this.tempSelectedItems.push(this.itemsSelected[0]);
     }
   }
+  REMISE_DISP_NOTIF_MSG:{label:string,value:string}[]=[];
   REMISE_DISPO_EVENT_HANDLER(event: any) {
-    this.isFormValid = event.isFormValid;
-    this.remiseDispoObj = {
-      etatBal: this.balFilter.etatBal,
+    let obj={...event,
       adresseBal: this.balFilter.adresseBal,
-      identifiantFrontal: this.balFilter.identifiantFrontal,
-      listeIdentifiantsBALs: this.selectedBal,
-      ...event.DATA,
     };
+
+   this.isFormValid = obj.isValid;
+
+   delete obj.isValid;
+   delete obj.periode;
+   delete obj.isEmpty;
+
+   this.REMISE_DISP_NOTIF_MSG=[];
+
+   const formatData=(key:string,value:any)=>{
+    if(key.toLocaleLowerCase().includes('date')) return formatDate(value,'EEEE d MMMM, h:mm',this.locale);
+    else if(key.toLocaleLowerCase().includes('fichier')) {
+     
+      if(value==='NULL') return 'INDIFFERENT'
+      else if(value) return 'OUI'
+      else 'NON'
+    }else return value
+  }
+
+   for(let key in obj){
+     if(obj[key]!==''){
+       this.REMISE_DISP_NOTIF_MSG.push({
+         label:key,
+         value:formatData(key,obj[key])
+     })
+   }
+   console.log(this.REMISE_DISP_NOTIF_MSG)
+  }
   }
 
   openRemiseDispositionModal() {

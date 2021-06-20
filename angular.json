@@ -28,6 +28,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.scss",
+              "src/date-picker-style.scss",
               "node_modules/intl-tel-input/build/css/intlTelInput.css"
             ],
             "scripts": [
@@ -100,6 +101,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.scss",
+              "src/date-picker-style.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []

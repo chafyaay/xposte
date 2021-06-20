@@ -1,0 +1,83 @@
+<div class="flex field-group">
+
+
+  <div class="inputField" style="flex-grow: 1">
+    <ng-select [items]="FIELDS" bindLabel="fcn" bindValue="id" [(ngModel)]="selectedValue" (focus)="isOpened=true"
+      (blur)="isOpened=false" (change)="onSelectField($event)">
+    </ng-select>
+    <label for="Critères de recherche du message" [ngClass]="!!selectedValue || isOpened ? 'ng-select-label' : ''">
+      {{ filterTitle | translate }}
+    </label>
+  </div>
+  <button
+  class="main-btn icon mgl20" 
+  [disabled]="!(!!selectedValue || isOpened ) || !isAddFieldBtnValid" (click)="insertField()">
+    {{ 'AJOUTER_CRITERE' | translate }}
+  </button>
+</div>
+<!-- form -->
+<div [formGroup]="addFieldForm" class="app-remise-dispo">
+  <!-- other subfield -->
+  
+  <div *ngFor="let field of FIELDS,let i=index">
+    <div class="flex subfield-group">
+    <div *ngIf="field.fcn" style="flex-grow: 1;">
+      <div class="inputField" *ngIf="field.disabled">
+        <!-- input -->
+        <input placeholder=" " type="text" [id]="field.fcn"
+        id="field-{{field.fcn}}"
+         (keyup)="onchange($event,field)" 
+         (keypress)="onchange($event,field)" 
+         (change)="onchange($event,field)" 
+         (blur)="onBlur($event,field)" 
+         formControlName="{{field.fcn}}" *ngIf="field.type==='text' || field.type==='email'" />
+        <!-- select -->
+        <ng-select
+        (change)="onchange($event,field)"
+         *ngIf="field.type==='list'"
+         [items]="field.data"
+         bindLabel="fcn"
+         bindValue="value"
+        formControlName="{{field.fcn}}"
+        (focus)="selectFocused=true;selectedLabel=field.fcn"
+        (blur)="selectFocused=false"
+        >
+        </ng-select>
+        <!-- date  -->
+        <app-date-time-picker
+        *ngIf="field.type==='date'"
+        [isPeriod]="true"
+        (keyupEvent)="onchange($event,field)"
+        (datetimevalueEvent)="onchange($event,field)"
+        label="{{field.fcn}}" 
+        formControlName="{{field.fcn}}"
+        ></app-date-time-picker>
+
+        <label *ngIf="!(field.type==='date' || field.type==='list')" for="{{field.fcn}}">
+          {{field.fcn}}
+        </label>
+
+        <label *ngIf="field.type==='list'" for="{{field.fcn}}"
+        [ngClass]="((selectFocused && selectedLabel===field.fcn) || form.get(field.fcn).value!=='') ? 'ng-select-label' : ''">{{field.fcn}}</label>
+
+
+
+      </div>
+      <!-- message d'erreurs -->
+      <span
+      *ngIf="form.get(field.fcn).touched && form.get(field.fcn).invalid"
+      class="helptext text-red"
+      >{{ 'INVALID_INPUT' | translate }}</span
+    >
+    </div>
+    <!-- remove field -->
+    <div *ngIf="field.disabled" class="remove" (click)="removeField(field.fcn)">
+      <i class="zmdi zmdi-delete"></i>
+    </div>
+  </div>
+
+  </div> 
+</div>
+
+
+

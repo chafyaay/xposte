@@ -1,18 +1,21 @@
 export interface SUBFIELDSI {
-  EMMETTEUR: string;
-  DESITINATAIRE: string;
-  CONTENT_DESC: string;
-  FICHIER_COMPRESSEE: string;
-  FICHIER_CHIFFREE: string;
-  TYPE: string;
-  VERSION: string;
-  CODE_EMETTEUR: string;
-  CODE_COMPOSTAGE: string;
-  DATE_HEURE_SUJET: string;
-  NBFSE: string;
-  SUJET_OUT_REPLY_INFO: string;
+  emetteur:string;
+  destinataire:string;
+  contentDescription:string;
+  fichiersCompresses:string;
+  fichiersChiffres:string;
+  type:string;
+  version:string;
+  codeEmetteur:string;
+  codeCompostage:string;
+  dateHeureSujet:string;
+  nbFSE:string;
+  sujetOuReplyInTo:string;
+  dateHeureDebut:string;
+  dateHeureFin:string;
   INDIFFERENT: string;
   OUI: string;
   NON: string;
-  AJOUTER_CRITERE: string;
-}
+  
+  }
+  

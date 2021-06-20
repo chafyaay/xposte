@@ -72,6 +72,9 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
     private modifEnMassService: ModifEnMassService,
     public translate: TranslateService
   ) {
+    console.clear()
+    console.log(this.balDataList)
+    console.log(this.selectedBal)
     const FIELD: any = this.translate.translations[this.translate.currentLang];
     this.CRITERIA_LIST = [
       {
