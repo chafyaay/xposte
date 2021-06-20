@@ -19,9 +19,9 @@
     <div class="flex">
       <app-date-time-picker
       [isPeriod]="true"
-      label="{{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }}"
-      (keyupEvent)="onChange($event)"
-      (datetimevalueEvent)="onChange($event,'dateHeureDebut')"
+      label="{{ 'dateHeureDebut' | translate }}"
+      (keyupEvent)="onDateTimeChange($event)"
+      (datetimevalueEvent)="onDateTimeChange($event,'dateHeureDebut')"
       formControlName="dateHeureDebut"
       name="dateHeureDebut"
     ></app-date-time-picker>
@@ -29,9 +29,9 @@
     <app-date-time-picker
       [isPeriod]="true"
       class="mgl20"
-      label="{{ 'REMETTRE_DISPO_DATE_FIN' | translate }}"
-      (keyupEvent)="onChange($event)"
-      (datetimevalueEvent)="onChange($event,'dateHeureFin')"
+      label="{{ 'dateHeureFin' | translate }}"
+      (keyupEvent)="onDateTimeChange($event)"
+      (datetimevalueEvent)="onDateTimeChange($event,'dateHeureFin')"
       formControlName="dateHeureFin"
       name="dateHeureFin"
     ></app-date-time-picker>
@@ -41,8 +41,8 @@
     <div *ngIf="(form.get('dateHeureDebut').touched && form.get('dateHeureFin').touched) && form.get('periode').invalid" class="helptext text-red mgt20">{{'SUBFIELDS.DATE_ERR_INV' | translate}}</div>
   </div>
   <div class="field-container mgt40">
-    <app-add-field  (formEvent)="formValidHandler($event)" [filterTitle]="'REMETTRE_DISPO_FILTER_MESSAGE_LUS'" [tempItems]="message_lus_fields"></app-add-field>
-    <app-add-field  (formEvent)="formValidHandler($event)" [filterTitle]="'REMETTRE_DISPO_FILTER_SUJET'"  [tempItems]="message_subject_fields"></app-add-field>
+    <app-add-field  (emitDataEvent)="formValidHandler($event)" [filterTitle]="'REMETTRE_DISPO_FILTER_MESSAGE_LUS'" [tempItems]="message_lus_fields"></app-add-field>
+    <app-add-field  (emitDataEvent)="formValidHandler($event)" [filterTitle]="'REMETTRE_DISPO_FILTER_SUJET'"  [tempItems]="message_subject_fields"></app-add-field>
   
   </div>
 </div>

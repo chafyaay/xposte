@@ -2,7 +2,7 @@
 
 
   <div class="inputField" style="flex-grow: 1">
-    <ng-select [items]="FIELDS" bindLabel="label" bindValue="id" [(ngModel)]="selectedValue" (focus)="isOpened=true"
+    <ng-select [items]="FIELDS" bindLabel="fcn" bindValue="id" [(ngModel)]="selectedValue" (focus)="isOpened=true"
       (blur)="isOpened=false" (change)="onSelectField($event)">
     </ng-select>
     <label for="Critères de recherche du message" [ngClass]="!!selectedValue || isOpened ? 'ng-select-label' : ''">
@@ -18,6 +18,7 @@
 <!-- form -->
 <div [formGroup]="addFieldForm" class="app-remise-dispo">
   <!-- other subfield -->
+  
   <div *ngFor="let field of FIELDS,let i=index">
     <div class="flex subfield-group">
     <div *ngIf="field.fcn" style="flex-grow: 1;">
@@ -25,7 +26,9 @@
         <!-- input -->
         <input placeholder=" " type="text" [id]="field.fcn"
         id="field-{{field.fcn}}"
+         (keyup)="onchange($event,field)" 
          (keypress)="onchange($event,field)" 
+         (change)="onchange($event,field)" 
          (blur)="onBlur($event,field)" 
          formControlName="{{field.fcn}}" *ngIf="field.type==='text' || field.type==='email'" />
         <!-- select -->
@@ -33,7 +36,7 @@
         (change)="onchange($event,field)"
          *ngIf="field.type==='list'"
          [items]="field.data"
-         bindLabel="label"
+         bindLabel="fcn"
          bindValue="value"
         formControlName="{{field.fcn}}"
         (focus)="selectFocused=true;selectedLabel=field.fcn"
@@ -46,17 +49,19 @@
         [isPeriod]="true"
         (keyupEvent)="onchange($event,field)"
         (datetimevalueEvent)="onchange($event,field)"
-        label="{{field.label}}" 
+        label="{{field.fcn}}" 
         formControlName="{{field.fcn}}"
         ></app-date-time-picker>
-          <!-- label -->
-        <label for="" *ngIf="field.type!=='date' && field.type!=='list'" for="{{field.label}}">{{field.label}}</label>
-          <!-- label date-->
-        <label *ngIf="field.type==='date'" for="{{field.label}}"
-          [ngClass]="!!selectedValue || isOpened ? 'ng-select-label' : ''">{{field.label}}</label>
-          <!-- label list-->
-        <label *ngIf="field.type==='list'" for="{{field.label}}"
-          [ngClass]="((selectFocused && selectedLabel===field.fcn) || form.get(field.fcn).value!=='') ? 'ng-select-label' : ''">{{field.label}}</label>
+
+        <label *ngIf="!(field.type==='date' || field.type==='list')" for="{{field.fcn}}">
+          {{field.fcn}}
+        </label>
+
+        <label *ngIf="field.type==='list'" for="{{field.fcn}}"
+        [ngClass]="((selectFocused && selectedLabel===field.fcn) || form.get(field.fcn).value!=='') ? 'ng-select-label' : ''">{{field.fcn}}</label>
+
+
+
       </div>
       <!-- message d'erreurs -->
       <span

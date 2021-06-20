@@ -26,6 +26,9 @@
   </app-template-modal>
   <!-- ======= END .Bloc TILTE & BUTTON ======= -->
   <!--notification de tamponnage -->
+
+
+
   <app-notification
     *ngIf="
       openNotifDetemponnageSucces ||
@@ -188,109 +191,26 @@
     </ng-container>
     <!-- show remise disposition notification  -->
 
+  
+  </app-notification>
+
+
+  <app-notification
+  class="app-notification"
+  [notificationColor]="openNotifRemiseDispoError? 'alerteMessage': notificationColor"
+(closeNotfification)="resetNotificationDataAndClose()"
+
+*ngIf="openNotifRemiseDispoSuccess">
     <ng-container *ngIf="openNotifRemiseDispoSuccess">
       <h3 class="message_title">
-        {{
-          openNotifRemiseDispoSuccess
-            ? ('REMISE_DISPO_NOTIFICATION_SUCCES' | translate)
-            : ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)
-        }}
+        {{openNotifRemiseDispoSuccess? ('REMISE_DISPO_NOTIFICATION_SUCCES' | translate): ('REMISE_DISPO_NOTIFICATION_FAIL' | translate)}}
       </h3>
-
-      <ul class="flex notif-message">
-        <li class="notif-items">
-          {{ 'REMISE-DISPO_BAL' | translate }} :{{
-            selectedBal.length === 0 ? totalResult : selectedBal.length
-          }}
-        </li>
-        <li class="notif-items">
-          {{ 'ETAT' | translate }} : {{ remiseDispoObj.etatBal }}
-        </li>
-        <li *ngIf="remiseDispoObj.adresseBal" class="notif-items">
-          {{ 'ADRESS' | translate }} : {{ remiseDispoObj.adresseBal }}
-        </li>
-        <li *ngIf="remiseDispoObj.identifiantFrontal" class="notif-items">
-          {{ 'FRONTAL' | translate }} :
-          {{ remiseDispoObj.identifiantFrontal }}
-        </li>
-        <li
-          *ngIf="remiseDispoObj.dateHeureDebut && remiseDispoObj.dateHeureFin"
-          class="notif-items"
-        >
-          <div class="date-label">
-            {{ 'REMETTRE_DISPO_DATE_DEBUT' | translate }} :
-            {{ remiseDispoObj.dateHeureDebut | date: 'EEEE d MMMM, h:mm' }}
-          </div>
-          <div class="date-label fin">
-            {{ 'REMETTRE_DISPO_DATE_FIN' | translate }} :
-            {{ remiseDispoObj.dateHeureFin | date: 'EEEE d MMMM, h:mm' }}
-          </div>
-        </li>
-        <li *ngIf="remiseDispoObj.emetteur">
-          {{ 'SUBFIELDS.EMMETTEUR' | translate }}:{{ remiseDispoObj.emetteur }}
-        </li>
-        <li *ngIf="remiseDispoObj.destinataire">
-          {{ 'SUBFIELDS.DESITINATAIRE' | translate }}:{{
-            remiseDispoObj.destinataire
-          }}
-        </li>
-        <li *ngIf="remiseDispoObj.contentDescription">
-          {{ 'SUBFIELDS.CONTENT_DESC' | translate }}:{{
-            remiseDispoObj.contentDescription
-          }}
-        </li>
-        <li *ngIf="remiseDispoObj.fichiersCompresses">
-          {{ 'SUBFIELDS.FICHIER_COMPRESSEE' | translate }}:{{
-            remiseDispoObj.fichiersCompresses ? 'Oui' : 'Non'
-          }}
-        </li>
-        <li
-          *ngIf="
-            remiseDispoObj.fichiersChiffres === null ||
-            remiseDispoObj.fichiersChiffres === true ||
-            remiseDispoObj.fichiersChiffres === false
-          "
-        >
-          {{ 'SUBFIELDS.FICHIER_CHIFFREE' | translate }}:
-          {{ remiseDispoObj.fichiersChiffres ? 'Oui' : 'Non' }}
-          <span *ngIf="remiseDispoObj.fichiersChiffres === true">{{
-            'SUBFIELDS.OUI' | translate
-          }}</span>
-          <span *ngIf="remiseDispoObj.fichiersChiffres === false">{{
-            'SUBFIELDS.NON' | translate
-          }}</span>
-          <span *ngIf="remiseDispoObj.fichiersChiffres === null">{{
-            'SUBFIELDS.INDIFFERENT' | translate
-          }}</span>
-        </li>
-        <li *ngIf="remiseDispoObj.type">
-          {{ 'SUBFIELDS.TYPE' | translate }}:{{ remiseDispoObj.type }}
-        </li>
-        <li *ngIf="remiseDispoObj.version">
-          {{ 'SUBFIELDS.VERSION' | translate }}:{{ remiseDispoObj.version }}
-        </li>
-        <li *ngIf="remiseDispoObj.codeEmetteur">
-          {{ 'SUBFIELDS.CODE_EMETTEUR' | translate }}:{{
-            remiseDispoObj.codeEmetteur
-          }}
-        </li>
-        <li *ngIf="remiseDispoObj.dateHeureSujet">
-          {{ 'SUBFIELDS.DATE_HEURE_SUJET' | translate }}:{{
-            remiseDispoObj.dateHeureSujet | date: 'EEEE d MMMM, h:mm'
-          }}
-        </li>
-        <li *ngIf="remiseDispoObj.codeCompostage">
-          {{ 'SUBFIELDS.CODE_COMPOSTAGE' | translate }}:{{
-            remiseDispoObj.codeCompostage
-          }}
-        </li>
-        <li *ngIf="remiseDispoObj.nbFSE">
-          {{ 'SUBFIELDS.NBFSE' | translate }}:{{ remiseDispoObj.nbFSE }}
-        </li>
-        <li *ngIf="remiseDispoObj.sujetOuReplyInTo">
-          {{ 'SUBFIELDS.SUJET_OUT_REPLY_INFO' | translate }}:{{
-            remiseDispoObj.sujetOuReplyInTo
-          }}
+      <ul class="flex">
+        <li> {{ 'DETAMPO_BAL' | translate }} :
+          {{ selectedBal.length === 0 ? totalResult : selectedBal.length }}</li>
+        <li *ngFor="let msg of REMISE_DISP_NOTIF_MSG" class="flex">  
+          <div>{{msg.label | translate}} :</div>
+          <div>{{msg.value | titlecase}}</div>
         </li>
       </ul>
     </ng-container>

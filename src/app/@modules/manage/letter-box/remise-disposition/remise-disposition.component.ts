@@ -22,8 +22,36 @@ import { TranslateService } from '@ngx-translate/core';
 import { SUBFIELDSI } from '@shared/models/sub_fields';
 import { RemiseDispoI } from 'src/app/@shared/models/remise-dispo';
 import * as moment from 'moment';
+import { keyframes } from '@angular/animations';
 import { DateValidator } from '@shared/add-field/add-field.component';
 
+interface SUB_FIELDSI_FORM {
+  messageLus?: MessageLusI;
+  sujet?: SujetI;
+  isValid?: boolean;
+  dateHeureDebut: any;
+  dateHeureFin: any;
+}
+interface MessageLusI {
+  contentDescription?: any;
+  destinataire?: any;
+  emetteur?: any;
+  fichiersChiffres?: any[];
+  fichiersCompresses?: any[];
+  isEmpty?: boolean;
+  isValid?: boolean;
+}
+interface SujetI {
+  codeCompostage?: any;
+  codeEmetteur?: any;
+  dateHeureSujet?: any;
+  nbFSE?: any;
+  sujetOuReplyInTo?: any;
+  type?: any;
+  version?: any;
+  isEmpty?: boolean;
+  isValid?: boolean;
+}
 @Component({
   selector: 'app-remise-disposition',
   templateUrl: './remise-disposition.component.html',
@@ -52,61 +80,77 @@ export class RemiseDispositionComponent implements OnInit {
   periodeForm: FormGroup;
   public message_lus_fields: any[];
   message_subject_fields: any[];
-  isPeriodeValid = false;
-  isFormValid = false;
+  messageLusForm:any={};
+  sujetForm:any={};
+  dateHeureForm={};
+  remiseDispoForm={};
+  isMessageLusFormValid=false;
+  isSujetFormValid=false;
+  
+  isMessageLusFormEmpty=true;
+  isSujetFormEmpty=true;
+  
+  isDateHeureFormValid=false;
+  isRemiseDispoFormValid=false
 
 
   constructor(public translate: TranslateService) { }
 
   ngOnInit() {
 
-    const FIELD: SUBFIELDSI = this.translate.translations[
-      this.translate.currentLang
-    ].SUBFIELDS;
+    const FIELD: SUBFIELDSI = this.translate.translations[this.translate.currentLang];
+  
     this.message_lus_fields = [
       {
         id: 1,
-        label: FIELD.EMMETTEUR,
-        fcn: 'emetteur',
+        fcn: FIELD.emetteur,
         disabled: false,
         type: 'email',
       },
       {
         id: 2,
-        label: FIELD.DESITINATAIRE,
-        fcn: 'destinataire',
+        fcn: FIELD.destinataire,
         disabled: false,
         type: 'email',
       },
       {
         id: 3,
-        label: FIELD.CONTENT_DESC,
-        fcn: 'contentDescription',
+        fcn: FIELD.contentDescription,
         disabled: false,
         type: 'text',
       },
       {
         id: 4,
-        label: FIELD.FICHIER_COMPRESSEE,
-        fcn: 'fichiersCompresses',
+        fcn: FIELD.fichiersCompresses,
         disabled: false,
         type: 'list',
         data: [
-          { id: 0, label: FIELD.INDIFFERENT, value: 'NULL' },
-          { id: 1, label: FIELD.OUI, value: true },
-          { id: 2, label: FIELD.NON, value: false },
+          { id: 0,
+            fcn: FIELD.INDIFFERENT,
+             value: 'NULL' },
+          { id: 1,
+            fcn: FIELD.OUI,
+             value: true },
+          { id: 2,
+            fcn: FIELD.NON,
+             value: false },
         ],
       },
       {
         id: 5,
-        label: FIELD.FICHIER_CHIFFREE,
-        fcn: 'fichiersChiffres',
+        fcn: FIELD.fichiersChiffres,
         disabled: false,
         type: 'list',
         data: [
-          { id: 0, label: FIELD.INDIFFERENT, value: 'NULL' },
-          { id: 1, label: FIELD.OUI, value: true },
-          { id: 2, label: FIELD.NON, value: false },
+          { id: 0, 
+            fcn: FIELD.INDIFFERENT,
+             value: 'NULL' },
+          { id: 1, 
+            fcn: FIELD.OUI,
+             value: true },
+          { id: 2, 
+            fcn: FIELD.NON,
+             value: false },
         ],
       },
     ];
@@ -114,50 +158,43 @@ export class RemiseDispositionComponent implements OnInit {
     this.message_subject_fields = [
       {
         id: 1,
-        label: FIELD.TYPE,
-        fcn: 'type',
+        fcn: FIELD.type,
         disabled: false,
         type: 'text',
       },
       {
         id: 2,
-        label: FIELD.VERSION,
-        fcn: 'version',
+        fcn: FIELD.version,
         disabled: false,
         type: 'text',
       },
       {
         id: 3,
-        label: FIELD.CODE_EMETTEUR,
-        fcn: 'codeEmetteur',
+        fcn: FIELD.codeEmetteur,
         disabled: false,
         type: 'text',
       },
       {
         id: 4,
-        label: FIELD.CODE_COMPOSTAGE,
-        fcn: 'codeCompostage',
+        fcn: FIELD.codeCompostage,
         disabled: false,
         type: 'text',
       },
       {
         id: 5,
-        label: FIELD.DATE_HEURE_SUJET,
-        fcn: 'dateHeureSujet',
+        fcn: FIELD.dateHeureSujet,
         disabled: false,
         type: 'date',
       },
       {
         id: 6,
-        label: FIELD.NBFSE,
-        fcn: 'nbFSE',
+        fcn: FIELD.nbFSE,
         disabled: false,
         type: 'text',
       },
       {
         id: 7,
-        label: FIELD.SUJET_OUT_REPLY_INFO,
-        fcn: 'sujetOuReplyInTo',
+        fcn: FIELD.sujetOuReplyInTo,
         disabled: false,
         type: 'text',
       },
@@ -178,12 +215,55 @@ export class RemiseDispositionComponent implements OnInit {
     return this.periodeForm;
   }
 
-  onChange(event: any, fcn?: any) {
-    if (fcn)
-      this.periodeValidator();
-    if (this.form.valid) {
-      this.getFomData();
+  onDateTimeChange(event: any, fcn?: any) {   
+    this.validateForm(this.form.value);
+  }
+
+  formValidHandler(form:any){
+    this.validateForm(form);
+  }
+
+  validateForm(form?: any) {
+    const keys = Object.keys(form);
+
+    if (keys.includes('emetteur')) {
+      console.log('form 1')
+      this.messageLusForm = form;
+      this.isMessageLusFormValid = form.isValid;
+      this.isMessageLusFormEmpty = form.isEmpty;   
     }
+    else if (keys.includes('type')) {
+
+      this.sujetForm = form;
+      this.isSujetFormValid = form.isValid;
+      this.isSujetFormEmpty = form.isEmpty;
+    }
+    else if (keys.includes('dateHeureDebut')) {
+      this.periodeValidator();
+      this.dateHeureForm = form;
+      this.isDateHeureFormValid=this.form.valid;
+    }
+
+    if((!this.isMessageLusFormEmpty && !this.isSujetFormEmpty)){
+      this.isRemiseDispoFormValid=this.isDateHeureFormValid && this.messageLusForm.isValid && this.sujetForm.isValid;
+    }else if(this.isMessageLusFormEmpty && this.isSujetFormEmpty){
+      this.isRemiseDispoFormValid=this.form.valid ;
+    }else if(this.isMessageLusFormEmpty && !this.isSujetFormEmpty){
+      this.isRemiseDispoFormValid=this.isDateHeureFormValid && this.sujetForm.isValid;
+    }else if(!this.isMessageLusFormEmpty && this.isSujetFormEmpty){
+      console.log(4)
+      console.log(this.messageLusForm)
+      this.isRemiseDispoFormValid=this.isDateHeureFormValid && this.messageLusForm.isValid;
+    }
+    
+    this.remiseDispoForm={
+      ...this.messageLusForm,
+      ...this.sujetForm,
+      ...this.dateHeureForm,
+      isValid:this.isRemiseDispoFormValid
+    }
+
+    this.remiseDispoEvent.emit(this.remiseDispoForm)
 
   }
 
@@ -193,49 +273,11 @@ export class RemiseDispositionComponent implements OnInit {
     let py = now.setFullYear(now.getFullYear() - 1);
     let dd = new Date(this.form.get('dateHeureDebut').value).getTime();
     let df = new Date(this.form.get('dateHeureFin').value).getTime();
-    this.isPeriodeValid = dd < df && dd < n && df <= n && dd >= py && df > py;
-    this.form.get('periode').patchValue(this.isPeriodeValid);
-  }
-  OBJ: RemiseDispoI;
-  formValidHandler(form: any) {
-
-    this.getFomData(form);
-
+    const isPeriodeValid = dd < df && dd < n && df <= n && dd >= py && df > py;
+    this.form.get('periode').patchValue(isPeriodeValid);
   }
 
-  getFomData(form?: any) {
-    let obj = {
-      dateHeureDebut: this.form.get('dateHeureDebut').value,
-      dateHeureFin: this.form.get('dateHeureFin').value,
-      IS_EMPTY:true
-    }
-    if(Object.keys(form.formObj).length>0){
-obj.IS_EMPTY=false;
-obj={...form.formObj}
-    }
 
-    console.log(obj)
-/*     let obj = {
-      dateHeureDebut: this.form.get('dateHeureDebut').value,
-      dateHeureFin: this.form.get('dateHeureFin').value,
-      IS_EMPTY:true
-    }
-   
-    if (form) {
-      console.log(form.formObj)
-      this.isFormValid = form.isvalid && this.form.valid;
-      obj={
-        dateHeureDebut: this.form.get('dateHeureDebut').value,
-      dateHeureFin: this.form.get('dateHeureFin').value,
-      ...form.formObj,
-      IS_EMPTY:form.listEmpty?form.listEmpty:false
-      }
-    }
-
-    else this.isFormValid = this.form.valid;
-
-    this.remiseDispoEvent.emit({ isFormValid: this.isFormValid, isvalid: this.isFormValid, ...obj })
- */  }
 }
 
 
