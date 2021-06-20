@@ -73,43 +73,47 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
     public translate: TranslateService
   ) {
     console.clear()
+
+    
     console.log(this.balDataList)
     console.log(this.selectedBal)
     const FIELD: any = this.translate.translations[this.translate.currentLang];
     this.CRITERIA_LIST = [
       {
         id: 1,
-        label: FIELD.FRONTAL,
         fcn: 'frontal',
+        label: FIELD.frontal,
         type: 'list',
         disabled: false,
       },
-      // { id: 2, label: FIELD.TYPE_BOITE_LETTRE, fcn: 'typeBALList', type: 'list', disabled: false },
+      // { id: 3, 
+      // fcn: 'typeBALList', type: 'list', disabled: false },
+      // label: FIELD.typeBALList', type: 'list', disabled: false },
       {
         id: 2,
-        label: FIELD.MOD_MASS_SEUIL,
         fcn: 'seuil',
+        label: FIELD.seuil,
         type: 'number',
         disabled: false,
       },
       {
         id: 3,
-        label: FIELD.IPs,
         fcn: 'listeAdressesIPAutorises',
+        label: FIELD.listeAdressesIPAutorises,
         type: 'text',
         disabled: false,
       },
       {
         id: 4,
-        label: FIELD.EMAIL_ALERT,
         fcn: 'adresseMailAlerte',
+        label: FIELD.adresseMailAlerte,
         type: 'email',
         disabled: false,
       },
       {
         id: 5,
-        label: FIELD.RELAIS_MESSAGERIE,
         fcn: 'balRelais',
+        label: FIELD.balRelais,
         type: 'text',
         disabled: false,
       },
@@ -138,8 +142,6 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('selectedBal');
-    console.log(this.selectedBal);
   }
 
   loadFromStoredRef() {
@@ -306,29 +308,13 @@ export class ModifierMasseBalsComponent implements OnInit, OnChanges {
       ? this.form.get('listeAdressesIPAutorises').value.split(',')
       : [];
 
-    obj = {
-      listeAdresses: this.selectedBal,
-      etatBal: this.etatBal,
-      filtreAdresse: this.filtreAdresse,
-      identifiantFrontal: this.identifiantFrontal,
-      frontal: this.form.get('frontal') ? this.form.get('frontal').value : '',
-      seuil: this.form.get('seuil') ? this.form.get('seuil').value : 0,
-      adressesIP: listeAdresses,
-      mailAlerte: this.form.get('mailAlerte')
-        ? this.form.get('mailAlerte').value
-        : '',
-      relaiMessagerie: this.form.get('relaiMessagerie')
-        ? this.form.get('relaiMessagerie').value
-        : '',
-    };
-
     if (this.form.valid) {
       try {
         this.modifEnMassService.modifEnMass(this.form.value).subscribe(
           (res) => {
             this.MODIF_EN_MASS_EVENT_EMITTER.emit({
               closeModal: true,
-              DATA: obj,
+              DATA: this.form.value,
             });
           },
           (err) => {

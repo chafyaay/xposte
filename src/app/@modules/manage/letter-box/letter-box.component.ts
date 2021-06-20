@@ -53,7 +53,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   isFormulaireopen = false;
   isUpdateBalFormOpen = false;
   titlePagination = 'BAL';
-  isDesactiverEnMassFormvalid = false;
+  isDesactiverEnMassFormvalid = true;
   TitleModal: string = 'Confirmation de tamponnage';
   balFilterState: BALFilter = new BALFilter();
   openNotifTemponnageError = false;
@@ -138,7 +138,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.BalTamponner.identifiantFrontal = this.balFilter.identifiantFrontal;
   }
 
-  ngOnChanges() {}
+  ngOnChanges() { }
 
   ngOnInit() {
     this.ShowDetamponnage();
@@ -148,17 +148,16 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.testRoleUser();
   }
   InitSelectBox() {
-    alert(1)
     this.itemsSelected = [
       {
         id: 0,
         label: this.isModalOpen
           ? ''
           : 'Exporter au forma Excel ' +
-            (this.selectedBal.length === 0
-              ? this.totalResult
-              : this.selectedBal.length) +
-            ' BALs',
+          (this.selectedBal.length === 0
+            ? this.totalResult
+            : this.selectedBal.length) +
+          ' BALs',
       },
       {
         id: 1,
@@ -188,44 +187,46 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       this.tempSelectedItems.push(this.itemsSelected[0]);
     }
   }
-  REMISE_DISP_NOTIF_MSG:{label:string,value:string}[]=[];
+  REMISE_DISP_NOTIF_MSG: { label: string, value: string }[] = [];
   REMISE_DISPO_EVENT_HANDLER(event: any) {
-    let obj={...event,
+    let obj = {
+      ...event,
       adresseBal: this.balFilter.adresseBal,
     };
 
-   this.isFormValid = obj.isValid;
+    this.isFormValid = obj.isValid;
 
-   delete obj.isValid;
-   delete obj.periode;
-   delete obj.isEmpty;
+    delete obj.isValid;
+    delete obj.periode;
+    delete obj.isEmpty;
 
-   this.REMISE_DISP_NOTIF_MSG=[];
+    this.REMISE_DISP_NOTIF_MSG = [];
 
-   const formatData=(key:string,value:any)=>{
-    if(key.toLocaleLowerCase().includes('date')) return formatDate(value,'EEEE d MMMM, h:mm',this.locale);
-    else if(key.toLocaleLowerCase().includes('fichier')) {
-     
-      if(value==='NULL') return 'INDIFFERENT'
-      else if(value) return 'OUI'
-      else 'NON'
-    }else return value
-  }
+    const formatData = (key: string, value: any) => {
+      if (key.toLocaleLowerCase().includes('date')) return formatDate(value, 'EEEE d MMMM, h:mm', this.locale);
+      else if (key.toLocaleLowerCase().includes('fichier')) {
 
-   for(let key in obj){
-     if(obj[key]!==''){
-       this.REMISE_DISP_NOTIF_MSG.push({
-         label:key,
-         value:formatData(key,obj[key])
-     })
-   }
-   console.log(this.REMISE_DISP_NOTIF_MSG)
-  }
+        if (value === 'NULL') return 'INDIFFERENT'
+        else if (value) return 'OUI'
+        else 'NON'
+      } else return value
+    }
+
+    for (let key in obj) {
+      if (obj[key] !== '') {
+        this.REMISE_DISP_NOTIF_MSG.push({
+          label: key,
+          value: formatData(key, obj[key])
+        })
+      }
+      console.log(this.REMISE_DISP_NOTIF_MSG)
+    }
   }
 
   openRemiseDispositionModal() {
     this.resetNotificationDataAndClose();
     this.showRemiseDispositionModal = true;
+    this.hideNotificationMessage()
   }
 
   closeRemiseDispositionModal(event) {
@@ -250,7 +251,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     );
     console.log(this.remiseDispoObj);
   }
-
+  DESACTIVER_EN_MASS_NOTIF_MSGs:any[]=[];
   desactiver_en_mass_submit($event: any) {
     this.openDescativerEnMassModal = false;
     const obj = {};
@@ -258,6 +259,13 @@ export class LetterBoxComponent implements OnInit, OnChanges {
       (data) => {
         this.openNotifDescativerMassSuccess = true;
         this.openDescativerEnMassModal = false;
+       
+        this.DESACTIVER_EN_MASS_NOTIF_MSGs=this.DESACTIVER_EN_MASS_NOTIF_MSGs.filter(item=>
+          item.label==='adresseBal' || 
+          item.label==='identifiantFrontal' 
+          )
+       console.clear()
+       console.log(this.DESACTIVER_EN_MASS_NOTIF_MSGs)
       },
       (err) => {
         this.openNotifDescativerMassSuccess = false;
@@ -272,9 +280,19 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     console.log(this.selectAllBAL);
     this.openDescativerEnMassModal = false;
   }
+
   DESACTIVER_EN_MASS_EVENT_HANDLER(event) {
-    console.log(event);
+  
     this.isDesactiverEnMassFormvalid = event;
+this.DESACTIVER_EN_MASS_NOTIF_MSGs=[]
+    for(let key in this.balFilter){
+if(this.balFilter[key]){
+  this.DESACTIVER_EN_MASS_NOTIF_MSGs.push({label:key,value:this.balFilter[key]})
+}
+    }
+    console.log('------',this.DESACTIVER_EN_MASS_NOTIF_MSGs)
+    console.log(this.DESACTIVER_EN_MASS_NOTIF_MSGs)
+ 
   }
   loadBALTable() {
     if (this.isRoleAdmin) {
@@ -527,20 +545,35 @@ export class LetterBoxComponent implements OnInit, OnChanges {
   isModMassbalsSidBarCanvasOpen = false;
   modifMassObj: ModifEnMassI;
   modMassErrMessage = '';
-
+MODIF_MASS_NOTIF_MSGs:any[]=[];
   MODIF_EN_MASS_EVENT_HANDLER(data: any) {
     this.isModMassbalsSidBarCanvasOpen = false;
 
     if (data.DATA) {
-      const result = data.DATA;
-      if (result.etatBal) {
-        this.modifMassObj = result;
+      let obj={
+        identifiantFrontal:this.balFilter.identifiantFrontal,
+        adress:this.adresseHighlight
+        ,...data.DATA
+      }
+   
+    for(let key in obj)  {
+      if(!!obj[key]){
+        let value=obj[key];
+        if (key === 'adressesIP') {
+          value = obj[key].join(',')
+        }
+        this.MODIF_MASS_NOTIF_MSGs.push({label:key,value:value})
+      }
+      console.log(this.MODIF_MASS_NOTIF_MSGs)
+    }
+  
+      if (obj.etatBal) {
         this.isModMassbalsSuccess = true;
         this.isModMassbalsFail = false;
       } else {
         this.isModMassbalsSuccess = false;
         this.isModMassbalsFail = true;
-        this.modMassErrMessage = result.message;
+        this.modMassErrMessage = obj.message;
       }
     }
   }
@@ -748,6 +781,7 @@ export class LetterBoxComponent implements OnInit, OnChanges {
 
   saveSelectedBAL(selectedBal: string[]) {
     this.selectedBal = selectedBal;
+    this.InitSelectBox();
   }
 
   updateOrder(event: BALFilter) {
@@ -814,6 +848,8 @@ export class LetterBoxComponent implements OnInit, OnChanges {
     this.openNotifBalUpdateSucces = false;
     this.isModMassbalsSuccess = false;
     this.isModMassbalsFail = false;
+    this.openNotifDescativerMassSuccess = false;
+    this.openNotifDescativerMassFail = false;
     this.openNotifRemiseDispoSuccess = false;
     this.openNotifRemiseDispoError = false;
     this.notificationErrorMessage = '';

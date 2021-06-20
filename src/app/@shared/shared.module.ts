@@ -19,7 +19,7 @@ import { DateTimePickerComponent } from './date-time-picker/date-time-picker.com
 import { InfoBulleComponent } from './info-bulle/info-bulle.component';
 import { TemplateFormulaireComponent } from './template-formulaire/template-formulaire.component';
 import { NotificationComponent } from './notification/notification.component';
-import { AddFieldComponent } from './add-field/add-field.component';
+import { AddFieldComponent } from './add-field copy/add-field.component';
 
 @NgModule({
   declarations: [
